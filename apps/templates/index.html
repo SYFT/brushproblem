@@ -1,9 +1,9 @@
 {% extends "layout.html" %}
 {% block body %}
-	<h1>Overview</h1>
-	{% if userstatus == false %}
-	<p>Do you want to <a href="{{ url_for('login') }}">log in?</a>
-	{% else %}
-	<p><a href="{{url_for('details')}}">Show more details</a></p>
-	{% endif %}
+  <h1>Overview</h1>
+  {% if userstatus == False %}
+  <p>Do you want to <a href="{{ url_for('login') }}">log in?</a>
+  {% else %}
+  <p><a href="{{url_for('details')}}">Show more details</a></p>
+  {% endif %}
 {% endblock %}
