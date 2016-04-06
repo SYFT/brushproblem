@@ -1,9 +1,21 @@
 <!doctype html>
 <html>
   <head>
+    <meta http-equiv = "Content-Type" content = "text/html; charset=gb2312">
     <title>My Application</title>
+    {% block head %}
+    {% endblock %}
   </head>
   <body>
+    <a href = "{{url_for('index')}}"> Home </a> <br>
+    <hr>
+    {% if g.user.is_authenticated %}
+    <div>
+      User details
+      <a href = "{{url_for('logout')}}"> Logtout </a>
+    </div>
+    <hr>
+    {% endif %}
     {% with messages = get_flashed_messages() %}
       {% if messages %}
       <ul class=flashes>
