@@ -21,7 +21,7 @@ def login():
 		flash('username: ' + form.username.data + '\n')
 		flash('remember_me : ' + str(form.remember_me.data) + '\n')
 		session['remember_me'] = form.remember_me.data
-		return openID.try_login(form.openid.data, ask_for = ['email'])
+		#return openID.try_login(form.openid.data, ask_for = ['email'])
 	return render_template('login.html', title = 'Sign In', form = form, providers = app.config['OPENID_PROVIDERS'])
 
 @app.route('/logout')
@@ -60,7 +60,7 @@ def after_login(resp):
 	return redirect(url_for('index'))
 		
 @app.route('/details')
-@app.login_required
+@login_required
 def details():
 	user = {'username' : 'yzx'}
 	posts = [

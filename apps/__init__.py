@@ -1,6 +1,6 @@
 from flask import Flask
 from flask.ext.sqlalchemy import SQLAlchemy
-import os
+import os, sys
 from flask.ext.login import LoginManager
 from flask.ext.openid import OpenID
 from config import baseDir
@@ -13,6 +13,7 @@ db = SQLAlchemy(app)
 lm = LoginManager()
 lm.init_app(app)
 lm.login_view = 'login'
+lm.login_message = u'Please login first.'
 openID = OpenID(app, os.path.join(baseDir, 'tmp'))
 
 from apps import views, models
