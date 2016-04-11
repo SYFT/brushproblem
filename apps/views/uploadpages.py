@@ -16,5 +16,5 @@ def upload() :
 	form = UploadForm()
 	if request.method == 'POST' and form.file.data :
 		title = us.save(request.FILES[form.file.name])
-		reccd ddd
+		reccd dddsdfasdfasdfasd
 	return render_template('uploadpages/upload.html', form = form)
