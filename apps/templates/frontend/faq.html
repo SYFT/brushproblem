@@ -1,4 +1,15 @@
-{% extend "frontend/frontendmain.html" %}
+{% extends "frontend/frontendmain.html" %}
 {% block content %}
-  <p>The file will turn to ".txt"</q>
+  <ol>
+    <li>The file will turn to ".txt"</li>
+  </ol>
+  
+  <p>Some else questions?</p>
+  <form method = "POST" action = "{{ url_for('frontend.suggest') }}" name = "suggest">
+    <input type = "file" name = "problem">
+    {{form.suggestion(width = "50px", height = "100px")}}
+    <hr/>
+    {{form.submit}}
+    <hr/>
+  </form>
 {% endblock %}

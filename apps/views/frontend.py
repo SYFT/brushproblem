@@ -2,7 +2,7 @@ from flask import Flask, Blueprint, render_template, \
 					g, url_for, session
 from flask.ext.login import login_required, \
 					current_user, login_required
-
+from apps.forms import SuggestionForm
 frontend = Blueprint('frontend', __name__, 
 					static_folder = 'static',
 					template_folder = 'templates')
@@ -34,4 +34,10 @@ def details():
 	
 @frontend.route('/FAQ')
 def faq() :
-	return render_template('frontend/faq.html')
+	form = SuggestionForm()
+	return render_template('frontend/faq.html', form = form)
+
+@frontend.route('/tha')
+def suggest() :
+	flash('Having receive!!!')
+	return render_template('frontend/index.html')

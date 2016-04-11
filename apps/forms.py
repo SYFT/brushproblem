@@ -1,5 +1,5 @@
 from flask.ext.wtf import Form
-from wtforms import StringField, PasswordField, BooleanField, SubmitField, FileField
+from wtforms import StringField, PasswordField, BooleanField, SubmitField, FileField, TextAreaField
 from wtforms.validators import *
 
 # error message
@@ -20,4 +20,8 @@ class RegisterForm(LoginForm) :
 
 class UploadForm() :
 	file = FileField('file', validators = [DataRequired()])
+	submit = SubmitField(u'submit')
+
+class SuggestionForm() :
+	suggestion = TextAreaField('suggestion', validators = [DataRequired(message = ERROR_EMPTY), Length(max = 64, message = ERROR_TOO_LONG)])
 	submit = SubmitField(u'submit')

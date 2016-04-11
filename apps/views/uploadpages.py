@@ -19,8 +19,9 @@ def upload() :
 		#if form.file.data :
 		try :
 			title = us.save(request.files['problem'])
+			flash("The title of the file has been changed to " + title + ".")
 			flash(u'It\'s now checking...Please wait for it.')
-		except Exception, e:
+		except Exception as e:
 			print e
 			flash(u'Sorry, this file is not allow to upload !!')
 	return render_template('uploadpages/upload.html')
