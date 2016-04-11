@@ -31,3 +31,7 @@ def details():
 		'body' : 'b'}
 	]
 	return render_template('frontend/details.html', titile = 'Home', user = user, posts = posts)
+	
+@frontend.route('/FAQ')
+def faq() :
+	return render_template('frontend/faq.html')

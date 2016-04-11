@@ -14,7 +14,8 @@ registerpages = Blueprint('registerpages', __name__,
 @registerpages.route('/register', methods = ['GET', 'POST'])
 def register() :
 	form = RegisterForm()
-	flash(len(form.email.data))
+	if form.email.data : 
+		flash(len(form.email.data))
 	if form.validate_on_submit() :
 		username = form.username.data
 		password = form.password.data

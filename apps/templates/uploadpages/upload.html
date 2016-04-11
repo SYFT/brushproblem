@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta http-equiv = "Content-Type" content = "text/html; charset = gb2312">
+    <title>Upload</title>
+  </head>
+  <body>
+    <div>
+      <a href = "{{url_for('frontend.index')}}"> Home </a>
+      <a href = "{{url_for('loginpages.logout')}}"> | Logout </a>
+    </div>
+    <hr/>
+    <div>
+      {% with messages = get_flashed_messages() %}
+        {% if messages %}
+        <ul class=flashes>
+          {% for message in messages %}
+          <li> {{ message }}  </li>
+          {% endfor %}
+        </ul>
+        {% endif %}
+      {% endwith %}
+    </div>
+    <form method = "POST" enctype = multipart/form-data action = "{{ url_for('uploadpages.upload') }}" name = "upload">
+      <input type = "file" name = "problem">
+      <hr/>
+      <input type = "submit" name = "submit" value = "submit" id = "submit">
+      <hr/>
+    </form>
+    <hr/>
+    <p>Have some questions with this process ?</p><br/>
+    <p>Don't Worry. You can find answer here! <a href = "{{url_for('frontend.faq')}}"></a></p><br/>
+  </body>
+</html>

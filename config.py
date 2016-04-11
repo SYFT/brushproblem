@@ -11,5 +11,6 @@ SQLALCHEMY_MIGRATE_REPO = os.path.join(baseDir, 'db_repository')
 
 
 UPLOAD_FOLDER = os.path.join(baseDir, 'uploads_files')
+UPLOADS_DEFAULT_DEST  = UPLOAD_FOLDER
 ALLOWED_EXTENSIONS = ('txt', 'pdf', 'doc', 'docx')
 MAX_CONTENT_LENGTH = 8 * 1024 * 1024

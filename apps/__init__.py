@@ -40,14 +40,12 @@ def load_user(id) :
 	return User.query.get(int(id))
 
 
-	
-	
-	
+
 from flask.ext.uploads import UploadSet, \
 							patch_request_class, \
 							configure_uploads
-us = UploadSet(extensions = app.config['ALLOWED_EXTENSIONS'], default_dest = app.config['UPLOAD_FOLDER'])
-configure_uploads(app, (us))
+us = UploadSet('us', extensions = app.config['ALLOWED_EXTENSIONS'])
+configure_uploads(app, (us, ))
 patch_request_class(app, size = app.config['MAX_CONTENT_LENGTH'])
 
 	
@@ -59,8 +57,8 @@ from apps.views import frontend, loginpages, registerpages, uploadpages
 MODULES = (
 (frontend, ''),
 (loginpages, ''),
-(registerpages, '')
-(uploadpages), ''
+(registerpages, ''),
+(uploadpages, '')
 )
 # the first parameter is the module's name
 # the second parameter is the url_prefix of the module

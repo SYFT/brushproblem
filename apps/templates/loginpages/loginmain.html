@@ -7,8 +7,9 @@
     {% endblock %}
   </head>
   <body>
-    <a href = "{{url_for('frontend.index')}}"> Home </a> <br>
-      {% with messages = get_flashed_messages() %}
+    <a href = "{{url_for('frontend.index')}}"> Home </a>
+    <hr/>
+    {% with messages = get_flashed_messages() %}
       {% if messages %}
       <ul class=flashes>
         {% for message in messages %}
