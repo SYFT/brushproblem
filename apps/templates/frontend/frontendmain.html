@@ -7,15 +7,17 @@
     {% endblock %}
   </head>
   <body>
-    <a href = "{{url_for('index')}}"> Home </a> <br>
     <hr>
-    {% if g.user.is_authenticated %}
+    {% set authenticated = ('user' in session and session['user'] == g.user.username) %}
     <div>
-      User details
-      <a href = "{{url_for('logout')}}"> Logtout </a>
+      <a href = "{{url_for('frontend.index')}}"> Home </a>
+      <a href="{{ url_for('loginpages.login') }}">| Login </a>
+      {% if authenticated == True %}
+      <a href = "{{url_for('loginpages.logout')}}"> | Logout </a>
+      {% endif %}
+      <a href = "{{url_for('registerpages.register')}}"> | Register </a>
     </div>
     <hr>
-    {% endif %}
     {% with messages = get_flashed_messages() %}
       {% if messages %}
       <ul class=flashes>
@@ -25,7 +27,7 @@
       </ul>
       {% endif %}
     {% endwith %}
-    {% block body %}
+    {% block content %}
     {% endblock %}
   </body>
 </html>

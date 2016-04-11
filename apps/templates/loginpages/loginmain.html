@@ -1,0 +1,23 @@
+<!doctype html>
+<html>
+  <head>
+    <meta http-equiv = "Content-Type" content = "text/html; charset=gb2312">
+    <title>My Application</title>
+    {% block head %}
+    {% endblock %}
+  </head>
+  <body>
+    <a href = "{{url_for('frontend.index')}}"> Home </a> <br>
+      {% with messages = get_flashed_messages() %}
+      {% if messages %}
+      <ul class=flashes>
+        {% for message in messages %}
+        <li> {{ message }}  </li>
+        {% endfor %}
+      </ul>
+      {% endif %}
+    {% endwith %}
+    {% block body %}
+    {% endblock %}
+  </body>
+</html>

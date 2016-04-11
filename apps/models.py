@@ -1,5 +1,5 @@
-from apps import db
 import datetime
+from apps import db
 
 class User(db.Model) :
 	id = db.Column(db.Integer, primary_key = True)
@@ -35,12 +35,10 @@ class Problem(db.Model) :
 	id = db.Column(db.Integer, primary_key = True)
 	userId = db.Column(db.Integer, db.ForeignKey(u'user.id'))
 	title = db.Column(db.String(256), index = True)
-	storage = db.Column(db.String(256), unique = True)
 	timeStamp = db.Column(db.DateTime, index = True)
 	
-	def __init__(self, title, storage, author, timeStamp = datetime.datetime.utcnow()) :
+	def __init__(self, title, author, timeStamp = datetime.datetime.utcnow()) :
 		self.title = title
-		self.storage = storage
 		self.author = author
 		self.timeStamp = timeStamp
 	

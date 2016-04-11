@@ -1,0 +1,8 @@
+{% extends "frontend/frontendmain.html" %}
+{% block content %}
+    <h1>Hi, {{g.user.username}}!</h1>
+  {% for post in posts %}
+    <p>{{post.author.username}} says: <b>{{post.body}}</b></p>
+    {% endfor %}
+  Back to <a href="{{url_for('frontend.index', status='True')}}">Home</a>
+{% endblock %}

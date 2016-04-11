@@ -1,0 +1,10 @@
+{% extends "frontend/frontendmain.html" %}
+{% block content %}
+  {% if authenticated == False %}
+  <h1>Overview</h1>
+  <p>Do you want to <a href="{{ url_for('loginpages.login') }}">log in?</a>
+  {% else %}
+  <h1>Hi {{current_user.username}}</h1>
+  <p><a href="{{url_for('frontend.details')}}">Show more details</a></p>
+  {% endif %}
+{% endblock %}
