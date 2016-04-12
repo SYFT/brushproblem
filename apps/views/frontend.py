@@ -1,5 +1,5 @@
 from flask import Flask, Blueprint, render_template, \
-					g, url_for, session
+					g, url_for, session, request
 from flask.ext.login import login_required, \
 					current_user, login_required
 from apps.forms import SuggestionForm
@@ -32,9 +32,11 @@ def details():
 	]
 	return render_template('frontend/details.html', titile = 'Home', user = user, posts = posts)
 	
-@frontend.route('/FAQ')
+@frontend.route('/FAQ', methods = ['POST', 'GET'])
 def faq() :
 	form = SuggestionForm()
+	print '#######\n\n\n\n  here'
+	print '###', form.suggestion
 	return render_template('frontend/faq.html', form = form)
 
 @frontend.route('/tha')

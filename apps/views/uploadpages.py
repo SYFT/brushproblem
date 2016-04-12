@@ -13,6 +13,7 @@ uploadpages = Blueprint('uploadpages', __name__,
 @uploadpages.route('/upload', methods = ['GET', 'POST'])
 @login_required
 def upload() :
+	form = UploadForm()
 	if request.method == 'POST' :
 		print "here"
 		#form = UploadForm(request.POST)
@@ -24,4 +25,4 @@ def upload() :
 		except Exception as e:
 			print e
 			flash(u'Sorry, this file is not allow to upload !!')
-	return render_template('uploadpages/upload.html')
+	return render_template('uploadpages/upload.html', form = form)

@@ -7,7 +7,7 @@
   <p>Some else questions?</p>
   <form method = "POST" action = "{{ url_for('frontend.suggest') }}" name = "suggest">
     <input type = "file" name = "problem">
-    {{form.suggestion(width = "50px", height = "100px")}}
+    {{form.suggestion(rows = 5, cols = 20)}}
     <hr/>
     {{form.submit}}
     <hr/>

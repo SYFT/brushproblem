@@ -18,10 +18,11 @@ class RegisterForm(LoginForm) :
 	confirm  = PasswordField('repeatPassword', validators = [DataRequired(message = ERROR_EMPTY), Length(max = 16)])
 	email = StringField('emailaddress', validators = [DataRequired(message = ERROR_EMPTY), Length(max = 64, message = ERROR_TOO_LONG), Email(message = u'Is this a email address ?')])
 
-class UploadForm() :
+class UploadForm(Form) :
 	file = FileField('file', validators = [DataRequired()])
 	submit = SubmitField(u'submit')
 
-class SuggestionForm() :
-	suggestion = TextAreaField('suggestion', validators = [DataRequired(message = ERROR_EMPTY), Length(max = 64, message = ERROR_TOO_LONG)])
+class SuggestionForm(Form) :
+	suggestion = TextAreaField('suggestion', _name = 'suggestion', validators = [DataRequired(message = ERROR_EMPTY), Length(max = 64, message = ERROR_TOO_LONG)])
 	submit = SubmitField(u'submit')
+	test = StringField('test')
