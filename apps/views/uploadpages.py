@@ -4,7 +4,8 @@ from flask import Flask, request, session, \
 					Blueprint
 from apps.forms import UploadForm
 from flask.ext.login import login_required
-from apps import lm, db, models, us
+from apps import lm, db, models, us, app
+import os
 
 uploadpages = Blueprint('uploadpages', __name__, 
 					static_folder = 'static',
@@ -22,6 +23,11 @@ def upload() :
 			title = us.save(request.files['problem'])
 			flash("The title of the file has been changed to " + title + ".")
 			flash(u'It\'s now checking...Please wait for it.')
+			turner = os.path.join(app.config['UPLOAD_FOLDER'], "us")
+			turner = os.path.join(turner, app.config['TURNER_NAME'])
+			print turner
+			x = os.system(turner)
+			print x
 		except Exception as e:
 			print e
 			flash(u'Sorry, this file is not allow to upload !!')
