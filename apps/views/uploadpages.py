@@ -39,6 +39,10 @@ def upload() :
 			else :
 				flash(u'Unsuccefully receive')
 			print x.poll()
+			# if the subprocess is not finish yet, x.poll() is a None
+			# else x.poll() return a int
+			# if the subprocess finish and stop as normal, it return 0
+			# else it return 1 represents that some wrongs interrupt it or you kill it
 		except Exception as e:
 			print e
 			flash(u'Sorry, this file is not allow to upload !!')
