@@ -5,7 +5,7 @@ from flask import Flask, request, session, \
 from apps.forms import UploadForm
 from flask.ext.login import login_required
 from apps import lm, db, models, us, app
-import os
+import subprocess, os, time
 
 uploadpages = Blueprint('uploadpages', __name__, 
 					static_folder = 'static',
@@ -23,11 +23,21 @@ def upload() :
 			title = us.save(request.files['problem'])
 			flash("The title of the file has been changed to " + title + ".")
 			flash(u'It\'s now checking...Please wait for it.')
-			turner = os.path.join(app.config['UPLOAD_FOLDER'], "us")
-			turner = os.path.join(turner, app.config['TURNER_NAME'])
+			folder = os.path.join(app.config['UPLOAD_FOLDER'], "us")
+			turner = os.path.join(folder, app.config['TURNER_NAME'])
 			print turner
-			x = os.command(turner)
-			print x
+			foutput = open(os.path.join(folder, 'xxx.txt'), 'w')
+
+			timebegin = time.time()
+			x = subprocess.Popen(turner, stdout = foutput, shell = True)
+			while x.poll() is None :
+				timenow = time.time()
+				if timenow - timebegin > 1000 :
+					x.kill()
+			if x.poll() == 0 :
+				flash(u'Succefully receive!!')
+			else :
+				flash(u'Unsuccefully receive')
 		except Exception as e:
 			print e
 			flash(u'Sorry, this file is not allow to upload !!')
