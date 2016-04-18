@@ -19,11 +19,10 @@ class RegisterForm(LoginForm) :
 	email = StringField('emailaddress', validators = [DataRequired(message = ERROR_EMPTY), Length(max = 64, message = ERROR_TOO_LONG), Email(message = u'Is this a email address ?')])
 
 class UploadForm(Form) :
-	file = FileField('file', validators = [DataRequired(message = ERROR_EMPTY)])
+	file = TextAreaField('file', validators = [DataRequired(message = ERROR_EMPTY)])
 	filename = StringField('filename', validators = [Length(max = 16, message = ERROR_TOO_LONG)])
 	submit = SubmitField(u'submit')
 
 class SuggestionForm(Form) :
 	suggestion = TextAreaField('suggestion', _name = 'suggestion', validators = [DataRequired(message = ERROR_EMPTY), Length(max = 64, message = ERROR_TOO_LONG)])
 	submit = SubmitField(u'submit')
-	test = StringField('test')

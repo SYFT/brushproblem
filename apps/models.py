@@ -7,7 +7,7 @@ class User(db.Model) :
 	password = db.Column(db.String(32))
 	email = db.Column(db.String(64), index = True)
 	isAdmin = db.Column(db.Boolean)
-	contributions = db.relationship(u'Problem', backref = u'author', lazy = u'dynamic')
+	contributions = db.relationship('Document', backref = 'author', lazy = 'dynamic')
 	
 	def __init__(self, username, password, email, isAdmin = False) :
 		self.username = username
@@ -31,11 +31,13 @@ class User(db.Model) :
 		return unicode(self.id)
 	
 		
-class Problem(db.Model) :
+class Document(db.Model) :
 	id = db.Column(db.Integer, primary_key = True)
-	userId = db.Column(db.Integer, db.ForeignKey(u'user.id'))
+	userId = db.Column(db.Integer, db.ForeignKey('user.id'))
 	title = db.Column(db.String(256), index = True)
 	timeStamp = db.Column(db.DateTime, index = True)
+	problems = db.relationship('Problem', backref = 'source', lazy = 'dynamic')
+	subject = db.Column(db.Integer, db.ForeignKey('category.id'), index = True)
 	
 	def __init__(self, title, author, timeStamp = datetime.datetime.utcnow()) :
 		self.title = title
@@ -44,4 +46,13 @@ class Problem(db.Model) :
 	
 	def __repr__(self) :
 		return '<Title % r>' % (self.title)
-	
+
+class Problem(db.Model) :
+	id = db.Column(db.Integer, primary_key = True)
+	documentId = db.Column(db.Integer, db.ForeignKey('document.id'))
+	content = db.Column(db.String(512))
+
+class Category(db.Model) :
+	id = db.Column(db.Integer, primary_key = True)
+	describtion = db.Column(db.String(32), index = True)
+	ducuments = db.relationship('Problem', backref = 'source', lazy = 'dynamic')
