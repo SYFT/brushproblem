@@ -20,8 +20,9 @@ class RegisterForm(LoginForm) :
 
 class UploadForm(Form) :
 	file = TextAreaField('file', validators = [DataRequired(message = ERROR_EMPTY)])
-	filename = StringField('filename', validators = [Length(max = 16, message = ERROR_TOO_LONG)])
+	filename = StringField('filename', validators = [DataRequired(message = ERROR_EMPTY), Length(min = 2, max = 16, message = u'Length should between 2 and 16!!')])
 	submit = SubmitField(u'submit')
+#	subjects = MultiChoose()
 
 class SuggestionForm(Form) :
 	suggestion = TextAreaField('suggestion', _name = 'suggestion', validators = [DataRequired(message = ERROR_EMPTY), Length(max = 64, message = ERROR_TOO_LONG)])
