@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
   <head>
-    <meta http-equiv = "Content-Type" content = "text/html; charset = gb2312">
+    <meta http-equiv = "Content-Type" content = "text/html; charset = utf-8">
     <title>Upload</title>
   </head>
   <body>
@@ -26,10 +26,14 @@
 <!--       <hr/> -->
 <!--       <input type = "submit" name = "submit" value = "submit" id = "submit"> -->
       <hr/>
-      {{form.file}} <br/>
-	  {{form.filename}} <br/>
-	  {{form.submit}} <br/>
-	  <hr/>
+      <p>标题：{{form.filename(placeholder = "标题将作为日后检索题目的文件名！")}} </p><br/>
+      <p>题目内容：<br/>{{form.file(rows = 10, cols = 100, placeholder = "直接粘帖题目即可，不支持图片。")}} </p><br/>
+      <p>分类：</p>{{form.subject}} <br/>
+      <hr/>
+      <span style="color: red;">以上内容一旦提交<strong>不可更改</strong>。</span></p> 
+      <hr/>
+      {{form.submit}} <br/>
+      <hr/>
     </form>
     <hr/>
     <p>Have some questions with this process ?</p><br/>

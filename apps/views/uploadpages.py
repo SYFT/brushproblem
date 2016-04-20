@@ -1,3 +1,5 @@
+# -*- coding: utf-8 -*-
+
 from flask import Flask, request, session, \
 					g, redirect, url_for, \
 					abort, render_template, flash,  \
@@ -28,6 +30,11 @@ def change(x) :
 @login_required
 def upload() :
 	form = UploadForm()
+	categories = models.Subject.query.order_by('name')
+	nameOfCategories = []
+	for x in categories :
+		nameOfCategories.append((x.id, x.name))
+	form.subject.choices = nameOfCategories
 	if request.method == 'POST' :
 #		print "here"
 		try :
@@ -50,4 +57,4 @@ def upload() :
 		except Exception as e:
 			print e
 			flash(u'Sorry, this file is not allow to upload !!')
-	return render_template('uploadpages/upload.html', form = form)
+	return render_template('uploadpages/upload.html', form = form, categories = nameOfCategories)

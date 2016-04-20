@@ -1,3 +1,5 @@
+# -*- coding: utf-8 -*-
+
 from flask import Flask, g, url_for
 from flask.ext.sqlalchemy import SQLAlchemy
 import os, sys
@@ -75,5 +77,5 @@ for module, url_prefix in MODULES :
 # 'str' or 'unicode' or 
 # 'optimized unicode' or 'custom functon'
 reload(sys)
-sys.setdefaultencoding('utf8')
+sys.setdefaultencoding('utf-8')
 text_factory = str
