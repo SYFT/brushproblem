@@ -54,16 +54,20 @@ class Problem(db.Model) :
 	id = db.Column(db.Integer, primary_key = True)
 	documentId = db.Column(db.Integer, db.ForeignKey('document.id'))
 	content = db.Column(db.String(512))
+	choice = db.Column(db.String(512))
 	answer = db.Column(db.String(128))
 #	content is in this format :
-#	(problem description) A(choose a description) B(choose b) .... 
+#	problem description
+#	answer is in this format :
+#	(choose description) (choose description) .... 
 #	caution : () are needed.
-#	answer is in this format : A_B_C/AB_DEF
-#	If multianswers is permited, answers will seperate with a space mutual
+#	answer is in this format : A_B_C_D/A/B_C
+#	multianswers must be splited by _ if necessary.
 	
-	def __init__(self, source, content, answer) :
+	def __init__(self, source, content, choice, answer) :
 		self.source = source
 		self.content = content
+		self.choice = choice
 		self.answer = answer
 	
 	def __repr__(self) :
