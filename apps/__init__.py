@@ -55,12 +55,14 @@ patch_request_class(app, size = app.config['MAX_CONTENT_LENGTH'])
 	
 
 
-from apps.views import frontend, loginpages, registerpages, uploadpages
+from apps.views import frontend, loginpages, registerpages, uploadpages, \
+						viewproblems
 MODULES = (
 (frontend, ''),
 (loginpages, ''),
 (registerpages, ''),
-(uploadpages, '')
+(uploadpages, ''),
+(viewproblems, '')
 )
 # the first parameter is the module's name
 # the second parameter is the url_prefix of the module
