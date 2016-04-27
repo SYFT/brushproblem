@@ -4,6 +4,8 @@ import datetime
 from apps import db
 
 class User(db.Model) :
+	__searchable__ = ['username']
+
 	id = db.Column(db.Integer, primary_key = True)
 	username = db.Column(db.String(16), index = True, unique = True)
 	password = db.Column(db.String(32))
@@ -34,6 +36,8 @@ class User(db.Model) :
 	
 		
 class Document(db.Model) :
+	__searchable__ = ['title']
+	
 	id = db.Column(db.Integer, primary_key = True)
 	userId = db.Column(db.Integer, db.ForeignKey('user.id'))
 	subjectId = db.Column(db.Integer, db.ForeignKey('subject.id'))

@@ -35,6 +35,24 @@
       {{form.submit}} <br/>
       <hr/>
     </form>
+    
+    (% if form.filename.error %)
+      <hr/>
+      <p><strong>文件名错误！</strong></p>
+      {% for error in form.filename.errors %}
+        <span style="color: red;">{% if error.message %} {{ error.message }} {% else %} {{ error }} {% endif %}</span><br>
+      {% endfor %}
+      <hr/>
+    {% endif %}
+    
+    (% if form.file.error %)
+      <hr/>
+      <p><strong>文件错误！</strong></p>
+      {% for error in form.filename.errors %}
+        <span style="color: red;">{% if error.message %} {{ error.message }} {% else %} {{ error }} {% endif %}</span><br>
+      {% endfor %}
+      <hr/>
+    {% endif %}
     <hr/>
     <p>Have some questions with this process ?</p><br/>
     <p>Don't Worry. You can find answer <a href = "{{url_for('frontend.faq')}}">here</a>!</p><br/>

@@ -1,0 +1,36 @@
+<!doctype html>
+<html>
+  <head>
+    <meta http-equiv = "Content-Type" content = "text/html; charset=utf-8">
+    <title>{% if title %} {{title}} {% else %} MyApplication {% endif % }</title>
+    {% block head %}
+    {% endblock %}
+  </head>
+  <body>
+    <a href = "{{url_for('frontend.index')}}"> Home </a>
+    
+    {% set authenticated = ('user' in session and session['user'] == g.user.username) %}
+    <div>
+      <a href = "{{url_for('frontend.index')}}"> Home </a>
+      <a href="{{ url_for('loginpages.login') }}">| Login </a>
+      {% if authenticated == True %}
+      <a href = "{{url_for('loginpages.logout')}}"> | Logout </a>
+      {% endif %}
+      <a href = "{{url_for('registerpages.register')}}"> | Register </a>
+    </div>
+    
+    {% with messages = get_flashed_messages() %}
+    <hr/>
+      {% if messages %}
+      <ul class=flashes>
+        {% for message in messages %}
+        <li> {{ message }}  </li>
+        {% endfor %}
+      </ul>
+      {% endif %}
+    <hr/>
+    {% endwith %}
+    {% block body %}
+    {% endblock %}
+  </body>
+</html>

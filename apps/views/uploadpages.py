@@ -93,9 +93,10 @@ def upload() :
 	for x in categories :
 		nameOfCategories.append((x.id, x.name))
 	form.subject.choices = nameOfCategories
-	if request.method == 'POST' :
+	if request.method == 'POST' and form.validate_on_submit() :
 #		print "here"
 		try :
+			
 			title = form.filename.data
 			content = form.file.data
 			category = form.subject.data

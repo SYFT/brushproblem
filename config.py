@@ -17,4 +17,4 @@ UPLOADS_DEFAULT_DEST  = UPLOAD_FOLDER
 ALLOWED_EXTENSIONS = ('txt', 'pdf', 'doc', 'docx')
 MAX_CONTENT_LENGTH = 8 * 1024 * 1024
 
-WHOOSH_BASE = os.path.join(baseDir, 'app.db')
+WHOOSH_BASE = os.path.join(baseDir, 'whoosh_index')
