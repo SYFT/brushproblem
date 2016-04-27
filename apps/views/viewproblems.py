@@ -1,9 +1,11 @@
+# -*- coding: utf-8 -*-
+
 from flask import Flask, request, session, \
 					g, redirect, url_for, \
 					abort, render_template, flash,  \
 					Blueprint
 from flask.ext.login import current_user, login_required
-from apps import db, models
+from apps import app, db, models
 from apps.forms import SearchProblemForm
 import datetime
 
@@ -15,12 +17,20 @@ viewproblems = Blueprint('viewproblems', __name__,
 def search() :
 	form = SearchProblemForm()
 	categories = models.Subject.query.order_by('name')
+	
 	nameOfCategories = []
 	for x in categories :
 		nameOfCategories.append((x.id, x.name))
 	form.subject.choices = nameOfCategories
+	
+	typeOfTimeDelta = []
+	for x, y in app.config['TIMEDELTACHOICE'] :
+		typeOfTimeDelta.append((x, y))
+	form.timeDelta.choices = typeOfTimeDelta
+	form.timeDelta.data = app.config['DEFAULTOFTIMEDELTA']
+		
 	if request.method == 'POST' and form.validate_on_submit() :
-		timeDelta = form.timeDelta.data
+		timeDelta = app.config['TIMEDELTA'][form.timeDelta.data]
 		name = form.filename.data
 		category = form.subject.data
 		

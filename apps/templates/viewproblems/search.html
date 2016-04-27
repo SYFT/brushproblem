@@ -1,0 +1,12 @@
+{% extends "mainpage.html" %}
+
+{% block body %}
+<h1>搜索你想要的文章！</h1>
+<form action = "{{ url_for('viewproblems.search') }}" 
+      method = "post" name = "login">
+  <p>请选择所要查找的科目： {{ form.subject }} </p> <br/>
+  <p>请输入你索要查找的关键字：<br/>{{ form.filename }}</p>
+  <p>请选择所要查找题目的上传时间段：<br/>{{ form.timeDelta }}</p>
+  {{ form.submit(value = "我选好了") }}
+</form>
+{% endblock %}

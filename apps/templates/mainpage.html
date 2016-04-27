@@ -2,14 +2,20 @@
 <html>
   <head>
     <meta http-equiv = "Content-Type" content = "text/html; charset=utf-8">
-    <title>{% if title %} {{title}} {% else %} MyApplication {% endif % }</title>
+    <title>
+      {% if title %}
+        {{title}}
+      {% else %}
+        MyApplication
+      {% endif %}
+    </title>
     {% block head %}
     {% endblock %}
   </head>
   <body>
     <a href = "{{url_for('frontend.index')}}"> Home </a>
     
-    {% set authenticated = ('user' in session and session['user'] == g.user.username) %}
+    {% set authenticated = ('user' in session and session['user'] == current_user.username) %}
     <div>
       <a href = "{{url_for('frontend.index')}}"> Home </a>
       <a href="{{ url_for('loginpages.login') }}">| Login </a>
@@ -18,17 +24,17 @@
       {% endif %}
       <a href = "{{url_for('registerpages.register')}}"> | Register </a>
     </div>
-    
+    <p> Hello {{current_user.username}} ! </p> <br/>
     {% with messages = get_flashed_messages() %}
-    <hr/>
       {% if messages %}
+      <hr/>
       <ul class=flashes>
         {% for message in messages %}
         <li> {{ message }}  </li>
         {% endfor %}
       </ul>
+      <hr/>
       {% endif %}
-    <hr/>
     {% endwith %}
     {% block body %}
     {% endblock %}

@@ -10,6 +10,7 @@
       <a href = "{{url_for('loginpages.logout')}}"> | Logout </a>
     </div>
     <hr/>
+    <p> Hello {{current_user.username}} ! </p> <br/>
     <div>
       {% with messages = get_flashed_messages() %}
         {% if messages %}
@@ -26,7 +27,7 @@
 <!--       <hr/> -->
 <!--       <input type = "submit" name = "submit" value = "submit" id = "submit"> -->
       <hr/>
-      <p>标题：{{form.filename(placeholder = "标题将作为日后检索题目的文件名！")}} </p><br/>
+      <p>标题：{{form.filename(size = 50, placeholder = "标题将作为日后检索题目的文件名！")}} </p><br/>
       <p>题目内容：<br/>{{form.file(rows = 10, cols = 100, placeholder = "直接粘帖题目即可，不支持图片。")}} </p><br/>
       <p>分类：</p>{{form.subject}} <br/>
       <hr/>
@@ -36,20 +37,20 @@
       <hr/>
     </form>
     
-    (% if form.filename.error %)
+    {% if form.filename.errors %}
       <hr/>
       <p><strong>文件名错误！</strong></p>
       {% for error in form.filename.errors %}
-        <span style="color: red;">{% if error.message %} {{ error.message }} {% else %} {{ error }} {% endif %}</span><br>
+        <span style="color: red;">{% if error.message %} {{ error.message }} {% else %} {{ error }} {% endif %}</span><br/>
       {% endfor %}
       <hr/>
     {% endif %}
     
-    (% if form.file.error %)
+    {% if form.file.errors %}
       <hr/>
       <p><strong>文件错误！</strong></p>
       {% for error in form.filename.errors %}
-        <span style="color: red;">{% if error.message %} {{ error.message }} {% else %} {{ error }} {% endif %}</span><br>
+        <span style="color: red;">{% if error.message %} {{ error.message }} {% else %} {{ error }} {% endif %}</span><br/>
       {% endfor %}
       <hr/>
     {% endif %}

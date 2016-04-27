@@ -60,11 +60,8 @@ class SearchProblemForm(Form) :
 						message = u'Length should between 2 and 16!!')])
 	timeDelta = SelectField('timedelta', 
 					validators = [DataRequired(message = ERROR_EMPTY)], 
-					coerce = datetime.datetime,
-					choices = [(datetime.timedelta(days = 1), u'今天'), 
-							(datetime.timedelta(days = 7), u'一星期内'), 
-							(datetime.timedelta(days = 30), u'一月内（30天）'), 
-							(datetime.timedelta(days = 4000), u'无限制')])
+					coerce = int)
+	submit = SubmitField(u'submit')
 							
 # SelectField->coerce is the return type, which is the first part of choices
 	
