@@ -1,5 +1,21 @@
 {% extends "mainpage.html" %}
 
+{% block someerrors %}
+
+{% for error in form.subject.errors %}
+  <span style="color: red;">{% if error.message %} {{ error.message }} {% else %} {{ error }} {% endif %}</span><br>
+{% endfor %}
+
+{% for error in form.filename.errors %}
+  <span style="color: red;">{% if error.message %} {{ error.message }} {% else %} {{ error }} {% endif %}</span><br>
+{% endfor %}
+
+{% for error in form.timeDelta.errors %}
+  <span style="color: red;">{% if error.message %} {{ error.message }} {% else %} {{ error }} {% endif %}</span><br>
+{% endfor %}
+
+{% endblock %}
+
 {% block body %}
 <h1>搜索你想要的文章！</h1>
 <form action = "{{ url_for('viewproblems.search') }}" 

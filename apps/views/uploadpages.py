@@ -83,17 +83,24 @@ def change(x) :
 			raise MyOperateError(u'Unexpected Error.')
 	
 	return ret
-		
+
+
 @uploadpages.route('/upload', methods = ['GET', 'POST'])
 @login_required
 def upload() :
-	form = UploadForm()
-	categories = models.Subject.query.order_by('name')
-	nameOfCategories = []
-	for x in categories :
-		nameOfCategories.append((x.id, x.name))
-	form.subject.choices = nameOfCategories
-	if request.method == 'POST' and form.validate_on_submit() :
+	if not form :
+		form = UploadForm()
+	
+	if not form.subject.choices :
+		print 'hhhh'
+		categories = models.Subject.query.order_by('name')
+		nameOfCategories = []
+		for x in categories :
+			nameOfCategories.append((x.id, x.name))
+		form.subject.choices = nameOfCategories
+	
+	print form.validate_on_submit()
+	if request.method == 'POST' and form is not None and form.validate_on_submit() :
 #		print "here"
 		try :
 			
@@ -118,10 +125,13 @@ def upload() :
 				pro = models.Document(source = doc, content = content, answer = answer)
 				db.session.add(pro)
 			db.session.commit()
+			flash(u'Successfully uploaded!')
 		except MyOperateError as e:
 			print e
 			flash(u'Sorry, this file is not allow to upload !!')
 		except Exception as e:
 			print e
 			flash(u'Sorry, this file is not allow to upload !!')
+	else :
+		flash(u'Upload failed!')
 	return render_template('uploadpages/upload.html', form = form, categories = nameOfCategories)

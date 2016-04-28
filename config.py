@@ -19,7 +19,7 @@ MAX_CONTENT_LENGTH = 8 * 1024 * 1024
 
 WHOOSH_BASE = os.path.join(baseDir, 'whoosh_index')
 
-TIMEDELTACHOICE = [(0, u'今天'), 
+TIMEDELTA_CHOICE = [(0, u'今天'), 
 			(1, u'一星期内'),
 			(2, u'一月内（30天）'), 
 			(3, u'无限制')]
@@ -27,4 +27,4 @@ TIMEDELTA = [timedelta(days = 1),
 			timedelta(days = 7),
 			timedelta(days = 30),
 			timedelta(days = 4000)]
-DEFAULTOFTIMEDELTA = 3
+DEFAULT_TIME_DELTA = 3

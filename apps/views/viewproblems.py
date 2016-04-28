@@ -16,24 +16,30 @@ viewproblems = Blueprint('viewproblems', __name__,
 @viewproblems.route('/search', methods=['GET', 'POST'])
 def search() :
 	form = SearchProblemForm()
-	categories = models.Subject.query.order_by('name')
 	
-	nameOfCategories = []
-	for x in categories :
-		nameOfCategories.append((x.id, x.name))
-	form.subject.choices = nameOfCategories
+	# debug
+	print form.is_submitted()
 	
-	typeOfTimeDelta = []
-	for x, y in app.config['TIMEDELTACHOICE'] :
-		typeOfTimeDelta.append((x, y))
-	form.timeDelta.choices = typeOfTimeDelta
-	form.timeDelta.data = app.config['DEFAULTOFTIMEDELTA']
+	if form.is_submitted() == False :
+		categories = models.Subject.query.order_by('name')
 		
+		nameOfCategories = []
+		for x in categories :
+			nameOfCategories.append((x.id, x.name))
+		form.subject.choices = nameOfCategories
+		
+		typeOfTimeDelta = []
+		for x, y in app.config['TIMEDELTA_CHOICE'] :
+			typeOfTimeDelta.append((x, y))
+		form.timeDelta.choices = typeOfTimeDelta
+		form.timeDelta.data = app.config['DEFAULT_TIME_DELTA']
+	
+	print form.subject, form.timeDelta
 	if request.method == 'POST' and form.validate_on_submit() :
 		timeDelta = app.config['TIMEDELTA'][form.timeDelta.data]
 		name = form.filename.data
 		category = form.subject.data
-		
+		print 'Good'
 		return redirect(url_for('showResult', category = category, 
 							name = name, timeDelta = timeDelta))
 		

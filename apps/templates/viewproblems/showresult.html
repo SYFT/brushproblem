@@ -1,0 +1,14 @@
+{% extends "mainpage.html" %}
+
+{% block body %}
+{% if len(result) > 0 %}
+<ul>
+  {% for x in result %}
+    <li> <a href = "{{url_for('viewproblems.show({{x[0]}})')}}">{{x[1]}}</a> </li>
+  {% endfor %}
+</ul>
+{% else %}
+<p>没有匹配结果。</p>
+<p>点击<a href = "{{url_for('viewproblems.search')}}">这里</a>返回</p>
+{% endif %}
+{% endblock %}
