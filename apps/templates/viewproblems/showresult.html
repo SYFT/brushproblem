@@ -1,11 +1,16 @@
 {% extends "mainpage.html" %}
 
 {% block body %}
-{% if len(result) > 0 %}
+{% if result|length > 0 %}
 <ul>
-  {% for x in result %}
-    <li> <a href = "{{url_for('viewproblems.show({{x[0]}})')}}">{{x[1]}}</a> </li>
-  {% endfor %}
+  <p>搜索结果如下:</p>
+  <div>
+    {% for x in result %}
+      <li> <a href = "{{url_for('viewproblems.show', pid = x[0])}}">{{x[1]}}</a> </li>
+    {% endfor %}
+  </div>
+  <p>共{{ result|length }}个结果。</p>
+  <p>找不到？按<a href = "{{url_for('viewproblems.search')}}">这里</a>返回调整查找参数。</p>
 </ul>
 {% else %}
 <p>没有匹配结果。</p>

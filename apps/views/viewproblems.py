@@ -8,6 +8,7 @@ from flask.ext.login import current_user, login_required
 from apps import app, db, models
 from apps.forms import SearchProblemForm
 import datetime
+import flask.ext.whooshalchemy
 
 viewproblems = Blueprint('viewproblems', __name__, 
 					static_folder = 'static',
@@ -15,12 +16,8 @@ viewproblems = Blueprint('viewproblems', __name__,
 
 @viewproblems.route('/search', methods=['GET', 'POST'])
 def search() :
-	form = SearchProblemForm()
-	
-	# debug
-	print form.is_submitted()
-	
-	if form.is_submitted() == False :
+	if 'form' not in dir() :
+		form = SearchProblemForm()
 		categories = models.Subject.query.order_by('name')
 		
 		nameOfCategories = []
@@ -34,28 +31,29 @@ def search() :
 		form.timeDelta.choices = typeOfTimeDelta
 		form.timeDelta.data = app.config['DEFAULT_TIME_DELTA']
 	
-	print form.subject, form.timeDelta
 	if request.method == 'POST' and form.validate_on_submit() :
-		timeDelta = app.config['TIMEDELTA'][form.timeDelta.data]
 		name = form.filename.data
 		category = form.subject.data
+		timeDelta = form.timeDelta.data
 		print 'Good'
-		return redirect(url_for('showResult', category = category, 
+		return redirect(url_for('viewproblems.showResult', category = category, 
 							name = name, timeDelta = timeDelta))
 		
 	return render_template('viewproblems/search.html', 
 							title = u'Select your want!',
 							form = form)
 
-@viewproblems.route('/show', methods = ['GET'])
+@viewproblems.route('/show/<int:category>&<string:name>&<int:timeDelta>', methods = ['GET'])
 def showResult(category, name, timeDelta) :
+	timeDelta = app.config['TIMEDELTA'][timeDelta]
 	startTime = datetime.datetime.utcnow() - timeDelta
-	results = models.Document.query.filter_by(
-				Dcoument.timeStamp >= startTime, 
-				subjectID == category).whoosh_search(name, limits = 50).all()
+	results = models.Document.query.whoosh_search(name, limit = 50).all()
 	result = []
 	for x in results :
 		result.append((x.id, x.title))
-	return render_template(url_for('viewproblems/showresult.html', 
-							result = result))
+	return render_template('viewproblems/showresult.html', result = result)
+
+@viewproblems.route('/show/<int:pid>')
+def show(pid) :
+	pass
 							

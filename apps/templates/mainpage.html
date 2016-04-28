@@ -13,8 +13,6 @@
     {% endblock %}
   </head>
   <body>
-    <a href = "{{url_for('frontend.index')}}"> Home </a>
-    
     {% set authenticated = ('user' in session and session['user'] == current_user.username) %}
     <div>
       <a href = "{{url_for('frontend.index')}}"> Home </a>

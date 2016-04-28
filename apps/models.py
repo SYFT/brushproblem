@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 
-import datetime
-from apps import db
+import datetime, flask.ext.whooshalchemy
+from apps import app, db
 
 class User(db.Model) :
 	__searchable__ = ['username']
@@ -45,10 +45,10 @@ class Document(db.Model) :
 	timeStamp = db.Column(db.DateTime, index = True)
 	problems = db.relationship('Problem', backref = 'source', lazy = 'dynamic')
 	
-	def __init__(self, title, author, category, timeStamp = datetime.datetime.utcnow()) :
+	def __init__(self, title, author, subjectId, timeStamp = datetime.datetime.utcnow()) :
 		self.title = title
 		self.author = author
-		self.category = category
+		self.subjectId = subjectId
 		self.timeStamp = timeStamp
 	
 	def __repr__(self) :
@@ -88,5 +88,8 @@ class Subject(db.Model) :
 
 	def __repr__(self) :
 		return '<Subject %r>' % (self.name)
+
 		
-		
+# 每个希望可以被检索的表都要被whoosh_index
+flask.ext.whooshalchemy.whoosh_index(app, User)
+flask.ext.whooshalchemy.whoosh_index(app, Document)

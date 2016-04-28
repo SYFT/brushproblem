@@ -22,20 +22,6 @@
         {% endif %}
       {% endwith %}
     </div>
-    <form method = "POST" action = "{{ url_for('uploadpages.upload') }}" name = "upload">
-<!--       <input type = "file" name = "problem"> -->
-<!--       <hr/> -->
-<!--       <input type = "submit" name = "submit" value = "submit" id = "submit"> -->
-      <hr/>
-      <p>标题：{{form.filename(size = 50, placeholder = "标题将作为日后检索题目的文件名！")}} </p><br/>
-      <p>题目内容：<br/>{{form.file(rows = 10, cols = 100, placeholder = "直接粘帖题目即可，不支持图片。")}} </p><br/>
-      <p>分类：</p>{{form.subject}} <br/>
-      <hr/>
-      <span style="color: red;">以上内容一旦提交<strong>不可更改</strong>。</span></p> 
-      <hr/>
-      {{form.submit}} <br/>
-      <hr/>
-    </form>
     
     {% if form.filename.errors %}
       <hr/>
@@ -54,6 +40,23 @@
       {% endfor %}
       <hr/>
     {% endif %}
+    
+    <form method = "POST" action = "{{ url_for('uploadpages.upload') }}" name = "upload">
+<!--       <input type = "file" name = "problem"> -->
+<!--       <hr/> -->
+<!--       <input type = "submit" name = "submit" value = "submit" id = "submit"> -->
+      {{form.hidden_tag()}}
+      <hr/>
+      <p>标题：{{form.filename(size = 50, placeholder = "标题将作为日后检索题目的文件名！")}} </p><br/>
+      <p>题目内容：<br/>{{form.file(rows = 10, cols = 100, placeholder = "直接粘帖题目即可，不支持图片。")}} </p><br/>
+      <p>分类：</p>{{form.subject}} <br/>
+      <hr/>
+      <span style="color: red;">以上内容一旦提交<strong>不可更改</strong>。</span></p> 
+      <hr/>
+      {{form.submit}} <br/>
+      <hr/>
+    </form>
+    
     <hr/>
     <p>Have some questions with this process ?</p><br/>
     <p>Don't Worry. You can find answer <a href = "{{url_for('frontend.faq')}}">here</a>!</p><br/>

@@ -88,20 +88,25 @@ def change(x) :
 @uploadpages.route('/upload', methods = ['GET', 'POST'])
 @login_required
 def upload() :
-	if not form :
+	if 'form' not in dir() :
 		form = UploadForm()
-	
-	if not form.subject.choices :
-		print 'hhhh'
 		categories = models.Subject.query.order_by('name')
 		nameOfCategories = []
 		for x in categories :
 			nameOfCategories.append((x.id, x.name))
 		form.subject.choices = nameOfCategories
 	
-	print form.validate_on_submit()
-	if request.method == 'POST' and form is not None and form.validate_on_submit() :
-#		print "here"
+	if 'form' in dir() :
+		print 'hhhhhhh'
+		print form.validate_on_submit()
+		print form.subject.data
+		print form.subject.choices
+		print form.filename.data
+		print form.file.data
+		print request.method
+		print form.errors
+	if request.method == 'POST' and form.validate_on_submit() :
+		print "here"
 		try :
 			
 			title = form.filename.data
@@ -119,10 +124,10 @@ def upload() :
 			
 			if len(format_content) < 2 :
 				raise MyOperateError('The number of problems is too small.')
-			doc = models.Document(title = title, author = g.user, category = category)
+			doc = models.Document(title = title, author = current_user, subjectId = category)
 			db.session.add(doc)
 			for content, choices, answer in format_content :
-				pro = models.Document(source = doc, content = content, answer = answer)
+				pro = models.Problem(source = doc, content = content, choice = choices, answer = answer)
 				db.session.add(pro)
 			db.session.commit()
 			flash(u'Successfully uploaded!')
@@ -134,4 +139,4 @@ def upload() :
 			flash(u'Sorry, this file is not allow to upload !!')
 	else :
 		flash(u'Upload failed!')
-	return render_template('uploadpages/upload.html', form = form, categories = nameOfCategories)
+	return render_template('uploadpages/upload.html', form = form)
