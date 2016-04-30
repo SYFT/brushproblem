@@ -2,12 +2,13 @@
 
 import datetime, flask.ext.whooshalchemy
 from apps import app, db
+from flask.ext.MyImport import jieba
 
 class User(db.Model) :
 	__searchable__ = ['username']
 
 	id = db.Column(db.Integer, primary_key = True)
-	username = db.Column(db.String(16), index = True, unique = True)
+	username = db.Column(db.String(16, convert_unicode = True), index = True, unique = True)
 	password = db.Column(db.String(32))
 	email = db.Column(db.String(64), index = True)
 	isAdmin = db.Column(db.Boolean)
@@ -41,7 +42,8 @@ class Document(db.Model) :
 	id = db.Column(db.Integer, primary_key = True)
 	userId = db.Column(db.Integer, db.ForeignKey('user.id'))
 	subjectId = db.Column(db.Integer, db.ForeignKey('subject.id'))
-	title = db.Column(db.String(256), index = True)
+	title = db.Column(db.String(256, convert_unicode = True), index = True)
+	keywordsForTitle = db.Column(db.String(512, convert_unicode = True), index = True)
 	timeStamp = db.Column(db.DateTime, index = True)
 	problems = db.relationship('Problem', backref = 'source', lazy = 'dynamic')
 	
@@ -50,6 +52,8 @@ class Document(db.Model) :
 		self.author = author
 		self.subjectId = subjectId
 		self.timeStamp = timeStamp
+		result = jieba.cut_for_search(title)
+		
 	
 	def __repr__(self) :
 		return '<Title % r>' % (self.title)
@@ -57,9 +61,9 @@ class Document(db.Model) :
 class Problem(db.Model) :
 	id = db.Column(db.Integer, primary_key = True)
 	documentId = db.Column(db.Integer, db.ForeignKey('document.id'))
-	content = db.Column(db.String(512))
-	choice = db.Column(db.String(512))
-	answer = db.Column(db.String(128))
+	content = db.Column(db.String(512, convert_unicode = True))
+	choice = db.Column(db.String(512, convert_unicode = True))
+	answer = db.Column(db.String(128, convert_unicode = True))
 #	content is in this format :
 #	problem description
 #	answer is in this format :
