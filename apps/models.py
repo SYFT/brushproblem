@@ -37,7 +37,7 @@ class User(db.Model) :
 	
 		
 class Document(db.Model) :
-	__searchable__ = ['title']
+	__searchable__ = ['keywordsForTitle']
 	
 	id = db.Column(db.Integer, primary_key = True)
 	userId = db.Column(db.Integer, db.ForeignKey('user.id'))
@@ -53,7 +53,11 @@ class Document(db.Model) :
 		self.subjectId = subjectId
 		self.timeStamp = timeStamp
 		result = jieba.cut_for_search(title)
-		
+		result = list(result)
+		print 'xxxx'
+		print ' '.join(result)
+		l = ' '.join(result)
+		self.keywordsForTitle = l
 	
 	def __repr__(self) :
 		return '<Title % r>' % (self.title)

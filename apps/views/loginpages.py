@@ -41,6 +41,7 @@ def checkAuthenticated(u) :
 	
 @loginpages.before_request
 def before_request():
+	print 'current_user:', current_user
 	g.user = current_user
 		
 @loginpages.route('/login', methods=['GET', 'POST'])
@@ -53,10 +54,14 @@ def login() :
 		print session['user']
 	print 'user' in session
 	
+	# Have log in
+	try :
+		if 'user' in session and session['user'] == g.user.username :
+			flash('you have been loggin in as %s.' % g.user.username)
+			return redirect(url_for('frontend.index'))
+	except Exception as e :
+		pass
 	
-	if 'user' in session and session['user'] == g.user.username :
-		flash('you have been loggin in as %s.' % g.user.username)
-		return redirect(url_for('frontend.index'))
 	form = LoginForm()
 	if request.method == 'POST' and form.validate_on_submit():
 		flash('username: ' + form.username.data + '\n')
