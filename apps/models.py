@@ -42,13 +42,13 @@ class Document(db.Model) :
 	id = db.Column(db.Integer, primary_key = True)
 	userId = db.Column(db.Integer, db.ForeignKey('user.id'))
 	subjectId = db.Column(db.Integer, db.ForeignKey('subject.id'))
-	title = db.Column(db.String(256, convert_unicode = True), index = True)
-	keywordsForTitle = db.Column(db.String(512, convert_unicode = True), index = True)
+	title = db.Column(db.Unicode(256), index = True)
+	keywordsForTitle = db.Column(db.Unicode(512), index = True)
 	timeStamp = db.Column(db.DateTime, index = True)
 	problems = db.relationship('Problem', backref = 'source', lazy = 'dynamic')
 	
 	def __init__(self, title, author, subjectId, timeStamp = datetime.datetime.utcnow()) :
-		self.title = title
+		self.title = unicode(title)
 		self.author = author
 		self.subjectId = subjectId
 		self.timeStamp = timeStamp
@@ -57,7 +57,7 @@ class Document(db.Model) :
 		print 'xxxx'
 		print ' '.join(result)
 		l = ' '.join(result)
-		self.keywordsForTitle = l
+		self.keywordsForTitle = unicode(l)
 	
 	def __repr__(self) :
 		return '<Title % r>' % (self.title)
@@ -65,9 +65,9 @@ class Document(db.Model) :
 class Problem(db.Model) :
 	id = db.Column(db.Integer, primary_key = True)
 	documentId = db.Column(db.Integer, db.ForeignKey('document.id'))
-	content = db.Column(db.String(512, convert_unicode = True))
-	choice = db.Column(db.String(512, convert_unicode = True))
-	answer = db.Column(db.String(128, convert_unicode = True))
+	content = db.Column(db.Unicode(512))
+	choice = db.Column(db.Unicode(512))
+	answer = db.Column(db.Unicode(128))
 #	content is in this format :
 #	problem description
 #	answer is in this format :
@@ -78,9 +78,9 @@ class Problem(db.Model) :
 	
 	def __init__(self, source, content, choice, answer) :
 		self.source = source
-		self.content = content
-		self.choice = choice
-		self.answer = answer
+		self.content = unicode(content)
+		self.choice = unicode(choice)
+		self.answer = unicode(answer)
 	
 	def __repr__(self) :
 		return '<Problem %d : \n %r \n %r \n>' % (self.id, self.content, self.answer)
@@ -88,11 +88,11 @@ class Problem(db.Model) :
 
 class Subject(db.Model) :
 	id = db.Column(db.Integer, primary_key = True)
-	name = db.Column(db.String(32), index = True)
+	name = db.Column(db.Unicode(32), index = True)
 	ducuments = db.relationship('Document', backref = 'category', lazy = 'dynamic')
 
 	def __init__(self, name) :
-		self.name = name
+		self.name = unicode(name)
 
 	def __repr__(self) :
 		return '<Subject %r>' % (self.name)
