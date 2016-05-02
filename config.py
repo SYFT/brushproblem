@@ -28,3 +28,5 @@ TIMEDELTA = [timedelta(days = 1),
 			timedelta(days = 30),
 			timedelta(days = 4000)]
 DEFAULT_TIME_DELTA = 3
+
+CHOICE_INDEX = u'ABCDEFGHIJKLMNOPQRSTUVWXYZ'

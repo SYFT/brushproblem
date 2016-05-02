@@ -47,13 +47,34 @@ def search() :
 def showResult(category, name, timeDelta) :
 	timeDelta = app.config['TIMEDELTA'][timeDelta]
 	startTime = datetime.datetime.utcnow() - timeDelta
-	results = models.Document.query.whoosh_search(name, limit = 50).all()
+	results = models.Document.query.\
+					filter(models.Document.timeStamp >= startTime)\
+					.whoosh_search(name, limit = 50).all()
 	result = []
 	for x in results :
 		result.append((x.id, x.title))
 	return render_template('viewproblems/showresult.html', result = result)
 
-@viewproblems.route('/show/<int:pid>')
-def show(pid) :
+class ShowProblemType :
 	pass
-							
+	
+@viewproblems.route('/show/<int:did>')
+def show(did) :
+	doc = models.Document.query.filter(models.Document.id == did).first()
+	allproblems = []
+	count = 0
+	for x in doc.problems :
+		count += 1
+		description = str(count) + u'、' + x.content.title()
+		choices = x.choice.split(u'##')
+		index = 0
+		choicesDescription = u''
+		for y in choices :
+			y = y.strip()
+			if len(y) > 0 :
+				choicesDescription += \
+					unicode(app.config['CHOICE_INDEX'][index]) + \
+					u'、' + \
+					y + \
+					u'\r\n'
+				countChoice += 1

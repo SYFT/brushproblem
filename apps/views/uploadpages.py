@@ -60,22 +60,22 @@ def change(x) :
 			allChoices = pat.search(pro)
 			allChoices = allChoices.group()
 			print 'allchoices:', allChoices
-			pat = re.compile(u'[ ,\r,\n,A-Z,\.,、,，,\,]')
+			pat = re.compile(u'[ ,\r,\n,A-Z,、,，,\,]\.')
 			choice = pat.split(allChoices)
 			choices = ""
 			for x in choice :
+				x = x.strip()
 				if len(x) > 0 :
-					choices += '(' + x + ')'
+					choices += u'##' + x + u'##'
 			
 			# Get description from each problem
 			ind = pro.index(allChoices)
 			description = pro[0 : ind]
 			description = description.strip()
-			pat = re.compile(u'[0-9,\.,，,、]')
-			des = pat.split(description)
-			description = ""
-			for x in des :
-				description += x
+			pat = re.compile(u'[0-9,\.,、]*')
+			des = pat.match(description)
+			des = des.group()
+			description = description[len(des):]
 			
 			ret.append((description, choices, answer))
 		except Exception as e :

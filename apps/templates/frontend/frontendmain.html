@@ -11,9 +11,10 @@
     {% set authenticated = ('user' in session and session['user'] == g.user.username) %}
     <div>
       <a href = "{{url_for('frontend.index')}}"> Home </a>
-      <a href="{{ url_for('loginpages.login') }}">| Login </a>
       {% if authenticated == True %}
       <a href = "{{url_for('loginpages.logout')}}"> | Logout </a>
+      {% else %}
+      <a href="{{ url_for('loginpages.login') }}">| Login </a>
       {% endif %}
       <a href = "{{url_for('registerpages.register')}}"> | Register </a>
     </div>

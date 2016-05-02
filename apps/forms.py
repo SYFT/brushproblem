@@ -65,4 +65,8 @@ class SearchProblemForm(Form) :
 							
 # SelectField->coerce is the return type, which is the first part of choices
 	
+class BrushForm(Form) :
+	pid = int
+	description = unicode
+	
 	

@@ -70,8 +70,8 @@ class Problem(db.Model) :
 	answer = db.Column(db.Unicode(128))
 #	content is in this format :
 #	problem description
-#	answer is in this format :
-#	(choose description) (choose description) .... 
+#	choice is in this format :
+#	##choose description##choose description## .... 
 #	caution : () are needed.
 #	answer is in this format : A_B_C_D/A/B_C
 #	multianswers must be splited by _ if necessary.
