@@ -73,7 +73,7 @@ class Problem(db.Model) :
 #	choice is in this format :
 #	##choose description##choose description## .... 
 #	caution : () are needed.
-#	answer is in this format : A_B_C_D/A/B_C
+#	answer is in this format : ABCD/A/BC
 #	multianswers must be splited by _ if necessary.
 	
 	def __init__(self, source, content, choice, answer) :

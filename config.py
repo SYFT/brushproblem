@@ -30,3 +30,6 @@ TIMEDELTA = [timedelta(days = 1),
 DEFAULT_TIME_DELTA = 3
 
 CHOICE_INDEX = u'ABCDEFGHIJKLMNOPQRSTUVWXYZ'
+
+MESSAGE_FOR_RIGHT = u'Your are right!'
+MESSAGE_FOR_WRONG = u'Your are wrong! Right answer is %s.'

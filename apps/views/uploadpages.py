@@ -44,9 +44,9 @@ def change(x) :
 			ans = pat.split(answer)
 			answer = ''
 			for i in range(0, len(ans)) :
+				ans[i] = ans[i].strip()
 				if len(ans[i]) > 0 :
-					answer += '_' + ans[i]
-			answer = answer[1 : len(answer)]
+					answer += ans[i]
 			
 			print 'answer:', answer
 			pat = re.compile(u'[\(,（]+[A-Z]+[\),）]+')

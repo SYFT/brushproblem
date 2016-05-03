@@ -1,0 +1,20 @@
+{% extend "mainpage.html" %}
+
+{% block error %}
+  {% for eachpro in pro %}
+    {% if eachpro.errors %}
+    <div>
+      <p>Problem {{eachpro.index}} has some wrongs :</p>
+      <ul>
+        {% for error in eachpro.errors %}
+          <li> {{error}} </li>
+        {% endfor %}
+      </ul>
+    </div>
+    {% endif %}
+  {% endfor %}
+{% endblock %}
+
+{% blcok body %}
+  
+{% endblock %}

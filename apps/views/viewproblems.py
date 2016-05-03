@@ -6,7 +6,7 @@ from flask import Flask, request, session, \
 					Blueprint
 from flask.ext.login import current_user, login_required
 from apps import app, db, models
-from apps.forms import SearchProblemForm
+from apps.forms import SearchProblemForm, BrushForm
 import datetime
 import flask.ext.whooshalchemy
 
@@ -55,26 +55,66 @@ def showResult(category, name, timeDelta) :
 		result.append((x.id, x.title))
 	return render_template('viewproblems/showresult.html', result = result)
 
-class ShowProblemType :
-	pass
-	
-@viewproblems.route('/show/<int:did>')
+def myValidate(arrayForm) :
+	for x in arrayForm :
+		if not x.validate_on_submit() :
+			return False
+	return True
+
+@viewproblems.route('/show/<int:did>', methods=['GET', 'POST'])
 def show(did) :
-	doc = models.Document.query.filter(models.Document.id == did).first()
-	allproblems = []
-	count = 0
-	for x in doc.problems :
-		count += 1
-		description = str(count) + u'、' + x.content.title()
-		choices = x.choice.split(u'##')
-		index = 0
-		choicesDescription = u''
-		for y in choices :
-			y = y.strip()
-			if len(y) > 0 :
-				choicesDescription += \
-					unicode(app.config['CHOICE_INDEX'][index]) + \
-					u'、' + \
-					y + \
-					u'\r\n'
-				countChoice += 1
+	allRight = False
+	if 'allproblems' not in dir() :
+		doc = models.Document.query.filter(models.Document.id == did).first()
+		allproblems = []
+		count = 0
+		for x in doc.problems :
+			count += 1
+			description = str(count) + u'、' + x.content.title()
+			choices = x.choice.split(u'##')
+			index = 0
+			choices = []
+			for y in choices :
+				y = y.strip()
+				if len(y) > 0 :
+					choicesDescription += \
+						unicode(app.config['CHOICE_INDEX'][index]) + \
+						u'、' + unicode(y)
+					
+					choices.append((app.config['CHOICE_INDEX'][index],
+									choicesDescription))
+					countChoice += 1
+			
+			pro = BrushForm()
+			pro.pid = x.id
+			pro.index = count
+			pro.description = description
+			pro.choice.choices = choices
+			pro.choice.default = []
+			pro.check = 0
+			allproblems.append(pro)
+	elif request.method == 'POST' and myValidate(allproblems) :
+		allRight = True
+		for x in allproblems :
+			if len(x.choice.data) < 1 :
+				allRight = False
+				continue
+			realPro = models.Problem.query.filter(models.Problem.id == x.pid)
+			realPro = realPro.first()
+			answer = unicode(realPro.answer)
+			customAnswer = unicode(''.join(x.choice.data))
+			if customAnswer == answer :
+				x.check = 2
+				x.message = app.config['MESSAGE_FOR_RIGHT']
+			else :
+				x.check = 1
+				allRight = False
+				x.message = app.config['MESSAGE_FOR_WRONG'] % (realPro.answer)
+	
+	if allRight == False :
+		return render_template('viewproblems/showproblems.html', 
+								pro = allproblems)
+	else :
+		return render_template('viewproblems/congratulation.html')
+	
+				

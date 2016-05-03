@@ -2,7 +2,8 @@
 
 from flask.ext.wtf import Form
 from wtforms import StringField, PasswordField, BooleanField, \
-					SubmitField, FileField, TextAreaField, SelectField
+					SubmitField, FileField, TextAreaField, SelectField, \
+					SelectMultipleField
 from wtforms.validators import *
 import datetime
 
@@ -67,6 +68,11 @@ class SearchProblemForm(Form) :
 	
 class BrushForm(Form) :
 	pid = int
+	index = int
 	description = unicode
-	
+	choice = SelectMultipleField('choice')
+	# The return value is a list
+	check = 0
+	message = ''
+	# 0 -> unSelect  1 -> Wrong  2 -> Right
 	
