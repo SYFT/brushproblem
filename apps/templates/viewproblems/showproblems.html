@@ -1,4 +1,4 @@
-{% extend "mainpage.html" %}
+{% extends "mainpage.html" %}
 
 {% block error %}
   {% for eachpro in papers.pro %}
@@ -15,7 +15,7 @@
   {% endfor %}
 {% endblock %}
 
-{% blcok body %}
+{% block body %}
   <form method = "POST" action = "viewproblems.show" name = "brushing">
     <ol>
       {% for eachpro in papers.pro %}
@@ -25,7 +25,7 @@
         </li>
         {% if eachpro.check == 1 %}
           <span style="color: red;">{{eachpro.message}}</span>
-        {% elif %}
+        {% else %}
           <span style="color: green;">{{eachpro.message}}</span>
         {% endif %}
       {% endfor %}
