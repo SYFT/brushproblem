@@ -1,7 +1,7 @@
 {% extend "mainpage.html" %}
 
 {% block error %}
-  {% for eachpro in pro %}
+  {% for eachpro in papers.pro %}
     {% if eachpro.errors %}
     <div>
       <p>Problem {{eachpro.index}} has some wrongs :</p>
@@ -16,5 +16,20 @@
 {% endblock %}
 
 {% blcok body %}
-  
+  <form method = "POST" action = "viewproblems.show" name = "brushing">
+    <ol>
+      {% for eachpro in papers.pro %}
+        <li>
+          {{eachpro.description}}
+          {{eachpro.choice}}
+        </li>
+        {% if eachpro.check == 1 %}
+          <span style="color: red;">{{eachpro.message}}</span>
+        {% elif %}
+          <span style="color: green;">{{eachpro.message}}</span>
+        {% endif %}
+      {% endfor %}
+    </ol>
+    {{papers.submit(value = "交卷")}}
+  </form>
 {% endblock %}

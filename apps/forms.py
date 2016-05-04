@@ -66,7 +66,7 @@ class SearchProblemForm(Form) :
 							
 # SelectField->coerce is the return type, which is the first part of choices
 	
-class BrushForm(Form) :
+class ProblemForm(Form) :
 	pid = int
 	index = int
 	description = unicode
@@ -75,4 +75,8 @@ class BrushForm(Form) :
 	check = 0
 	message = ''
 	# 0 -> unSelect  1 -> Wrong  2 -> Right
+
+class BrushForm(Form) :
+	pro = []
+	submit = SubmitField(u'submit')
 	

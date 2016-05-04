@@ -6,7 +6,7 @@ from flask import Flask, request, session, \
 					Blueprint
 from flask.ext.login import current_user, login_required
 from apps import app, db, models
-from apps.forms import SearchProblemForm, BrushForm
+from apps.forms import SearchProblemForm, ProblemForm, BrushForm
 import datetime
 import flask.ext.whooshalchemy
 
@@ -63,14 +63,16 @@ def myValidate(arrayForm) :
 
 @viewproblems.route('/show/<int:did>', methods=['GET', 'POST'])
 def show(did) :
-	allRight = False
-	if 'allproblems' not in dir() :
+	allCorret = False
+	if 'allProblem' not in dir() :
 		doc = models.Document.query.filter(models.Document.id == did).first()
-		allproblems = []
+		allProblem = BrushForm()
 		count = 0
 		for x in doc.problems :
 			count += 1
-			description = str(count) + u'、' + x.content.title()
+			# description = str(count) + u'、' + x.content.title()
+			# Use ol/li to index the problems
+			description = x.content.title()
 			choices = x.choice.split(u'##')
 			index = 0
 			choices = []
@@ -85,19 +87,20 @@ def show(did) :
 									choicesDescription))
 					countChoice += 1
 			
-			pro = BrushForm()
+			pro = ProblemForm()
 			pro.pid = x.id
 			pro.index = count
 			pro.description = description
 			pro.choice.choices = choices
 			pro.choice.default = []
 			pro.check = 0
-			allproblems.append(pro)
-	elif request.method == 'POST' and myValidate(allproblems) :
-		allRight = True
-		for x in allproblems :
+			allProblem.pro.append(pro)
+	elif request.method == 'POST' and myValidate(allProblem.pro) :
+		allCorret = True
+		for x in allProblem.pro :
 			if len(x.choice.data) < 1 :
-				allRight = False
+				allCorret = False
+				x.check = 0
 				continue
 			realPro = models.Problem.query.filter(models.Problem.id == x.pid)
 			realPro = realPro.first()
@@ -108,12 +111,12 @@ def show(did) :
 				x.message = app.config['MESSAGE_FOR_RIGHT']
 			else :
 				x.check = 1
-				allRight = False
+				allCorret = False
 				x.message = app.config['MESSAGE_FOR_WRONG'] % (realPro.answer)
 	
-	if allRight == False :
+	if allCorret == False :
 		return render_template('viewproblems/showproblems.html', 
-								pro = allproblems)
+								papers = allProblem)
 	else :
 		return render_template('viewproblems/congratulation.html')
 	
