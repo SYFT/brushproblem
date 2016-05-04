@@ -2,8 +2,7 @@
 
 from flask.ext.wtf import Form
 from wtforms import StringField, PasswordField, BooleanField, \
-					SubmitField, FileField, TextAreaField, SelectField, \
-					SelectMultipleField
+					SubmitField, FileField, TextAreaField, SelectField
 from wtforms.validators import *
 import datetime
 
@@ -65,12 +64,16 @@ class SearchProblemForm(Form) :
 	submit = SubmitField(u'submit')
 							
 # SelectField->coerce is the return type, which is the first part of choices
-	
+
+class ChoiceForm(Form) :
+	option = BooleanField(default = False)
+	description = ""
+
 class ProblemForm(Form) :
 	pid = int
 	index = int
 	description = unicode
-	choice = SelectMultipleField('choice')
+	choices = []
 	# The return value is a list
 	check = 0
 	message = ''

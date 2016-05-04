@@ -17,15 +17,18 @@
 
 {% block body %}
   <form method = "POST" action = "viewproblems.show" name = "brushing">
+    {{papers.hidden_tag()}}
     <ol>
       {% for eachpro in papers.pro %}
         <li>
-          {{eachpro.description}}
-          {{eachpro.choice}}
+          {{eachpro.description}}<br/>
+          {% for x in eachpro.choices %}
+            <p>{{x.option()}}{{x.description}}</p>
+          {% endfor %}
         </li>
         {% if eachpro.check == 1 %}
           <span style="color: red;">{{eachpro.message}}</span>
-        {% else %}
+        {% elif eachpro.check == 2 %}
           <span style="color: green;">{{eachpro.message}}</span>
         {% endif %}
       {% endfor %}

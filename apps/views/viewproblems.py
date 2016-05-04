@@ -6,7 +6,7 @@ from flask import Flask, request, session, \
 					Blueprint
 from flask.ext.login import current_user, login_required
 from apps import app, db, models
-from apps.forms import SearchProblemForm, ProblemForm, BrushForm
+from apps.forms import SearchProblemForm, ProblemForm, BrushForm, ChoiceForm
 import datetime
 import flask.ext.whooshalchemy
 
@@ -67,6 +67,7 @@ def show(did) :
 	if 'allProblem' not in dir() :
 		doc = models.Document.query.filter(models.Document.id == did).first()
 		allProblem = BrushForm()
+		allProblem.pro = []
 		count = 0
 		for x in doc.problems :
 			count += 1
@@ -74,25 +75,29 @@ def show(did) :
 			# Use ol/li to index the problems
 			description = x.content.title()
 			choices = x.choice.split(u'##')
+			print 'x.choice:', x.choice
 			index = 0
-			choices = []
+			countChoice = 0
+			pro = ProblemForm()
+			pro.choices = []
 			for y in choices :
 				y = y.strip()
 				if len(y) > 0 :
-					choicesDescription += \
-						unicode(app.config['CHOICE_INDEX'][index]) + \
+					option = unicode(app.config['CHOICE_INDEX'][index])
+					choicesDescription = \
+						option + \
 						u'、' + unicode(y)
 					
-					choices.append((app.config['CHOICE_INDEX'][index],
-									choicesDescription))
+					thisChoice = ChoiceForm()
+					thisChoice.option.default = False
+					thisChoice.option.name = option
+					thisChoice.option.id = option
+					thisChoice.description = unicode(choicesDescription)
+					pro.choices.append(thisChoice)
 					countChoice += 1
-			
-			pro = ProblemForm()
 			pro.pid = x.id
 			pro.index = count
 			pro.description = description
-			pro.choice.choices = choices
-			pro.choice.default = []
 			pro.check = 0
 			allProblem.pro.append(pro)
 	elif request.method == 'POST' and myValidate(allProblem.pro) :

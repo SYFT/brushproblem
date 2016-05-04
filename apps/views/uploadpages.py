@@ -66,7 +66,8 @@ def change(x) :
 			for x in choice :
 				x = x.strip()
 				if len(x) > 0 :
-					choices += u'##' + x + u'##'
+					choices += u'##' + x
+			choices += u"##"
 			
 			# Get description from each problem
 			ind = pro.index(allChoices)
