@@ -65,6 +65,7 @@ def myValidate(arrayForm) :
 def show(did) :
 	allCorret = False
 	if 'allProblem' not in dir() :
+		print 'no defined'
 		doc = models.Document.query.filter(models.Document.id == did).first()
 		allProblem = BrushForm()
 		allProblem.pro = []
@@ -76,14 +77,13 @@ def show(did) :
 			description = x.content.title()
 			choices = x.choice.split(u'##')
 			print 'x.choice:', x.choice
-			index = 0
 			countChoice = 0
 			pro = ProblemForm()
 			pro.choices = []
 			for y in choices :
 				y = y.strip()
 				if len(y) > 0 :
-					option = unicode(app.config['CHOICE_INDEX'][index])
+					option = unicode(app.config['CHOICE_INDEX'][countChoice])
 					choicesDescription = \
 						option + \
 						u'、' + unicode(y)
@@ -101,6 +101,7 @@ def show(did) :
 			pro.check = 0
 			allProblem.pro.append(pro)
 	elif request.method == 'POST' and myValidate(allProblem.pro) :
+		print 'in here'
 		allCorret = True
 		for x in allProblem.pro :
 			if len(x.choice.data) < 1 :
@@ -121,7 +122,7 @@ def show(did) :
 	
 	if allCorret == False :
 		return render_template('viewproblems/showproblems.html', 
-								papers = allProblem)
+								index = did, papers = allProblem)
 	else :
 		return render_template('viewproblems/congratulation.html')
 	

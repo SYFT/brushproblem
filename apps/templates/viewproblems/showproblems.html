@@ -16,7 +16,7 @@
 {% endblock %}
 
 {% block body %}
-  <form method = "POST" action = "viewproblems.show" name = "brushing">
+  <form method = "POST" action = "{{ url_for('viewproblems.show', did = index) }}" name = "brushing">
     {{papers.hidden_tag()}}
     <ol>
       {% for eachpro in papers.pro %}

@@ -60,7 +60,7 @@ def change(x) :
 			allChoices = pat.search(pro)
 			allChoices = allChoices.group()
 			print 'allchoices:', allChoices
-			pat = re.compile(u'[ ,\r,\n,A-Z,、,，,\,]\.')
+			pat = re.compile(u'[ ,\r,\n,A-Z,、,，,\,.]+')
 			choice = pat.split(allChoices)
 			choices = ""
 			for x in choice :
