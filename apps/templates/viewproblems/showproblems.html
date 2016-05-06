@@ -23,13 +23,13 @@
         <li>
           {{eachpro.description}}<br/>
           {% for x in eachpro.choices %}
-            <p>{{x.option()}}{{x.description}}</p>
+            <p>{{ x.option }}{{ x.description }}</p>
           {% endfor %}
         </li>
         {% if eachpro.check == 1 %}
-          <span style="color: red;">{{eachpro.message}}</span>
+          <span style="color: red;">{{ eachpro.message }}</span>
         {% elif eachpro.check == 2 %}
-          <span style="color: green;">{{eachpro.message}}</span>
+          <span style="color: green;">{{ eachpro.message }}</span>
         {% endif %}
       {% endfor %}
     </ol>

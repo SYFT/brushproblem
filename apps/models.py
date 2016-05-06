@@ -54,8 +54,6 @@ class Document(db.Model) :
 		self.timeStamp = timeStamp
 		result = jieba.cut_for_search(title)
 		result = list(result)
-		print 'xxxx'
-		print ' '.join(result)
 		l = ' '.join(result)
 		self.keywordsForTitle = unicode(l)
 	

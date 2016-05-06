@@ -63,9 +63,11 @@ def myValidate(arrayForm) :
 
 @viewproblems.route('/show/<int:did>', methods=['GET', 'POST'])
 def show(did) :
+	print 'request.form:', request.form
 	allCorret = False
+	
+	# 定义表格
 	if 'allProblem' not in dir() :
-		print 'no defined'
 		doc = models.Document.query.filter(models.Document.id == did).first()
 		allProblem = BrushForm()
 		allProblem.pro = []
@@ -90,8 +92,9 @@ def show(did) :
 					
 					thisChoice = ChoiceForm()
 					thisChoice.option.default = False
-					thisChoice.option.name = option
-					thisChoice.option.id = option
+					thisChoice.option.name = unicode(count)
+					thisChoice.option.id = unicode(count)
+					thisChoice.option.value = option
 					thisChoice.description = unicode(choicesDescription)
 					pro.choices.append(thisChoice)
 					countChoice += 1
@@ -100,26 +103,37 @@ def show(did) :
 			pro.description = description
 			pro.check = 0
 			allProblem.pro.append(pro)
-	elif request.method == 'POST' and myValidate(allProblem.pro) :
-		print 'in here'
-		allCorret = True
-		for x in allProblem.pro :
-			if len(x.choice.data) < 1 :
-				allCorret = False
-				x.check = 0
-				continue
-			realPro = models.Problem.query.filter(models.Problem.id == x.pid)
-			realPro = realPro.first()
-			answer = unicode(realPro.answer)
-			customAnswer = unicode(''.join(x.choice.data))
-			if customAnswer == answer :
-				x.check = 2
-				x.message = app.config['MESSAGE_FOR_RIGHT']
-			else :
-				x.check = 1
-				allCorret = False
-				x.message = app.config['MESSAGE_FOR_WRONG'] % (realPro.answer)
 	
+	# 将传过来的表单填写入对应的表格位置
+	if request.method == 'POST' :
+		pass
+		# print request.Form['1']
+	
+	for pro in allProblem.pro :
+		for ch in pro.choices :
+			print "choice's value:", ch.option.value
+	
+	if myValidate(allProblem.pro) :
+		pass
+		# allCorret = True
+		# for x in allProblem.pro :
+			# if len(x.choice.data) < 1 :
+				# allCorret = False
+				# x.check = 0
+				# continue
+			# realPro = models.Problem.query.filter(models.Problem.id == x.pid)
+			# realPro = realPro.first()
+			# answer = unicode(realPro.answer)
+			# customAnswer = unicode(''.join(x.choice.data))
+			# if customAnswer == answer :
+				# x.check = 2
+				# x.message = app.config['MESSAGE_FOR_RIGHT']
+			# else :
+				# x.check = 1
+				# allCorret = False
+				# x.message = app.config['MESSAGE_FOR_WRONG'] % (realPro.answer)
+	
+	print 'how allproblems:', 'allProblem' in dir()
 	if allCorret == False :
 		return render_template('viewproblems/showproblems.html', 
 								index = did, papers = allProblem)
