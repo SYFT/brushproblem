@@ -94,7 +94,7 @@ def show(did) :
 					thisChoice.option.default = False
 					thisChoice.option.name = unicode(count)
 					thisChoice.option.id = unicode(count)
-					thisChoice.option.value = option
+					thisChoice.option.userValue = option
 					thisChoice.description = unicode(choicesDescription)
 					pro.choices.append(thisChoice)
 					countChoice += 1
@@ -108,10 +108,6 @@ def show(did) :
 	if request.method == 'POST' :
 		pass
 		# print request.Form['1']
-	
-	for pro in allProblem.pro :
-		for ch in pro.choices :
-			print "choice's value:", ch.option.value
 	
 	if myValidate(allProblem.pro) :
 		pass
