@@ -23,11 +23,13 @@ class MyOperateError(Exception) :
 		return self.description
 	
 def change(x) :
-	problems = x.split(u'\r\n\r\n')
-	print problems
+	pat = re.compile(u'\r\n\r\n|[0-9]+[\.,、]')
+	problems = pat.split(x)
+	# print problems
 	ret = []
-	for p in problems :
-		pro = p
+	for pro in problems :
+		if len(pro) < 3 :
+			continue
 		
 		try :
 		
@@ -60,7 +62,7 @@ def change(x) :
 			allChoices = pat.search(pro)
 			allChoices = allChoices.group()
 			print 'allchoices:', allChoices
-			pat = re.compile(u'[ ,\r,\n,A-Z,、,，,\,.]+')
+			pat = re.compile(u'[A-Z]+[\.,、,．]|\r\n')
 			choice = pat.split(allChoices)
 			choices = ""
 			for x in choice :
@@ -68,17 +70,25 @@ def change(x) :
 				if len(x) > 0 :
 					choices += u'##' + x
 			choices += u"##"
+			print choices
 			
 			# Get description from each problem
 			ind = pro.index(allChoices)
 			description = pro[0 : ind]
 			description = description.strip()
-			pat = re.compile(u'[0-9,\.,、]*')
+			pat = re.compile(u'[0-9]+[\.,、]')
 			des = pat.match(description)
-			des = des.group()
-			description = description[len(des):]
+			
+			try :
+				des = des.group()
+				description = description[len(des):]
+			except Exception as e :
+				description = description
 			
 			ret.append((description, choices, answer))
+		except MyOperateError as e :
+			print e.description
+			raise MyOperateError(u'Unexpected Error.')
 		except Exception as e :
 			print e
 			raise MyOperateError(u'Unexpected Error.')
@@ -106,6 +116,7 @@ def upload() :
 		print form.file.data
 		print request.method
 		print form.errors
+	
 	if request.method == 'POST' and form.validate_on_submit() :
 		print "here"
 		try :
@@ -114,17 +125,23 @@ def upload() :
 			content = form.file.data
 			category = form.subject.data
 			
+			print 'begin change'
 			format_content = change(content)
+			print 'end change'
 #			format_content should be a pair list
 #			the first element should be problem's description
 #			the second element should be problem's answer
 			
-			print format_content
-			for x, y, z in format_content :
-				print x.encode('gb2312'), y.encode('gb2312'), z.encode('gb2312')
+			# print format_content
+			# for x, y, z in format_content :
+				# print x.encode('gb2312'), y.encode('gb2312'), z.encode('gb2312')
 			
 			if len(format_content) < 2 :
 				raise MyOperateError('The number of problems is too small.')
+			
+			
+			print 'fine'
+			
 			doc = models.Document(title = title, author = current_user, subjectId = category)
 			db.session.add(doc)
 			for content, choices, answer in format_content :
@@ -133,10 +150,10 @@ def upload() :
 			db.session.commit()
 			flash(u'Successfully uploaded!')
 		except MyOperateError as e:
-			print e
+			print '\n\n\n xxx :', e.description
 			flash(u'Sorry, this file is not allow to upload !!')
 		except Exception as e:
-			print e
+			print '\n\n\n yyy :', e
 			flash(u'Sorry, this file is not allow to upload !!')
 	else :
 		flash(u'Upload failed!')

@@ -56,9 +56,12 @@ def showResult(category, name, timeDelta) :
 	return render_template('viewproblems/showresult.html', result = result)
 
 def myValidate(arrayForm) :
-	for x in arrayForm :
-		if not x.validate_on_submit() :
+	for pro in arrayForm :
+		if not pro.validate_on_submit() :
 			return False
+		for choice in pro.choices :
+			if not choice.validate_on_submit() :
+				return False
 	return True
 
 @viewproblems.route('/show/<int:did>', methods=['GET', 'POST'])
@@ -78,14 +81,15 @@ def show(did) :
 			# Use ol/li to index the problems
 			description = x.content.title()
 			choices = x.choice.split(u'##')
-			print 'x.choice:', x.choice
+			# print 'x.choice:', x.choice
+			# print 'x.answer:', x.answer
 			countChoice = 0
 			pro = ProblemForm()
 			pro.choices = []
 			for y in choices :
 				y = y.strip()
 				if len(y) > 0 :
-					option = unicode(app.config['CHOICE_INDEX'][countChoice])
+					option = chr(countChoice + ord('A'))
 					choicesDescription = \
 						option + \
 						u'、' + unicode(y)
@@ -106,28 +110,44 @@ def show(did) :
 	
 	# 将传过来的表单填写入对应的表格位置
 	if request.method == 'POST' :
-		pass
+		for pro in allProblem.pro :
+			userChoices_list = request.form.getlist(str(pro.index))
+			for c in userChoices_list :
+				index = ord(c) - ord('A')
+				# pro.choices[index].option.checked = True
+				pro.choices[index].option.data = True
 		# print request.Form['1']
 	
-	if myValidate(allProblem.pro) :
-		pass
-		# allCorret = True
-		# for x in allProblem.pro :
-			# if len(x.choice.data) < 1 :
-				# allCorret = False
-				# x.check = 0
-				# continue
-			# realPro = models.Problem.query.filter(models.Problem.id == x.pid)
-			# realPro = realPro.first()
-			# answer = unicode(realPro.answer)
-			# customAnswer = unicode(''.join(x.choice.data))
-			# if customAnswer == answer :
-				# x.check = 2
-				# x.message = app.config['MESSAGE_FOR_RIGHT']
-			# else :
-				# x.check = 1
-				# allCorret = False
-				# x.message = app.config['MESSAGE_FOR_WRONG'] % (realPro.answer)
+	# 检查答案，给予反馈
+	if allProblem.validate_on_submit() and myValidate(allProblem.pro) :
+		allCorret = True
+		for pro in allProblem.pro :
+			userAnswer = unicode('')
+			choiceIndex = 0
+			for choice in pro.choices :
+				print choice.option.data
+				if choice.option.data == True :
+					userAnswer += unicode(chr(choiceIndex + ord('A')))
+				choiceIndex += 1
+			userAnswer = userAnswer.strip()
+			# print pro.index, ':', userAnswer
+			
+			if len(userAnswer) < 1 :
+				pro.check = 0
+				allCorret = False
+				continue
+			
+			realPro = models.Problem.query.filter(models.Problem.id == pro.pid)
+			realPro = realPro.first()
+			answer = unicode(realPro.answer)
+			
+			if userAnswer == answer :
+				pro.check = 2
+				pro.message = app.config['MESSAGE_FOR_RIGHT']
+			else :
+				pro.check = 1
+				allCorret = False
+				pro.message = app.config['MESSAGE_FOR_WRONG'] % (realPro.answer)
 	
 	print 'how allproblems:', 'allProblem' in dir()
 	if allCorret == False :

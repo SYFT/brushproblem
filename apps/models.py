@@ -56,6 +56,7 @@ class Document(db.Model) :
 		result = list(result)
 		l = ' '.join(result)
 		self.keywordsForTitle = unicode(l)
+		print 'okay'
 	
 	def __repr__(self) :
 		return '<Title % r>' % (self.title)
