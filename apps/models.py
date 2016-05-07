@@ -97,6 +97,37 @@ class Subject(db.Model) :
 		return '<Subject %r>' % (self.name)
 
 		
-# 每个希望可以被检索的表都要被whoosh_index
-flask.ext.whooshalchemy.whoosh_index(app, User)
-flask.ext.whooshalchemy.whoosh_index(app, Document)
+
+from flask.ext.admin import Admin, BaseView, expose
+from flask.ext.admin.contrib.sqla import ModelView
+from flask.ext.login import current_user
+
+class MyView(BaseView) :
+	def is_accessible(self) :
+		try :
+			# user = current_user
+			# print '%s isAdmin:' % (user.username), user.isAdmin
+			# print (user.is_authenticated() and user.isAdmin)
+			if (user.is_authenticated() and user.isAdmin) :
+				# print 'here return True'
+				return True
+			# print 'here return False'
+		except Exception as e :
+			pass
+		return False
+	
+	@expose('/')
+	def index(self) :
+		return self.render('admin/adminindex.html')
+
+class MyModelView(ModelView) :
+	def is_accessible(self) :
+		user = current_user
+		try :
+			if (user.is_authenticated() and user.isAdmin) :
+				return True
+		except Exception as e :
+			pass
+		return False
+
+

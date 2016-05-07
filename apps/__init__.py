@@ -20,20 +20,23 @@ from .models import *
 
 
 
+import flask.ext.whooshalchemy
+# 每个希望可以被检索的表都要被whoosh_index
+flask.ext.whooshalchemy.whoosh_index(app, User)
+flask.ext.whooshalchemy.whoosh_index(app, Document)
 
-from flask.ext.admin import Admin, BaseView, expose
-from flask.ext.admin.contrib.sqla import ModelView
 
-class MyView(BaseView) :
-	@expose('/')
-	def index(self) :
-		return self.render('admin/adminindex.html')
+
+
 
 ADMIN_NAME = 'MyAdmin'
 admin = Admin(name = ADMIN_NAME)
 admin.init_app(app)
 admin.add_view(MyView(name = 'Hello'))
-admin.add_view(ModelView(User, db.session))
+admin.add_view(MyModelView(User, db.session, name = u'用户', category = u'管理'))
+admin.add_view(MyModelView(Document, db.session, name = u'试卷', category = u'管理'))
+admin.add_view(MyModelView(Problem, db.session, name = u'具体题目', category = u'管理'))
+admin.add_view(MyModelView(Subject, db.session, name = u'科目', category = u'管理'))
 
 
 
