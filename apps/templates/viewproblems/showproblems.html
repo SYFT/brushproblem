@@ -20,19 +20,28 @@
     {{papers.hidden_tag()}}
     <ol>
       {% for eachpro in papers.pro %}
-        <li>
-          {{eachpro.description}}<br/>
+        {% if not (papers.hideCorrectProblem.data and eachpro.check == 2) %}
+          <li>
+            {{eachpro.description}}<br/>
+            {% for x in eachpro.choices %}
+              <p>{{ x.option }}{{ x.description }}</p>
+            {% endfor %}
+          </li>
+          {% if eachpro.check == 1 %}
+            <span style="color: red;">{{ eachpro.message }}</span>
+          {% elif eachpro.check == 2 %}
+            <span style="color: green;">{{ eachpro.message }}</span>
+          {% endif %}
+        {% else %}
+          <div style = "display:none;">
           {% for x in eachpro.choices %}
-            <p>{{ x.option }}{{ x.description }}</p>
+            {{ x.option(hidden = "hidden") }}
           {% endfor %}
-        </li>
-        {% if eachpro.check == 1 %}
-          <span style="color: red;">{{ eachpro.message }}</span>
-        {% elif eachpro.check == 2 %}
-          <span style="color: green;">{{ eachpro.message }}</span>
+          </div>
         {% endif %}
       {% endfor %}
     </ol>
-    {{papers.submit(value = "交卷")}}
+    <p>{{ papers.hideCorrectProblem }} 隐藏正确题目，剩下错误和未做的题目。</p>
+    {{ papers.submit(value = "交卷") }}
   </form>
 {% endblock %}

@@ -65,7 +65,7 @@ def myValidate(arrayForm) :
 	return True
 
 @viewproblems.route('/show/<int:did>', methods=['GET', 'POST'])
-def show(did) :
+def show(did, thatt = None) :
 	print 'request.form:', request.form
 	allCorret = False
 	
@@ -125,7 +125,7 @@ def show(did) :
 			userAnswer = unicode('')
 			choiceIndex = 0
 			for choice in pro.choices :
-				print choice.option.data
+				# print choice.option.data
 				if choice.option.data == True :
 					userAnswer += unicode(chr(choiceIndex + ord('A')))
 				choiceIndex += 1

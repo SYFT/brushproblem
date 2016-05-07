@@ -66,7 +66,7 @@ class SearchProblemForm(Form) :
 # SelectField->coerce is the return type, which is the first part of choices
 
 class ChoiceForm(Form) :
-	option = BooleanField(default = False)
+	option = BooleanField('option', default = False)
 	description = ""
 
 class ProblemForm(Form) :
@@ -82,4 +82,5 @@ class ProblemForm(Form) :
 class BrushForm(Form) :
 	pro = []
 	submit = SubmitField(u'submit')
+	hideCorrectProblem = BooleanField('hideCorrectProblem', default = False)
 	
