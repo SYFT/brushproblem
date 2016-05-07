@@ -13,10 +13,27 @@ app = Flask(APP_NAME)
 app.config.from_object('config')
 
 
-
 # create database
 db = SQLAlchemy(app)
 from .models import *
+
+
+
+
+
+from flask.ext.admin import Admin, BaseView, expose
+from flask.ext.admin.contrib.sqla import ModelView
+
+class MyView(BaseView) :
+	@expose('/')
+	def index(self) :
+		return self.render('admin/adminindex.html')
+
+ADMIN_NAME = 'MyAdmin'
+admin = Admin(name = ADMIN_NAME)
+admin.init_app(app)
+admin.add_view(MyView(name = 'Hello'))
+admin.add_view(ModelView(User, db.session))
 
 
 

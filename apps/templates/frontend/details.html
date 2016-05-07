@@ -1,5 +1,5 @@
-{% extends "frontend/frontendmain.html" %}
-{% block content %}
+{% extends "mainpage.html" %}
+{% block body %}
     <h1>Hi, {{g.user.username}}!</h1>
   {% for post in posts %}
     <p>{{post.author.username}} says: <b>{{post.body}}</b></p>

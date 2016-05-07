@@ -1,24 +1,24 @@
-﻿{% extends "loginpages/loginmain.html" %}
+﻿{% extends "mainpage.html" %}
 
 {% block body %}
-<p>Didn't have a account ? <a href = "{{url_for('registerpages.register')}}"> Register </a></p>
-<h1>Sign In</h1>
-<form action = "" method = "post" name = "login">
-  {{ form.hidden_tag() }}
-  <strong>Enter your username:</strong><br>
-  {{form.username(size = 16, placeholder = "username")}}
-  <hr/>
-  <strong>Enter your password:</strong><br>
-  {{form.password(size = 16, placeholder = "password")}}<br>
-  <hr/>
-  {% for error in form.username.errors %}
-    <span style="color: red;">{% if error.message %} {{ error.message }} {% else %} {{ error }} {% endif %}</span><br>
-  {% endfor %}
-  {% for error in form.password.errors %}
-    <span style="color: red;">{% if error.message %} {{ error.message }} {% else %} {{ error }} {% endif %}</span><br>
-  {% endfor %}
-  <div>{{form.remember_me}} Remember Me</div>
-  <hr/>
-  {{ form.submit }}
-</form>
+  <p>Didn't have a account ? <a href = "{{url_for('registerpages.register')}}"> Register </a></p>
+  <h1>Sign In</h1>
+  <form action = "" method = "post" name = "login">
+    {{ form.hidden_tag() }}
+    <strong>Enter your username:</strong><br>
+    {{form.username(size = 16, placeholder = "username")}}
+    <hr/>
+    <strong>Enter your password:</strong><br>
+    {{form.password(size = 16, placeholder = "password")}}<br>
+    <hr/>
+    {% for error in form.username.errors %}
+      <span style="color: red;">{% if error.message %} {{ error.message }} {% else %} {{ error }} {% endif %}</span><br>
+    {% endfor %}
+    {% for error in form.password.errors %}
+      <span style="color: red;">{% if error.message %} {{ error.message }} {% else %} {{ error }} {% endif %}</span><br>
+    {% endfor %}
+    <div>{{form.remember_me}} Remember Me</div>
+    <hr/>
+    {{ form.submit }}
+  </form>
 {% endblock %}

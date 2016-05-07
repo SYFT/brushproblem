@@ -1,5 +1,5 @@
-{% extends "frontend/frontendmain.html" %}
-{% block content %}
+{% extends "mainpage.html" %}
+{% block body %}
   {% if authenticated == False %}
   <h1>Overview</h1>
   <p>Do you want to <a href="{{ url_for('loginpages.login') }}">log in?</a>
