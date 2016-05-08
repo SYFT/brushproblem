@@ -6,10 +6,10 @@
   
   <p>Some else questions?</p>
   <form method = "POST" action = "{{ url_for('frontend.suggest') }}" name = "suggest">
-	<hr/>
-    {{form.suggestion(rows = 5, cols = 20)}}<br/>
     <hr/>
-    {{form.submit}}
-    <hr/>
+      {{form.suggestion(rows = 5, cols = 20)}}<br/>
+      <hr/>
+      {{form.submit}}
+      <hr/>
   </form>
 {% endblock %}

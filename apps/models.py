@@ -21,7 +21,7 @@ class User(db.Model) :
 		self.isAdmin = isAdmin
 	
 	def __repr__(self) :
-		return '<User % r>' % (self.username)
+		return self.username
 	
 	def is_authenticated(self) :
 		return True
@@ -59,7 +59,7 @@ class Document(db.Model) :
 		print 'okay'
 	
 	def __repr__(self) :
-		return '<Title % r>' % (self.title)
+		return self.title
 
 class Problem(db.Model) :
 	id = db.Column(db.Integer, primary_key = True)
@@ -94,13 +94,14 @@ class Subject(db.Model) :
 		self.name = unicode(name)
 
 	def __repr__(self) :
-		return '<Subject %r>' % (self.name)
+		return self.name
 
 		
 
 from flask.ext.admin import Admin, BaseView, expose
 from flask.ext.admin.contrib.sqla import ModelView
 from flask.ext.login import current_user
+from flask import session
 
 class MyView(BaseView) :
 	def is_accessible(self) :
@@ -108,7 +109,7 @@ class MyView(BaseView) :
 			# user = current_user
 			# print '%s isAdmin:' % (user.username), user.isAdmin
 			# print (user.is_authenticated() and user.isAdmin)
-			if (user.is_authenticated() and user.isAdmin) :
+			if (user.is_authenticated() and user.isAdmin and session['_fresh'] == True) :
 				# print 'here return True'
 				return True
 			# print 'here return False'
@@ -124,7 +125,8 @@ class MyModelView(ModelView) :
 	def is_accessible(self) :
 		user = current_user
 		try :
-			if (user.is_authenticated() and user.isAdmin) :
+			print 'fresh:', session['_fresh']
+			if (user.is_authenticated() and user.isAdmin and session['_fresh'] == True):
 				return True
 		except Exception as e :
 			pass

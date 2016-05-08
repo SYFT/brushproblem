@@ -41,7 +41,7 @@ def checkAuthenticated(u) :
 	
 @loginpages.before_request
 def before_request():
-	print 'current_user:', current_user
+	# print 'current_user:', current_user
 	g.user = current_user
 		
 @loginpages.route('/login', methods=['GET', 'POST'])

@@ -46,7 +46,7 @@ class UploadForm(Form) :
 		validators = [DataRequired(message = ERROR_EMPTY)])
 
 class SuggestionForm(Form) :
-	suggestion = TextAreaField('suggestion', _name = 'suggestion', 
+	suggestion = TextAreaField('suggestion', 
 		validators = [DataRequired(message = ERROR_EMPTY), 
 			Length(max = 64, message = ERROR_TOO_LONG)])
 	submit = SubmitField(u'submit')

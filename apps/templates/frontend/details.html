@@ -1,8 +1,15 @@
 {% extends "mainpage.html" %}
+
 {% block body %}
-    <h1>Hi, {{g.user.username}}!</h1>
-  {% for post in posts %}
-    <p>{{post.author.username}} says: <b>{{post.body}}</b></p>
+  <h1>Hi, {{username}}!</h1>
+  <p>此用户共上传{{ docs.__len__() }}份题目！</p>
+  <ul>
+    {% for x in docs %}
+      <li>
+        <a href = {{ url_for('viewproblems.show', did = x.id) }}>{{x.title}}</a>
+        <br/><br/>
+      </li>
     {% endfor %}
+  </ul>
   Back to <a href="{{url_for('frontend.index', status='True')}}">Home</a>
 {% endblock %}
