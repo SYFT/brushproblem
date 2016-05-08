@@ -10,18 +10,20 @@ import datetime
 ERROR_TOO_LONG = u'Too long !!'
 ERROR_EMPTY = u'This field should not be empty!!'
 
-class LoginForm(Form):
+class UserForm(Form) :
 	username = StringField('username', 
 				validators = [DataRequired(message = ERROR_EMPTY), 
 					Length(max = 16, message = ERROR_TOO_LONG)])
 	password = PasswordField('password', 
-						validators = [DataRequired(message = ERROR_EMPTY), 
-							Length(max = 16, message = ERROR_TOO_LONG)])
-	remember_me = BooleanField(u'remember_me', default = False)
+				validators = [DataRequired(message = ERROR_EMPTY), 
+					Length(max = 16, message = ERROR_TOO_LONG)])
 	submit = SubmitField(u'submit')
 
+class LoginForm(UserForm):
+	remember_me = BooleanField(u'remember_me', default = False)
 
-class RegisterForm(LoginForm) :
+
+class RegisterForm(UserForm) :
 	password = PasswordField('password', 
 				validators = [DataRequired(message = ERROR_EMPTY), 
 					EqualTo('confirm', message = u'Passwords must match'), 
@@ -34,6 +36,11 @@ class RegisterForm(LoginForm) :
 					Length(max = 64, message = ERROR_TOO_LONG), 
 					Email(message = u'Is this a email address ?')])
 
+class EditForm(RegisterForm) :
+	oldPassword = PasswordField('password', 
+				validators = [DataRequired(message = ERROR_EMPTY), 
+					Length(max = 16, message = ERROR_TOO_LONG)])
+					
 class UploadForm(Form) :
 	file = TextAreaField('file', 
 				validators = [DataRequired(message = ERROR_EMPTY)])

@@ -2,7 +2,7 @@ from flask import Flask, Blueprint, render_template, \
 					g, url_for, session, request, flash
 from flask.ext.login import login_required, \
 					current_user, login_required
-from apps.forms import SuggestionForm
+from apps.forms import SuggestionForm, EditForm
 frontend = Blueprint('frontend', __name__, 
 					static_folder = 'static',
 					template_folder = 'templates')
@@ -46,3 +46,16 @@ def faq() :
 def suggest() :
 	flash('Having receive!!!')
 	return render_template('frontend/index.html')
+
+@frontend.route('/edit', methods = ['POST', 'GET'])
+def changeUserdetails() :
+	user = current_user
+	form = EditForm()
+	
+	if request.method == 'POST' and form.validate_on_submit() :
+		u = models.User.query.filter(models.User.id == user.id).first()
+		if u.password == form.oldpassword.data :
+			u.username = form.username.data
+			u.password = form.password
+		else :
+			flash(app.config['PASSWRODNOTMEET'])
