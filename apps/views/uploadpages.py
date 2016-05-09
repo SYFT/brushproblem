@@ -22,7 +22,7 @@ class MyOperateError(Exception) :
 	def __repr__(self):
 		return self.description
 	
-def change(x, documenType = 0) :
+def change(x, documentType = 0) :
 	# 0 -> 答案在括号中     1 -> 答案在全文最后
 	if documentType == 0 :
 		pat = re.compile(u'\r\n *[0-9]+[\.,、,．]')
@@ -62,7 +62,7 @@ def change(x, documenType = 0) :
 					else :
 						answer = u'B'
 				
-				pat = re.compile(u'[\(,（][A-Z, ]+[\),）]')
+				pat = re.compile(u'[\(,（][A-Z, ,×,√]+[\),）]')
 				pro = pat.subn('____', pro)
 				pro = pro[0]
 				print 'pro:', pro
