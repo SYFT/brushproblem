@@ -36,10 +36,18 @@ class RegisterForm(UserForm) :
 					Length(max = 64, message = ERROR_TOO_LONG), 
 					Email(message = u'Is this a email address ?')])
 
-class EditForm(RegisterForm) :
-	oldPassword = PasswordField('password', 
-				validators = [DataRequired(message = ERROR_EMPTY), 
+class EditForm(UserForm) :
+	newPassword = PasswordField('password', 
+				validators = [
+					EqualTo('confirm', message = u'Passwords must match'), 
 					Length(max = 16, message = ERROR_TOO_LONG)])
+	confirm  = PasswordField('repeatPassword', 
+				validators = [
+					Length(max = 16, message = ERROR_TOO_LONG)])
+	email = StringField('emailaddress', 
+				validators = [DataRequired(message = ERROR_EMPTY), 
+					Length(max = 64, message = ERROR_TOO_LONG), 
+					Email(message = u'Is this a email address ?')])
 					
 class UploadForm(Form) :
 	file = TextAreaField('file', 

@@ -1,12 +1,13 @@
 from flask import Flask, Blueprint, render_template, \
-					g, url_for, session, request, flash
+					g, url_for, session, request, flash, \
+					redirect
 from flask.ext.login import login_required, \
 					current_user, login_required
 from apps.forms import SuggestionForm, EditForm
 frontend = Blueprint('frontend', __name__, 
 					static_folder = 'static',
 					template_folder = 'templates')
-from apps import models
+from apps import models, app, db
 					
 @frontend.before_request
 def before_request() :
@@ -38,8 +39,8 @@ def details():
 @frontend.route('/FAQ', methods = ['POST', 'GET'])
 def faq() :
 	form = SuggestionForm()
-	print '#######\n\n\n\n  here'
-	print '###', form.suggestion.data
+	# print '#######\n\n\n\n  here'
+	# print '###', form.suggestion.data
 	return render_template('frontend/faq.html', form = form)
 
 @frontend.route('/Thank', methods = ['POST', 'GET'])
@@ -48,14 +49,31 @@ def suggest() :
 	return render_template('frontend/index.html')
 
 @frontend.route('/edit', methods = ['POST', 'GET'])
-def changeUserdetails() :
+def changeUserDetails() :
 	user = current_user
 	form = EditForm()
+	u = models.User.query.filter(models.User.id == user.id).first()
 	
+	if not form.username.data :
+		form.username.data = u.username
+	if not form.email.data :
+		form.email.data = u.email
+	
+	# print 'form.validate_on_submit:', form.validate_on_submit()
 	if request.method == 'POST' and form.validate_on_submit() :
-		u = models.User.query.filter(models.User.id == user.id).first()
-		if u.password == form.oldpassword.data :
+		# print 'xxxxxxx'
+		if u.password == form.password.data :
 			u.username = form.username.data
-			u.password = form.password
+			print form.newPassword.data
+			if len(form.newPassword.data) > 0 :
+				u.password = form.newPassword.data
+			u.email = form.email.data
+			flash('Succefully change!!')
+			db.session.commit()
+			# print 'yyyyy'
+			return redirect(url_for('frontend.changeUserDetails'))
 		else :
-			flash(app.config['PASSWRODNOTMEET'])
+			# print 'xxxxx'
+			flash(app.config['PASSWROD_NOT_MATCH'])
+	
+	return render_template('frontend/changeUserDetails.html', form = form)

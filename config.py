@@ -33,3 +33,5 @@ CHOICE_INDEX = u'ABCDEFGHIJKLMNOPQRSTUVWXYZ'
 
 MESSAGE_FOR_RIGHT = u'Your are right!'
 MESSAGE_FOR_WRONG = u'Your are wrong! Right answer is %s.'
+
+PASSWROD_NOT_MATCH = u'Old password do not match!'
