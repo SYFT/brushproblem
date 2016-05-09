@@ -49,7 +49,9 @@ def suggest() :
 	flash('Having receive!!!')
 	return render_template('frontend/index.html')
 
-@frontend.route('/edit', methods = ['POST', 'GET'])@fresh_login_required
+@frontend.route('/edit', methods = ['POST', 'GET'])
+@login_required
+@fresh_login_required
 def changeUserDetails() :
 	user = current_user
 	form = EditForm()
