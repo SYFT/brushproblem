@@ -2,7 +2,8 @@ from flask import Flask, Blueprint, render_template, \
 					g, url_for, session, request, flash, \
 					redirect
 from flask.ext.login import login_required, \
-					current_user, login_required
+					current_user, login_required,\
+					fresh_login_required
 from apps.forms import SuggestionForm, EditForm
 frontend = Blueprint('frontend', __name__, 
 					static_folder = 'static',
@@ -48,7 +49,7 @@ def suggest() :
 	flash('Having receive!!!')
 	return render_template('frontend/index.html')
 
-@frontend.route('/edit', methods = ['POST', 'GET'])
+@frontend.route('/edit', methods = ['POST', 'GET'])@fresh_login_required
 def changeUserDetails() :
 	user = current_user
 	form = EditForm()
