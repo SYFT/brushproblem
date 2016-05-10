@@ -17,10 +17,10 @@ def before_request() :
 @frontend.route('/')
 @frontend.route('/index/')
 def index():
-	if '_fresh' in session :
-		print session['_fresh']
-	if 'user' in session : 
-		print session['user']
+	# if '_fresh' in session :
+		# print session['_fresh']
+	# if 'user' in session : 
+		# print session['user']
 	return render_template('frontend/index.html')
 	
 @frontend.route('/details')
@@ -50,7 +50,7 @@ def suggest() :
 	return render_template('frontend/index.html')
 
 @frontend.route('/edit', methods = ['POST', 'GET'])
-@login_required
+# @login_required
 @fresh_login_required
 def changeUserDetails() :
 	user = current_user

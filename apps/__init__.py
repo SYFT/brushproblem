@@ -4,7 +4,7 @@ from flask import Flask, g, url_for
 from flask.ext.sqlalchemy import SQLAlchemy
 import os, sys
 from flask.ext.login import LoginManager
-from werkzeug import secure_filename
+# from werkzeug import secure_filename
 
 
 APP_NAME = __name__
@@ -43,35 +43,20 @@ admin.add_view(MyModelView(Subject, db.session, name = u'科目', category = u'�
 
 
 
-LOGIN_MESSAGE = u'Please login first.'
-# flash while access some login_required pages
-# without login
-REFRESH_MESSAGE = (u"To protect your account, please reauthenticate to access this page.")
-# a list of message that will flash while 
-# a non-fresh user access some fresh_login_required
-# pages (it means the user can not login by cookies)
+
+
+
+# from flask.ext.uploads import UploadSet, \
+							# patch_request_class, \
+							# configure_uploads
+# us = UploadSet('us', extensions = app.config['ALLOWED_EXTENSIONS'])
+# configure_uploads(app, (us, ))
+# patch_request_class(app, size = app.config['MAX_CONTENT_LENGTH'])
+
+
+
 lm = LoginManager()
 lm.init_app(app)
-lm.login_view = 'login'
-lm.login_message = LOGIN_MESSAGE
-lm.refresh_view = 'login'
-lm.needs_refresh_message = REFRESH_MESSAGE
-
-@lm.user_loader
-def load_user(id) :
-	return User.query.get(int(id))
-
-
-
-from flask.ext.uploads import UploadSet, \
-							patch_request_class, \
-							configure_uploads
-us = UploadSet('us', extensions = app.config['ALLOWED_EXTENSIONS'])
-configure_uploads(app, (us, ))
-patch_request_class(app, size = app.config['MAX_CONTENT_LENGTH'])
-
-	
-	
 	
 
 
@@ -93,6 +78,17 @@ for module, url_prefix in MODULES :
 
 
 
+# a non-fresh user access some fresh_login_required
+# pages (it means the user can not login by cookies)
+lm.login_view = 'loginpages.login'
+lm.login_message = app.config['LOGIN_MESSAGE']
+lm.refresh_view = 'loginpages.login'
+lm.needs_refresh_message = app.config['REFRESH_MESSAGE']
+lm.session_protection = "strong"
+
+@lm.user_loader
+def load_user(id) :
+	return User.query.get(int(id))
 
 
 # set default language

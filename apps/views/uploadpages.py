@@ -6,7 +6,7 @@ from flask import Flask, request, session, \
 					Blueprint
 from apps.forms import UploadForm
 from flask.ext.login import login_required, current_user
-from apps import lm, db, models, us, app
+from apps import lm, db, models, app
 import subprocess, os, time, re
 
 uploadpages = Blueprint('uploadpages', __name__, 

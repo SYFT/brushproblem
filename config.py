@@ -12,10 +12,10 @@ SQLALCHEMY_DATABASE_URI = 'sqlite:///' + os.path.join(baseDir, 'app.db')
 SQLALCHEMY_MIGRATE_REPO = os.path.join(baseDir, 'db_repository')
 
 
-UPLOAD_FOLDER = os.path.join(baseDir, 'uploads_files')
-UPLOADS_DEFAULT_DEST  = UPLOAD_FOLDER
-ALLOWED_EXTENSIONS = ('txt', 'pdf', 'doc', 'docx')
-MAX_CONTENT_LENGTH = 8 * 1024 * 1024
+# UPLOAD_FOLDER = os.path.join(baseDir, 'uploads_files')
+# UPLOADS_DEFAULT_DEST  = UPLOAD_FOLDER
+# ALLOWED_EXTENSIONS = ('txt', 'pdf', 'doc', 'docx')
+# MAX_CONTENT_LENGTH = 8 * 1024 * 1024
 
 WHOOSH_BASE = os.path.join(baseDir, 'whoosh_index')
 
@@ -35,3 +35,9 @@ MESSAGE_FOR_RIGHT = u'Your are right!'
 MESSAGE_FOR_WRONG = u'Your are wrong! Right answer is %s.'
 
 PASSWROD_NOT_MATCH = u'Old password do not match!'
+
+LOGIN_MESSAGE = u'Please login first.'
+# flash while access some login_required pages
+# without login
+REFRESH_MESSAGE = (u"To protect your account, please reauthenticate to access this page.")
+# a list of message that will flash while 
