@@ -1,5 +1,33 @@
 ﻿{% extends "bootstrap/base.html" %}
 {% import "bootstrap/wtf.html" as wtf %}
+
+{% block navbar %}
+  <div class = "container">
+    <div class="navbar">
+      <div class="navbar-inner">
+        <a class="btn btn-navbar" data-toggle="collapse" data-target=".nav-collapse">
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+        </a>
+        <a class="brand" href="{{ url_for('frontend.index') }}">microblog</a>
+        <ul class="nav">
+          <li><a href="{{ url_for('frontend.index') }}">Home</a></li>
+          {% if authenticated == True %}
+            <li><a href="{{url_for('frontend.details')}}">Your Profile</a></li>
+            <li><a href = "{{url_for('loginpages.logout')}}">Logout</a><li>
+          {% else %}
+            <a href="{{ url_for('loginpages.login') }}">Login</a>
+          {% endif %}
+        </ul>
+        <div class="nav-collapse collapse">
+          <p>Here is nav-collapse collapse</p>
+        </div>
+      </div>
+    </div>
+  </div>
+{% endblock %}
+
 {% block content %}
   <p>Didn't have a account ? <a href = "{{url_for('registerpages.register')}}"> Register </a></p>
   <h1>Sign In</h1>
