@@ -29,7 +29,7 @@ def tryLogin(form) :
 		session['remember_me'] = None
 	login_user(u, remember = remember_me)
 	g.user = current_user
-	session['user'] = g.user.username
+	session['user'] = g.user.id
 	return redirect(request.args.get('next') or url_for('frontend.index'))
 
 def checkAuthenticated(u) :
@@ -47,16 +47,16 @@ def before_request():
 @loginpages.route('/login', methods=['GET', 'POST'])
 def login() :
 	# debug
-	if '_fresh' in session :
-		print session['_fresh']
-	print g.user
-	if 'user' in session : 
-		print session['user']
-	print 'user' in session
+	# if '_fresh' in session :
+		# print session['_fresh']
+	# print g.user
+	# if 'user' in session : 
+		# print session['user']
+	# print 'user' in session
 	
 	# Have log in
 	try :
-		if 'user' in session and session['user'] == g.user.username :
+		if 'user' in session and session['user'] == g.user.id :
 			flash('you have been loggin in as %s.' % g.user.username)
 			return redirect(url_for('frontend.index'))
 	except Exception as e :

@@ -5,10 +5,11 @@ from flask.ext.sqlalchemy import SQLAlchemy
 import os, sys
 from flask.ext.login import LoginManager
 # from werkzeug import secure_filename
-
+from flask_bootstrap import Bootstrap
 
 APP_NAME = __name__
 app = Flask(APP_NAME)
+Bootstrap(app)
 #app.secret_key = '123456'
 app.config.from_object('config')
 
