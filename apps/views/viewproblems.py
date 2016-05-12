@@ -75,6 +75,7 @@ def show(did, thatt = None) :
 		allProblem = BrushForm()
 		allProblem.pro = []
 		count = 0
+		allProblem.title = doc.title
 		for x in doc.problems :
 			count += 1
 			# description = str(count) + u'、' + x.content.title()

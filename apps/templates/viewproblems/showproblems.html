@@ -16,6 +16,7 @@
 {% endblock %}
 
 {% block content %}
+  <div align = "center"><h1>{{ papers.title }}</h1></div><br/>
   <form method = "POST" action = "{{ url_for('viewproblems.show', did = index) }}" name = "brushing">
     {{papers.hidden_tag()}}
     <ol>
@@ -26,14 +27,14 @@
             {% for x in eachpro.choices %}
               <p>{{ x.option }}{{ x.description }}</p>
             {% endfor %}
-          </li>
+          </li><br/>
           {% if eachpro.check == 1 %}
-            <span style="color: red;">{{ eachpro.message }}</span>
+            <span class = "label label-danger">{{ eachpro.message }}</span>
           {% elif eachpro.check == 2 %}
-            <span style="color: green;">{{ eachpro.message }}</span>
+            <span class = "label label-success">{{ eachpro.message }}</span>
           {% endif %}
         {% else %}
-          <div style = "display:none;">
+          <div class = "invisible">
           {% for x in eachpro.choices %}
             {{ x.option(hidden = "hidden") }}
           {% endfor %}

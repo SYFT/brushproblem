@@ -1,3 +1,10 @@
+badge must use with button
+
+
+
+
+
+
 对于在windows下无法使用pip 安装 mysql-python模块 和 flask-mysql模块的同学，请到这里下载32位或者64位的安装包进行安装 http://pan.baidu.com/s/1qWz7I5e
 
 
