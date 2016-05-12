@@ -1,33 +1,24 @@
 {% extends "mainpage.html" %}
 
 {% block someerrors %}
-  <div>
-    {% if form.errors %}
-      <ul>
-        {% for error, errormessage in form.errors.iteritems() %}
-        <li><span style = "color: red;">
-          {{ error }} :
-          <ul>
-          {% for x in errormessage %}
-            <li>{{x}}</li>
-          {% endfor %}
-          </ul>
-         </span></li>
-        {% endfor %}
-      <ul>
-    {% endif %}
-  </div>
+  {% if form.errors %}
+    <div>
+      <p>有点错误：</p>
+      {{wtf.form_errors(form, hiddens = "False")}}
+    </div>
+    <hr/>
+  {% endif %}
 {% endblock %}
 
 {% block content %}
   <p>如果你不想修改某项信息，请留空或者不做修改，具体请根据表格格式进行选择。</p><br/>
   <form action = "{{ url_for('frontend.changeUserDetails') }}" method = "POST" name = "editform">
     {{ form.hidden_tag() }}
-    <p>请输入用户名：{{ form.username }}</p><br/>
-    <p>请输入旧的密码，进行确认：{{ form.password }}</p><br/>
-    <p>请输入新密码：{{ form.newPassword }}</p><br/>
-    <p>请在此输入新密码：{{ form.confirm }}</p><br/>
-    <p>请输入邮箱地址：{{ form.email }}</p><br/>
+    <p>请输入用户名：{{ form.username(class = "my-input-field") }}</p><br/>
+    <p>请输入旧的密码，进行确认：{{ form.password(class = "my-input-field") }}</p><br/>
+    <p>请输入新密码：{{ form.newPassword(class = "my-input-field") }}</p><br/>
+    <p>请在此输入新密码：{{ form.confirm(class = "my-input-field") }}</p><br/>
+    <p>请输入邮箱地址：{{ form.email(class = "my-input-field") }}</p><br/>
     {{ form.submit(value = "提交") }}
   </form>
 {% endblock %}

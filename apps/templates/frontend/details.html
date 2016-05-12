@@ -3,9 +3,9 @@
 {% block content %}
   <p>此用户共上传{{ docs.__len__() }}份题目！</p>
   <ul>
-    {% for x in docs %}
+    {% for doc in docs %}
       <li>
-        <a href = {{ url_for('viewproblems.show', did = x.id) }}>{{x.title}}</a>
+        <a href = {{ url_for('viewproblems.show', did = doc.id) }}>{{doc.title}}</a>
         <br/><br/>
       </li>
     {% endfor %}

@@ -1,35 +1,29 @@
 {% extends "mainpage.html" %}
 
+{% block someerrors %}
+  {% if form.errors %}
+    <div>
+      <p>有点错误：</p>
+      {{wtf.form_errors(form, hiddens = "False")}}
+    </div>
+    <hr/>
+  {% endif %}
+{% endblock %}
+
 {% block content %}
   <p>Already have a account? <a href = "{{url_for('loginpages.login')}}"> Login </a></p>
-  <div>
-    {% if form.errors %}
-      <ul>
-      {% for error, errormessage in form.errors.iteritems() %}
-      <li><span style = "color: red;">
-        {{ error }} :
-        <ul>
-        {% for x in errormessage %}
-          <li>{{x}}</li>
-        {% endfor %}
-        </ul>
-       </span></li>
-      {% endfor %}
-      <ul>
-    {% endif %}
-  </div>
   <form action = "" method = "post" name = "login">
     {{form.hidden_tag()}}
-    <strong>Enter your username:</strong><br/>
+    <p><strong>请输入用户名：</strong></p><br/>
     {{form.username(size = 16, placeholder = "username")}}
     <hr/>
-    <strong>Enter your password:</strong><br/>
+    <p><strong>请输入密码：</strong></p><br/>
     {{form.password(size = 16, placeholder = "password")}}<br/>
     <hr/>
-    <strong>Enter your password agin:</strong><br>
+    <p><strong>请再次输入密码：</strong></p><br/>
     {{form.confirm(size = 16, placeholder = "repeat your password")}}<br/>
     <hr/>
-    <strong>Enter your email address:</strong><br>
+    <p><strong>请输入邮箱地址：</strong></p><br/>
     {{form.email(size = 16, placeholder = "email address")}}<br/>
     <hr/>
     {{ form.submit }}
