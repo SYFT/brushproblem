@@ -1,13 +1,17 @@
 {% extends "mainpage.html" %}
-{% block body %}
+
+{% block content %}
+  {{ super() }}
+  {% set authenticated = ('user' in session and session['user'] == current_user.id) %}
+  
   {% if authenticated == False %}
-  <h1>Overview</h1>
-  <p><a href="{{ url_for('loginpages.login') }}">登入</a>。</p><br/>
+    <h1>Overview</h1>
+    <p><a href="{{ url_for('loginpages.login') }}">登入</a>。</p><br/>
   {% else %}
-  <h1>Hi {{current_user.username}}</h1>
-  <p><a href="{{url_for('frontend.details')}}">显示</a>我已上传题目。</p><br/>
-  <p><a href = "{{url_for('uploadpages.upload')}}">上传</a>题目。</p><br/>
-  <p><a href = "{{ url_for('frontend.changeUserDetails') }}">更改</a>用户信息。</p><br/>
+    <h1>Hi {{current_user.username}}</h1>
+    <p><a href="{{url_for('frontend.details')}}">显示</a>我已上传题目。</p><br/>
+    <p><a href = "{{url_for('uploadpages.upload')}}">上传</a>题目。</p><br/>
+    <p><a href = "{{ url_for('frontend.changeUserDetails') }}">更改</a>用户信息。</p><br/>
   {% endif %}
   <p>开始<a href = "{{url_for('viewproblems.search')}}">刷题</a>。</p><br/>
 {% endblock %}

@@ -90,20 +90,20 @@ def change(x, documentType = 0) :
 					description = pro[0 : ind]
 					description = description.strip()
 				else :
-					choices = u"##Yes##No##"
+					choices = u"##正确##错误##"
 					description = pro
 					# 题目描述已经处理，因为判断题无选项字段需要去除
 				
 				# 去除题目序号
 				# 实际不需要？分开题目时已经去除？
-				# pat = re.compile(u'[0-9]+[\.,、,．]')
-				# des = pat.match(description)
+				pat = re.compile(u'[0-9]+[\.,、,．]')
+				des = pat.match(description)
 				
-				# try :
-					# des = des.group()
-					# description = description[len(des):]
-				# except Exception as e :
-					# description = description
+				try :
+					des = des.group()
+					description = description[len(des):]
+				except Exception as e :
+					description = description
 				
 				ret.append((description, choices, answer))
 			except MyOperateError as e :

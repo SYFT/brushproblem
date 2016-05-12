@@ -1,10 +1,11 @@
 {% extends "mainpage.html" %}
 
-{% block head %}
+{% block metas %}
+  {{ super() }}
   <meta http-equiv="refresh" content="3;url={{ url_for('viewproblems.search') }}">
 {% endblock %}
 
-{% block body %}
+{% block content %}
   <p>学神，你的答案全部正确！</p>
   <p>快去做下一篇题目吧！</p><br/>
   <hr/>

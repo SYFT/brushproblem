@@ -1,6 +1,6 @@
 {% extends "mainpage.html" %}
 
-{% block error %}
+{% block someerrors %}
   {% for eachpro in papers.pro %}
     {% if eachpro.errors %}
     <div>
@@ -15,7 +15,7 @@
   {% endfor %}
 {% endblock %}
 
-{% block body %}
+{% block content %}
   <form method = "POST" action = "{{ url_for('viewproblems.show', did = index) }}" name = "brushing">
     {{papers.hidden_tag()}}
     <ol>

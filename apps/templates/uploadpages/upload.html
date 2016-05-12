@@ -1,64 +1,41 @@
-<!DOCTYPE html>
-<html>
-  <head>
-    <meta http-equiv = "Content-Type" content = "text/html; charset = utf-8">
-    <title>Upload</title>
-  </head>
-  <body>
-    <div>
-      <a href = "{{url_for('frontend.index')}}"> Home </a>
-      <a href = "{{url_for('loginpages.logout')}}"> | Logout </a>
-    </div>
+{% extends "mainpage.html" %}
+
+{% block content %}
+  {% if form.filename.errors %}
     <hr/>
-    <p> Hello {{current_user.username}} ! </p> <br/>
-    <div>
-      {% with messages = get_flashed_messages() %}
-        {% if messages %}
-        <ul class=flashes>
-          {% for message in messages %}
-          <li> {{ message }}  </li>
-          {% endfor %}
-        </ul>
-        {% endif %}
-      {% endwith %}
-    </div>
-    
-    {% if form.filename.errors %}
-      <hr/>
-      <p><strong>文件名错误！</strong></p>
-      {% for error in form.filename.errors %}
-        <span style="color: red;">{% if error.message %} {{ error.message }} {% else %} {{ error }} {% endif %}</span><br/>
-      {% endfor %}
-      <hr/>
-    {% endif %}
-    
-    {% if form.file.errors %}
-      <hr/>
-      <p><strong>文件错误！</strong></p>
-      {% for error in form.filename.errors %}
-        <span style="color: red;">{% if error.message %} {{ error.message }} {% else %} {{ error }} {% endif %}</span><br/>
-      {% endfor %}
-      <hr/>
-    {% endif %}
-    
-    <form method = "POST" action = "{{ url_for('uploadpages.upload') }}" name = "upload">
+    <p><strong>文件名错误！</strong></p>
+    {% for error in form.filename.errors %}
+      <span style="color: red;">{% if error.message %} {{ error.message }} {% else %} {{ error }} {% endif %}</span><br/>
+    {% endfor %}
+    <hr/>
+  {% endif %}
+  
+  {% if form.file.errors %}
+    <hr/>
+    <p><strong>文件错误！</strong></p>
+    {% for error in form.filename.errors %}
+      <span style="color: red;">{% if error.message %} {{ error.message }} {% else %} {{ error }} {% endif %}</span><br/>
+    {% endfor %}
+    <hr/>
+  {% endif %}
+  
+  <form method = "POST" action = "{{ url_for('uploadpages.upload') }}" name = "upload">
 <!--       <input type = "file" name = "problem"> -->
 <!--       <hr/> -->
 <!--       <input type = "submit" name = "submit" value = "submit" id = "submit"> -->
-      {{form.hidden_tag()}}
-      <hr/>
-      <p>标题：{{form.filename(size = 50, placeholder = "标题将作为日后检索题目的文件名！")}} </p><br/>
-      <p>题目内容：<br/>{{form.file(rows = 10, cols = 100, placeholder = "直接粘帖题目即可，不支持图片。")}} </p><br/>
-      <p>分类：</p>{{form.subject}} <br/>
-      <hr/>
-      <span style="color: red;">以上内容一旦提交<strong>不可更改</strong>。</span></p> 
-      <hr/>
-      {{form.submit}} <br/>
-      <hr/>
-    </form>
-    
+    {{form.hidden_tag()}}
     <hr/>
-    <p>Have some questions with this process ?</p><br/>
-    <p>Don't Worry. You can find answer <a href = "{{url_for('frontend.faq')}}">here</a>!</p><br/>
-  </body>
-</html>
+    <p>标题：{{form.filename(size = 50, placeholder = "标题将作为日后检索题目的文件名！")}} </p><br/>
+    <p>题目内容：<br/>{{form.file(rows = 10, cols = 100, placeholder = "直接粘帖题目即可，不支持图片。")}} </p><br/>
+    <p>分类：</p>{{form.subject}} <br/>
+    <hr/>
+    <span style="color: red;">以上内容一旦提交<strong>不可更改</strong>。</span></p> 
+    <hr/>
+    {{form.submit}} <br/>
+    <hr/>
+  </form>
+  
+  <hr/>
+  <p>Have some questions with this process ?</p><br/>
+  <p>Don't Worry. You can find answer <a href = "{{url_for('frontend.faq')}}">here</a>!</p><br/>
+{% endblock %}

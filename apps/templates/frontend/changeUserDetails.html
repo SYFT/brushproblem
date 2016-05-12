@@ -19,7 +19,7 @@
   </div>
 {% endblock %}
 
-{% block body %}
+{% block content %}
   <p>如果你不想修改某项信息，请留空或者不做修改，具体请根据表格格式进行选择。</p><br/>
   <form action = "{{ url_for('frontend.changeUserDetails') }}" method = "POST" name = "editform">
     {{ form.hidden_tag() }}

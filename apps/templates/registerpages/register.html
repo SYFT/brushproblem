@@ -1,55 +1,37 @@
-<!doctype html>
-<html>
-  <head>
-    <meta http-equiv = "Content-Type" content = "text/html; charset = gb2312">
-    <title>My Application</title>
-  </head>
-  <body>
-    <a href = "{{url_for('frontend.index')}}"> Home </a>
+{% extends "mainpage.html" %}
+
+{% block content %}
+  <p>Already have a account? <a href = "{{url_for('loginpages.login')}}"> Login </a></p>
+  <div>
+    {% if form.errors %}
+      <ul>
+      {% for error, errormessage in form.errors.iteritems() %}
+      <li><span style = "color: red;">
+        {{ error }} :
+        <ul>
+        {% for x in errormessage %}
+          <li>{{x}}</li>
+        {% endfor %}
+        </ul>
+       </span></li>
+      {% endfor %}
+      <ul>
+    {% endif %}
+  </div>
+  <form action = "" method = "post" name = "login">
+    {{form.hidden_tag()}}
+    <strong>Enter your username:</strong><br/>
+    {{form.username(size = 16, placeholder = "username")}}
     <hr/>
-    <div>
-    {% with messages = get_flashed_messages() %}
-      {% if messages %}
-      <ul class=flashes>
-        {% for message in messages %}
-        <li> {{ message }}  </li>
-        {% endfor %}
-      </ul>
-      {% endif %}
-    {% endwith %}
-    </div>
-    <p>Already have a account? <a href = "{{url_for('loginpages.login')}}"> Login </a></p>
-    <div>
-      {% if form.errors %}
-        <ul>
-        {% for error, errormessage in form.errors.iteritems() %}
-        <li><span style = "color: red;">
-          {{ error }} :
-          <ul>
-          {% for x in errormessage %}
-            <li>{{x}}</li>
-          {% endfor %}
-          </ul>
-         </span></li>
-        {% endfor %}
-        <ul>
-      {% endif %}
-    </div>
-    <form action = "" method = "post" name = "login">
-      {{form.hidden_tag()}}
-      <strong>Enter your username:</strong><br/>
-      {{form.username(size = 16, placeholder = "username")}}
-      <hr/>
-      <strong>Enter your password:</strong><br/>
-      {{form.password(size = 16, placeholder = "password")}}<br/>
-      <hr/>
-      <strong>Enter your password agin:</strong><br>
-      {{form.confirm(size = 16, placeholder = "repeat your password")}}<br/>
-      <hr/>
-      <strong>Enter your email address:</strong><br>
-      {{form.email(size = 16, placeholder = "email address")}}<br/>
-      <hr/>
-      {{ form.submit }}
-    </form>
-  </body>
-</html>
+    <strong>Enter your password:</strong><br/>
+    {{form.password(size = 16, placeholder = "password")}}<br/>
+    <hr/>
+    <strong>Enter your password agin:</strong><br>
+    {{form.confirm(size = 16, placeholder = "repeat your password")}}<br/>
+    <hr/>
+    <strong>Enter your email address:</strong><br>
+    {{form.email(size = 16, placeholder = "email address")}}<br/>
+    <hr/>
+    {{ form.submit }}
+  </form>
+{% endblock %}

@@ -1,43 +1,75 @@
-<!doctype html>
-<html>
-  <head>
-    <meta http-equiv = "Content-Type" content = "text/html; charset=utf-8">
-    <title>
-      {% if title %}
-        {{title}}
-      {% else %}
-        MyApplication
-      {% endif %}
-    </title>
-    {% block head %}
-    {% endblock %}
-  </head>
-  <body>
-    {% set authenticated = ('user' in session and session['user'] == current_user.username) %}
-    <div>
-      <a href = "{{url_for('frontend.index')}}"> Home </a>
-      {% if authenticated == True %}
-      <a href = "{{url_for('loginpages.logout')}}"> | Logout </a>
-      {% else %}
-      <a href="{{ url_for('loginpages.login') }}">| Login </a>
-      {% endif %}
-      <a href = "{{url_for('registerpages.register')}}"> | Register </a>
-    </div>
-    <p> Hello {{current_user.username}} ! </p> <br/>
-    {% with messages = get_flashed_messages() %}
-      {% if messages %}
-      <hr/>
-      <ul class=flashes>
-        {% for message in messages %}
-        <li> {{ message }}  </li>
-        {% endfor %}
-      </ul>
-      <hr/>
-      {% endif %}
-    {% endwith %}
-    {% block someerrors %}
-    {% endblock %}
-    {% block body %}
-    {% endblock %}
-  </body>
-</html>
+{% block doc -%}
+  <!DOCTYPE html>
+  <html{% block html_attribs %}{% endblock html_attribs %}>
+  {%- block html %}
+    <head>
+      {%- block head %}
+        <title>
+          {% if title %}
+            {{title}}
+          {% else %}
+            MyApplication
+          {% endif %}
+        </title>
+
+        {%- block metas %}
+          <meta http-equiv = "Content-Type" content = "text/html; charset=utf-8">
+          <meta name = viewport" content = "width=device-width, initial-scale=1.0">
+        {%- endblock metas %}
+
+        {%- block styles %}
+          <!-- Bootstrap -->
+          <link href="{{bootstrap_find_resource('css/bootstrap.css', cdn='bootstrap')}}" rel="stylesheet">
+        {%- endblock styles %}
+      {%- endblock head %}
+    </head>
+    <body{% block body_attribs %}{% endblock body_attribs %}>
+      {% block body -%}
+        {% set authenticated = ('user' in session and session['user'] == current_user.id) %}
+        <div class = "container">
+          <div class = "navbar navbar-static-top">
+            <div class = "navbar-inner">
+              <span class = "brand" style = "font-size:20px">你好，{%if current_user.username %}{{current_user.username}}{% else %}游客{% endif %}!</span>
+              <ul class = "nav nav-tabs">
+                <li class = "divider-horizontal">
+                  <a href = "{{ url_for('frontend.index') }}">首页</a>
+                </li>
+                {% if authenticated == True %}
+                  <li>
+                    <a href = "{{ url_for('loginpages.logout')}}">登出</a>
+                  </li>
+                  <li>
+                    <a href = "{{ url_for('frontend.details') }}">个人信息</a>
+                  </li>
+                {% else %}
+                  <li class = "divider-horizontal">
+                    <a href = "{{ url_for('loginpages.login') }}">登入</a>
+                  </li>
+                {% endif %}
+                <li class = "divider-horizontal pull-right">
+                  <a href = "{{ url_for('viewproblems.search') }}">高级搜索</a>
+                </li>
+              </ul>
+            </div>
+          </div>
+        </div>
+        
+        <div class = "container">
+          {% include 'flashMessage.html' %}
+          
+          {% block someerrors %}
+          {% endblock %}
+          
+          {% block content -%}
+          {%- endblock content %}
+
+          {% block scripts %}
+            <script src="{{bootstrap_find_resource('jquery.js', cdn='jquery')}}"></script>
+            <script src="{{bootstrap_find_resource('js/bootstrap.js', cdn='bootstrap')}}"></script>
+          {%- endblock scripts %}
+        {%- endblock body %}
+      </div>
+    </body>
+  {%- endblock html %}
+  </html>
+{% endblock doc -%}
