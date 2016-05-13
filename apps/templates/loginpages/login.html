@@ -13,18 +13,18 @@
 {% endblock %}
 
 {% block content %}
-  <p>Didn't have a account ? <a href = "{{url_for('registerpages.register')}}"> Register </a></p>
-  <h1>Sign In</h1>
+  <h1>登入</h1><br/>
+  <p>还没有帐号？<a href = "{{url_for('registerpages.register')}}">注册</a>一个。</p>
   <form class = "form form-horizontal" action = "" method = "post" name = "login">
     {{ form.hidden_tag() }}
     <p><strong>请输入用户名：</strong></p><br/>
-    {{form.username(class = "my-input-field" size = 16, placeholder = "用户名")}}
+    {{form.username(size = 16, placeholder = "用户名")|safe}}
     <hr/>
     <p><strong>请输入密码：</strong></p><br/>
-    {{form.password(class = "my-input-field" size = 16, placeholder = "password")}}<br/>
+    {{form.password(size = 16, placeholder = "password")|safe}}<br/>
     <hr/>
     
-    <p>{{wtf.form_field(form.remember_me)}}记住我</p>
+    <p>{{form.remember_me|safe}}&nbsp;记住我</p><br/>
     <hr/>
     {{ form.submit }}
   </form>

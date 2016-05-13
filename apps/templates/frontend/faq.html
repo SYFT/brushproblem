@@ -7,9 +7,9 @@
   <p>Some else questions?</p>
   <form method = "POST" action = "{{ url_for('frontend.suggest') }}" name = "suggest">
     <hr/>
-      {{form.suggestion(rows = 5, cols = 20)}}<br/>
+      {{form.suggestion(rows = 5, cols = 20)|safe}}<br/>
       <hr/>
-      {{form.submit}}
+      {{form.submit|safe}}
       <hr/>
   </form>
 {% endblock %}

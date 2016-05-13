@@ -14,11 +14,11 @@
   <p>如果你不想修改某项信息，请留空或者不做修改，具体请根据表格格式进行选择。</p><br/>
   <form action = "{{ url_for('frontend.changeUserDetails') }}" method = "POST" name = "editform">
     {{ form.hidden_tag() }}
-    <p>请输入用户名：{{ form.username(class = "my-input-field") }}</p><br/>
-    <p>请输入旧的密码，进行确认：{{ form.password(class = "my-input-field") }}</p><br/>
-    <p>请输入新密码：{{ form.newPassword(class = "my-input-field") }}</p><br/>
-    <p>请在此输入新密码：{{ form.confirm(class = "my-input-field") }}</p><br/>
-    <p>请输入邮箱地址：{{ form.email(class = "my-input-field") }}</p><br/>
-    {{ form.submit(value = "提交") }}
+    <p>请输入用户名：{{ form.username|safe }}</p><br/>
+    <p>请输入旧的密码，进行确认：{{ form.password|safe }}</p><br/>
+    <p>请输入新密码：{{ form.newPassword|safe }}</p><br/>
+    <p>请在此输入新密码：{{ form.confirm|safe }}</p><br/>
+    <p>请输入邮箱地址：{{ form.email|safe }}</p><br/>
+    {{ form.submit(value = "提交")|safe }}
   </form>
 {% endblock %}
