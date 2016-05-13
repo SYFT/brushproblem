@@ -164,12 +164,16 @@ def upload() :
 				print 'fine'
 				
 				doc = models.Document(title = title, author = current_user, subjectId = category)
-				db.session.add(doc)
-				for content, choices, answer in format_content :
-					pro = models.Problem(source = doc, content = content, choice = choices, answer = answer)
-					db.session.add(pro)
-				db.session.commit()
-				flash(app.config['SUCCESS_UPLOAD'])
+				if current_user.isAdmin == True :
+					db.session.add(doc)
+					for content, choices, answer in format_content :
+						pro = models.Problem(source = doc, content = content, choice = choices, answer = answer)
+						db.session.add(pro)
+					db.session.commit()
+					flash(app.config['SUCCESS_UPLOAD'])
+				else :
+					flash(app.config['SUCCESS_PROCESS'])
+					return redirect(url_for('viewproblems.show', tempfile = doc))
 			except MyOperateError as e:
 				print '\n\n\n xxx :', e.description
 				flash(app.config['FAIL_PROCESS'])
@@ -177,5 +181,8 @@ def upload() :
 				print '\n\n\n yyy :', e
 				flash(app.config['FAIL_PROCESS'])
 		else :
-			flash(app.config['FAIL_UPLOAD'])
+			if current_user.isAdmin :
+				flash(app.config['FAIL_UPLOAD'])
+			else :
+				flash(app.config['FAIL_PROCESS'])
 	return render_template('uploadpages/upload.html', form = form)

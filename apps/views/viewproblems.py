@@ -65,13 +65,16 @@ def myValidate(arrayForm) :
 	return True
 
 @viewproblems.route('/show/<int:did>', methods=['GET', 'POST'])
-def show(did, thatt = None) :
+def show(did = None, tempfile = None) :
 	print 'request.form:', request.form
 	allCorret = False
 	
 	# 定义表格
 	if 'allProblem' not in dir() :
-		doc = models.Document.query.filter(models.Document.id == did).first()
+		if not did and tempfile :
+			doc = tempfile
+		else :
+			doc = models.Document.query.filter(models.Document.id == did).first()
 		allProblem = BrushForm()
 		allProblem.pro = []
 		count = 0
