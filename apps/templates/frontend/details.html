@@ -2,13 +2,12 @@
 
 {% block content %}
   <p>此用户共上传{{ docs.__len__() }}份题目！</p>
-  <ul>
+  <ul class = "list-group">
     {% for doc in docs %}
-      <li>
-        <a href = {{ url_for('viewproblems.show', did = doc.id) }}>{{doc.title}}</a>
-        <br/><br/>
+      <li class = "list-group-item" style = "width: 35%;">
+        <a href = {{ url_for('viewproblems.show', did = doc.id) }}>{{doc.title}}</a><br/>
       </li>
     {% endfor %}
   </ul>
-  Back to <a href="{{url_for('frontend.index', status='True')}}">Home</a>
+  <p>返回<a href="{{url_for('frontend.index')}}">首页</a>！</p>
 {% endblock %}

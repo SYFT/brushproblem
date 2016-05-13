@@ -41,3 +41,8 @@ LOGIN_MESSAGE = u'Please login first.'
 # without login
 REFRESH_MESSAGE = (u"To protect your account, please reauthenticate to access this page.")
 # a list of message that will flash while 
+SUCCESS_LOGIN = u'成功登入！'
+SUCCESS_UPLOAD = u'成功上传！'
+FAIL_LOGIN = u'登入失败！'
+FAIL_UPLOAD = u'上传失败！'
+FAIL_PROCESS = u'处理异常！'

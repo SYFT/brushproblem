@@ -24,6 +24,7 @@ textarea.form-control {
 
 p {
   margin: 0 0 30px;
+  font-size: 20px;
 }
 
 input[type = "submit"] {
@@ -49,4 +50,14 @@ input[type = "submit"] {
   color: #333;
   background-color: #fff;
   border-color: #ccc;
+}
+
+.my-problem-description {
+  margin: 0 0 0px;
+  font-size: 17px;
+}
+
+.my-problem-choice {
+  margin: 0 0 5px;
+  font-size: 15px;
 }

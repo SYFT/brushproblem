@@ -5,7 +5,7 @@ from flask import Flask, request, session, \
 from apps.forms import LoginForm
 from flask.ext.login import login_user, logout_user, \
 							current_user, login_required
-from apps import lm, db, models
+from apps import lm, db, models, app
 
 loginpages = Blueprint('loginpages', __name__, 
 					static_folder = 'static',
@@ -18,18 +18,19 @@ def tryLogin(form) :
 	u = models.User.query.filter_by(username = username)
 	u = list(u)
 	if len(u) < 1 :
-		flash('No such user')
+		flash(app.config['FAIL_LOGIN'])
 		return redirect(url_for('loginpages.login'))
 	
 	u = u[0]
 	if cmp(u.password, password) != 0 :
-		flash('Invalid password')
+		flash(app.config['FAIL_LOGIN'])
 		return redirect(url_for('loginpages.login'))
 	if 'remember_me' in session :
 		session['remember_me'] = None
 	login_user(u, remember = remember_me)
 	g.user = current_user
 	session['user'] = g.user.id
+	flash(app.config['SUCCESS_LOGIN'])
 	return redirect(request.args.get('next') or url_for('frontend.index'))
 
 def checkAuthenticated(u) :
@@ -64,8 +65,8 @@ def login() :
 	
 	form = LoginForm()
 	if request.method == 'POST' and form.validate_on_submit():
-		flash('username: ' + form.username.data + '\n')
-		flash('remember_me : ' + str(form.remember_me.data) + '\n')
+		# flash('username: ' + form.username.data + '\n')
+		# flash('remember_me : ' + str(form.remember_me.data) + '\n')
 		return tryLogin(form)
 	return render_template('loginpages/login.html', title = 'Sign In', form = form)	
 

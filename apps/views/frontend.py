@@ -25,16 +25,17 @@ def index():
 	
 @frontend.route('/details')
 @login_required
-def details():
-	user = current_user
-	u = models.User.query.filter(models.User.id == user.id).first()
+def details(uid = None):
+	if not uid :
+		uid = current_user.id
+	u = models.User.query.filter(models.User.id == uid).first()
 	docs = []
 	for x in u.contributions :
 		docs.append(x)
 	
 	return render_template('frontend/details.html', 
 							titile = 'Home', 
-							username = user.username, 
+							username = u.username, 
 							docs = docs)
 	
 @frontend.route('/FAQ', methods = ['POST', 'GET'])

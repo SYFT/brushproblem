@@ -127,54 +127,55 @@ def upload() :
 			nameOfCategories.append((x.id, x.name))
 		form.subject.choices = nameOfCategories
 	
-	if 'form' in dir() :
-		print 'hhhhhhh'
-		print form.validate_on_submit()
-		print form.subject.data
-		print form.subject.choices
-		print form.filename.data
-		print form.file.data
-		print request.method
-		print form.errors
+	# if 'form' in dir() :
+		# print 'hhhhhhh'
+		# print form.validate_on_submit()
+		# print form.subject.data
+		# print form.subject.choices
+		# print form.filename.data
+		# print form.file.data
+		# print request.method
+		# print form.errors
 	
-	if request.method == 'POST' and form.validate_on_submit() :
-		print "here"
-		try :
-			
-			title = form.filename.data
-			content = form.file.data
-			category = form.subject.data
-			
-			print 'begin change'
-			format_content = change(content)
-			print 'end change'
-#			format_content should be a pair list
-#			the first element should be problem's description
-#			the second element should be problem's answer
-			
-			# print format_content
-			# for x, y, z in format_content :
-				# print x.encode('gb2312'), y.encode('gb2312'), z.encode('gb2312')
-			
-			if len(format_content) < 2 :
-				raise MyOperateError('The number of problems is too small.')
-			
-			
-			print 'fine'
-			
-			doc = models.Document(title = title, author = current_user, subjectId = category)
-			db.session.add(doc)
-			for content, choices, answer in format_content :
-				pro = models.Problem(source = doc, content = content, choice = choices, answer = answer)
-				db.session.add(pro)
-			db.session.commit()
-			flash(u'Successfully uploaded!')
-		except MyOperateError as e:
-			print '\n\n\n xxx :', e.description
-			flash(u'Sorry, this file is not allow to upload !!')
-		except Exception as e:
-			print '\n\n\n yyy :', e
-			flash(u'Sorry, this file is not allow to upload !!')
-	else :
-		flash(u'Upload failed!')
+	if request.method == 'POST' :
+		if form.validate_on_submit() :
+			print "here"
+			try :
+				
+				title = form.filename.data
+				content = form.file.data
+				category = form.subject.data
+				
+				print 'begin change'
+				format_content = change(content)
+				print 'end change'
+	#			format_content should be a pair list
+	#			the first element should be problem's description
+	#			the second element should be problem's answer
+				
+				# print format_content
+				# for x, y, z in format_content :
+					# print x.encode('gb2312'), y.encode('gb2312'), z.encode('gb2312')
+				
+				if len(format_content) < 2 :
+					raise MyOperateError('The number of problems is too small.')
+				
+				
+				print 'fine'
+				
+				doc = models.Document(title = title, author = current_user, subjectId = category)
+				db.session.add(doc)
+				for content, choices, answer in format_content :
+					pro = models.Problem(source = doc, content = content, choice = choices, answer = answer)
+					db.session.add(pro)
+				db.session.commit()
+				flash(app.config['SUCCESS_UPLOAD'])
+			except MyOperateError as e:
+				print '\n\n\n xxx :', e.description
+				flash(app.config['FAIL_PROCESS'])
+			except Exception as e:
+				print '\n\n\n yyy :', e
+				flash(app.config['FAIL_PROCESS'])
+		else :
+			flash(app.config['FAIL_UPLOAD'])
 	return render_template('uploadpages/upload.html', form = form)

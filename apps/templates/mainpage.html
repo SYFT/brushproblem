@@ -30,9 +30,9 @@
         <div class = "container">
           <div class = "navbar navbar-static-top">
             <div class = "navbar-inner">
-              <span class = "navbar-header" style = "font-size:20px">你好，{%if current_user.username %}{{current_user.username}}{% else %}游客{% endif %}!</span>
+              <span class = "navbar-header" style = "font-size:20px">你好，{%if current_user.username %}{{current_user.username}}{% else %}游客{% endif %} !</span>
               <ul class = "nav nav-tabs">
-                <li class = "divider-horizontal">
+                <li>
                   <a href = "{{ url_for('frontend.index') }}">首页</a>
                 </li>
                 {% if authenticated == True %}
@@ -42,26 +42,37 @@
                       <b class="caret"></b>
                     </a>
                     <ul class="dropdown-menu">
-                      <li class = "divider-horizontal">
+                      <li>
                         <a href = "{{ url_for('loginpages.logout')}}">登出</a>
                       </li>
-                      <li class = "divider-horizontal">
+                      <li>
                         <a href = "{{ url_for('frontend.details') }}">个人信息</a>
                       </li>
-                      <li class = "divider-horizontal">
+                      <li>
                         <a href = "{{ url_for('frontend.changeUserDetails') }}">修改信息</a>
                       </li>
                     </ul>
                   </li>
+                  {% if current_user.isAdmin and current_user.isAdmin == True %}
+                    <li>
+                      <a href = "{{ url_for('uploadpages.upload') }}">上传题目</a>
+                    </li>
+                    <li>
+                      <a href = "{{ url_for('admin.index') }}">管理</a>
+                    </li>
+                  {% endif %}
                 {% else %}
-                  <li class = "divider-horizontal">
+                  <li>
                     <a href = "{{ url_for('loginpages.login') }}">登入</a>
                   </li>
-                  <li class = "divider-horizontal">
+                  <li>
                     <a href = "{{ url_for('registerpages.register') }}">注册</a>
                   </li>
                 {% endif %}
-                <li class = "divider-horizontal pull-right">
+                <li>
+                  <a href = "{{ url_for('uploadpages.upload') }}">处理题目</a>
+                </li>
+                <li class = "pull-right">
                   <a href = "{{ url_for('viewproblems.search') }}">高级搜索</a>
                 </li>
               </ul>
