@@ -119,12 +119,13 @@ def show(did) :
 	
 	# 定义表格
 	if 'allProblem' not in dir() :
-		try :
+		if did < 6666666 :
 			documentId = int(did)
 			doc = models.Document.query.filter(models.Document.id == documentId).first()
-		except Exception as e :
+		else :
 			print 'hello life'
 			print session['tempfile'][0]
+			print session
 			doc = models.Tempfile(session['tempfile'][0], session['tempfile'][1])
 		allProblem = getAllProblem(doc)
 	
@@ -368,26 +369,30 @@ def upload() :
 						db.session.add(pro)
 					db.session.commit()
 					flash(app.config['SUCCESS_UPLOAD'])
-					return redirect(url_for('processProblems.show', \
+					return redirect(url_for('processProblems.show', 
 									did = unicode(doc.id)))
 				else :
+					print session
 					if 'tempfile' in session :
 						session.pop('tempfile', None)
 					session['tempfile'] = (title, format_content)
+					print session
 					print title
 					print 'session:', session['tempfile'][0]
 					flash(app.config['SUCCESS_PROCESS'])
-					return redirect(url_for('processProblems.show', \
-									did = u'orz' + current_user.username))
+					return redirect(url_for('processProblems.show', 
+									did = 6666666))
 			except MyOperateError as e:
 				print '\n\n\n xxx :', e.description
-				flash(app.config['FAIL_PROCESS'])
+				print '\r\n\r\n\r\n\r\n\r\n\r\n\r\n\n'
+				flash(app.config['FAIL_PROCESS'] + '1')
 			except Exception as e:
 				print '\n\n\n yyy :', e
-				flash(app.config['FAIL_PROCESS'])
+				print '\r\n\r\n\r\n\r\n\r\n\r\n\r\n\n'
+				flash(app.config['FAIL_PROCESS'] + '2')
 		else :
 			if current_user.isAdmin :
 				flash(app.config['FAIL_UPLOAD'])
 			else :
-				flash(app.config['FAIL_PROCESS'])
+				flash(app.config['FAIL_PROCESS'] + '3')
 	return render_template('processProblems/upload.html', form = form)
