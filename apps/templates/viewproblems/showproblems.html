@@ -28,17 +28,17 @@
               {% for x in eachpro.choices %}
                 <p class = "my-problem-choice">{{ x.option|safe }}{{ x.description|safe }}</p><br/>
               {% endfor %}
+              {% if eachpro.check == 1 %}
+                <span class = "label label-danger">{{ eachpro.message|safe }}</span><br/>
+              {% elif eachpro.check == 2 %}
+                <span class = "label label-success">{{ eachpro.message|safe }}</span><br/>
+              {% endif %}
             </li><br/>
-            {% if eachpro.check == 1 %}
-              <span class = "label label-danger">{{ eachpro.message|safe }}</span>
-            {% elif eachpro.check == 2 %}
-              <span class = "label label-success">{{ eachpro.message|safe }}</span>
-            {% endif %}
           </div>
         {% else %}
           <div class = "invisible">
           {% for x in eachpro.choices %}
-            {{ x.option(hidden = "hidden")|safe }}
+            {{ x.option(style = "display:none;")|safe }}
           {% endfor %}
           </div>
         {% endif %}

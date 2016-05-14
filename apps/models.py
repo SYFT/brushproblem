@@ -61,6 +61,28 @@ class Document(db.Model) :
 	def __repr__(self) :
 		return self.title
 
+class TempProblem :
+	content = unicode
+	choice = unicode
+	answer = unicode
+	
+	def __init__(self, content, choice, answer) :
+		self.content = unicode(content)
+		self.choice = unicode(choice)
+		self.answer = unicode(answer)
+	
+class Tempfile :
+	problems = []
+	title = unicode
+	
+	def __init__(self, title, pros) :
+		self.title = unicode(title)
+		self.problems = []
+		for content, choice, answer in pros :
+			pro = TempProblem(content, choice, answer)
+			self.problems.append(pro)
+		
+
 class Problem(db.Model) :
 	id = db.Column(db.Integer, primary_key = True)
 	documentId = db.Column(db.Integer, db.ForeignKey('document.id'))

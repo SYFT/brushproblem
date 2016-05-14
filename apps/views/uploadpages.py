@@ -37,45 +37,70 @@ def change(x, documentType = 0) :
 			
 				# Set the first letter in pro to be the answer
 				# Get Answer from each problem
-				pat = re.compile(u'[\(,（][A-Z, ,×,√]+[\),）]')
-				answer = pat.search(pro)
-				if answer is None :
+				getAnswer = False
+				for reg in app.config['REGEX_ANSWER'] :
+					pat = re.compile(reg)
+					ansMatch = pat.search(pro)
+					if ansMatch is None :
+						continue
+					getAnswer = True
+					
+					while True :
+						next = pat.search(pro, ansMatch.end())
+						if next is None :
+							break
+						ansMatch = next
+					
+					answer = ansMatch.group()
+					answer = answer.strip()
+					# print answer
+					
+					pat = re.compile(u'[\(（\)） ]')
+					ans = pat.split(answer)
+					answer = ''
+					for i in range(0, len(ans)) :
+						ans[i] = ans[i].strip()
+						if len(ans[i]) > 0 :
+							answer += ans[i]
+					# print 'answer:', answer
+					
+					panDuanTi = False
+					if answer in app.config['RIGHT_ANSWER'] or \
+						answer in app.config['WRONG_ANSWER'] :
+						if answer in app.config['RIGHT_ANSWER'] :
+							answer = u'A'
+						else :
+							answer = u'B'
+						panDuanTi = True
+					
+					pro = pro[:ansMatch.start()] + u'___' + pro[ansMatch.end():]
+					
+					break
+				
+				if getAnswer == False :
+					print '\r\n\r\n Wrong here:', pro
+					print '\r\n\r\n unicode here:', pro.decode('utf8')
+					
+					for reg in app.config['REGEX_ANSWER'] :
+						pat = re.compile(reg)
+						answer = pat.search(pro)
+						print answer
 					raise MyOperateError(u'No Answer in brackets.')
-				answer = answer.group()
-				answer = answer.strip()
-				# print answer
-				
-				pat = re.compile(u'[\(,（,\),）, ]')
-				ans = pat.split(answer)
-				answer = ''
-				for i in range(0, len(ans)) :
-					ans[i] = ans[i].strip()
-					if len(ans[i]) > 0 :
-						answer += ans[i]
-				print 'answer:', answer
-				
-				panDuanTi = False
-				if answer == u'√' or answer == u'×' :
-					panDuanTi = True
-					if answer == u'√' :
-						answer = u'A'
-					else :
-						answer = u'B'
-				
-				pat = re.compile(u'[\(,（][A-Z, ,×,√]+[\),）]')
-				pro = pat.subn('____', pro)
-				pro = pro[0]
-				print 'pro:', pro
-				
 				
 				if not panDuanTi :
 					# Get choices
 					# Choices must be set in the tail of the problem
-					pat = re.compile(u'[A-Z][\.,、,．]+.*', re.S)
-					allChoices = pat.search(pro)
+					
+					getChoice = False
+					for reg in app.config['REGEX_CHOICE'] :
+						pat = re.compile(reg, re.S)
+						allChoices = pat.search(pro)
+						if allChoices is None :
+							continue
+						getChoice = True
 					allChoices = allChoices.group()
-					print 'allchoices:', allChoices
-					pat = re.compile(u'[A-Z]+[\.,、,．]|\r\n')
+					# print 'allchoices:', allChoices
+					pat = re.compile(app.config['REGEX_CHOICE_INDEX'])
 					choice = pat.split(allChoices)
 					choices = ""
 					for x in choice :
@@ -83,7 +108,7 @@ def change(x, documentType = 0) :
 						if len(x) > 0 :
 							choices += u'##' + x
 					choices += u"##"
-					print choices
+					# print choices
 					
 					# Get description from each problem
 					ind = pro.index(allChoices)
@@ -96,7 +121,7 @@ def change(x, documentType = 0) :
 				
 				# 去除题目序号
 				# 实际不需要？分开题目时已经去除？
-				pat = re.compile(u'[0-9]+[\.,、,．]')
+				pat = re.compile(app.config['REGEX_PROBLEM_INDEX'])
 				des = pat.match(description)
 				
 				try :
@@ -126,6 +151,7 @@ def upload() :
 		for x in categories :
 			nameOfCategories.append((x.id, x.name))
 		form.subject.choices = nameOfCategories
+	
 	
 	# if 'form' in dir() :
 		# print 'hhhhhhh'
@@ -161,10 +187,10 @@ def upload() :
 					raise MyOperateError('The number of problems is too small.')
 				
 				
-				print 'fine'
+				# print 'fine'
 				
-				doc = models.Document(title = title, author = current_user, subjectId = category)
 				if current_user.isAdmin == True :
+					doc = models.Document(title = title, author = current_user, subjectId = category)
 					db.session.add(doc)
 					for content, choices, answer in format_content :
 						pro = models.Problem(source = doc, content = content, choice = choices, answer = answer)
@@ -173,7 +199,8 @@ def upload() :
 					flash(app.config['SUCCESS_UPLOAD'])
 				else :
 					flash(app.config['SUCCESS_PROCESS'])
-					return redirect(url_for('viewproblems.show', tempfile = doc))
+					session['tempfile'] = models.Tempfile(title = title, pros = format_content)
+					return redirect(url_for('viewproblems.show', did = 100))
 			except MyOperateError as e:
 				print '\n\n\n xxx :', e.description
 				flash(app.config['FAIL_PROCESS'])
