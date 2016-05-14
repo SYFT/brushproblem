@@ -1,0 +1,35 @@
+{% extends "mainpage.html" %}
+
+{% import "bootstrap/wtf.html" as wtf %}
+
+{% block someerrors %}
+  {% if form.errors %}
+    <div>
+      <p>有点错误：</p>
+      {{wtf.form_errors(form, hiddens = "False")}}
+    </div>
+    <hr/>
+  {% endif %}
+{% endblock %}
+
+{% block content %}
+  <form method = "POST" action = "{{ url_for('processProblems.upload') }}" name = "upload">
+<!--       <input type = "file" name = "problem"> -->
+<!--       <hr/> -->
+<!--       <input type = "submit" name = "submit" value = "submit" id = "submit"> -->
+    {{form.hidden_tag()}}
+    <hr/>
+    <p>标题：{{form.filename(size = 50, placeholder = "标题将作为日后检索题目的文件名！")|safe}} </p><br/>
+    <p>题目内容：<br/>{{form.file(rows = 10, cols = 100, placeholder = "直接粘帖题目即可，不支持图片。")|safe}} </p><br/>
+    <p>分类：</p>{{form.subject|safe}} <br/>
+    <hr/>
+    <span style="color: red;">以上内容一旦提交<strong>不可更改</strong>。</span></p> 
+    <hr/>
+    {{form.submit|safe}} <br/>
+    <hr/>
+  </form>
+  
+  <hr/>
+  <p>Have some questions with this process ?</p><br/>
+  <p>Don't Worry. You can find answer <a href = "{{url_for('frontend.faq')}}">here</a>!</p><br/>
+{% endblock %}

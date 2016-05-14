@@ -61,14 +61,12 @@ lm.init_app(app)
 	
 
 
-from apps.views import frontend, loginpages, registerpages, uploadpages, \
-						viewproblems
+from apps.views import frontend, loginpages, registerpages, processProblems
 MODULES = (
 (frontend, ''),
 (loginpages, ''),
 (registerpages, ''),
-(uploadpages, ''),
-(viewproblems, '')
+(processProblems, ''),
 )
 # the first parameter is the module's name
 # the second parameter is the url_prefix of the module

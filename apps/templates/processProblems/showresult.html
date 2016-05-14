@@ -1,0 +1,19 @@
+{% extends "mainpage.html" %}
+
+{% block content %}
+  {% if result|length > 0 %}
+    <p>搜索结果如下:</p>
+    <ul>
+      <div>
+        {% for x in result %}
+          <li> <a href = "{{url_for('processProblems.show', did = x[0])}}">{{x[1]|safe}}</a></li><br/>
+        {% endfor %}
+      </div>
+    </ul>
+    <p>共{{ result|length|safe }}个结果。</p><br/>
+    <p>找不到？按<a href = "{{url_for('processProblems.search')}}">这里</a>返回调整查找参数。</p><br/>
+  {% else %}
+    <p>没有匹配结果。</p>
+    <p>点击<a href = "{{url_for('processProblems.search')}}">这里</a>返回</p>
+  {% endif %}
+{% endblock %}

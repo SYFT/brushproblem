@@ -1,0 +1,31 @@
+{% extends "mainpage.html" %}
+
+{% import "bootstrap/wtf.html" as wtf %}
+
+{% block someerrors %}
+  {% if form.errors %}
+    <div>
+      <p>有点错误：</p>
+      {{wtf.form_errors(form, hiddens = "False")}}
+    </div>
+    <hr/>
+  {% endif %}
+{% endblock %}
+
+{% block content %}
+  <div align = "middle">
+    <h1>搜索你想要的文章！</h1>
+    <div class = "form-group">
+      <form action = "{{ url_for('processProblems.search') }}" 
+            method = "post" name = "login">
+        {{ form.hidden_tag() }}
+        <p>请选择所要查找的科目： {{ form.subject(class = "my-input-field")|safe }} </p> <br/>
+        <p>请输入你索要查找的文件名称中的关键字：<br/>{{ form.filename(class = "my-input-field")|safe }}</p><br/>
+        <p>请选择所要查找题目的上传时间段：<br/>{{ form.timeDelta(class = "my-input-field")|safe }}</p><br/>
+        <!--<button type = "submit" class="btn btn-default">{{ form.submit(value = "我选好了") }}</button>
+        {{ form.submit(value = "我选好了") }}-->
+        {{ wtf.form_field(form.submit, value = "开始查找")|safe }}<br/>
+      </form>
+    </div>
+  </div>
+{% endblock %}

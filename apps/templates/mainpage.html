@@ -55,7 +55,7 @@
                   </li>
                   {% if current_user.isAdmin and current_user.isAdmin == True %}
                     <li>
-                      <a href = "{{ url_for('uploadpages.upload') }}">上传题目</a>
+                      <a href = "{{ url_for('processProblems.upload') }}">上传题目</a>
                     </li>
                     <li>
                       <a href = "{{ url_for('admin.index') }}">管理</a>
@@ -69,11 +69,13 @@
                     <a href = "{{ url_for('registerpages.register') }}">注册</a>
                   </li>
                 {% endif %}
-                <li>
-                  <a href = "{{ url_for('uploadpages.upload') }}">处理题目</a>
-                </li>
+                {% if not (authenticated == True and current_user.isAdmin and current_user.isAdmin == True) %}
+                  <li>
+                    <a href = "{{ url_for('processProblems.upload') }}">处理题目</a>
+                  </li>
+                {% endif %}
                 <li class = "pull-right">
-                  <a href = "{{ url_for('viewproblems.search') }}">高级搜索</a>
+                  <a href = "{{ url_for('processProblems.search') }}">高级搜索</a>
                 </li>
               </ul>
             </div>

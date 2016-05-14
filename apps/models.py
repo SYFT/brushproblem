@@ -61,19 +61,19 @@ class Document(db.Model) :
 	def __repr__(self) :
 		return self.title
 
-class TempProblem :
-	content = unicode
-	choice = unicode
-	answer = unicode
+class TempProblem(object) :
+	content = unicode('')
+	choice = unicode('')
+	answer = unicode('')
 	
 	def __init__(self, content, choice, answer) :
 		self.content = unicode(content)
 		self.choice = unicode(choice)
 		self.answer = unicode(answer)
 	
-class Tempfile :
+class Tempfile(object) :
 	problems = []
-	title = unicode
+	title = unicode('')
 	
 	def __init__(self, title, pros) :
 		self.title = unicode(title)

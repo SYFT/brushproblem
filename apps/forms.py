@@ -105,16 +105,17 @@ class ChoiceForm(Form) :
 class ProblemForm(Form) :
 	pid = int
 	index = int
-	description = unicode
+	description = u''
 	choices = []
 	# The return value is a list
 	check = 0
 	message = ''
+	realAnswer = ''
 	# 0 -> unSelect  1 -> Wrong  2 -> Right
 
 class BrushForm(Form) :
 	pro = []
 	submit = SubmitField(u'submit')
 	hideCorrectProblem = BooleanField('hideCorrectProblem', default = False)
-	title = unicode
+	title = u''
 	

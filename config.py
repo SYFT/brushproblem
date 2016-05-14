@@ -35,17 +35,20 @@ CHOICE_INDEX = u'ABCDEFGHIJKLMNOPQRSTUVWXYZ'
 # 其次是行末的字母或者×√两种符号
 # 然后是最后一个‘对’或者‘错’的标识
 # 最后是最后一个字母
+
 # 判断题特别的答案 ×√╳xX
-REGEX_ANSWER = (u'[\(（][A-Za-z ×√╳\uff21-\uff3a\uff41-\uff5a]+[\)）]',
-				u'[A-Za-z×√╳\uff21-\uff3a\uff41-\uff5a]+ *[\r\n]+',
-				u'[对错]+',
-				u'[A-Za-z×√╳\uff21-\uff3a\uff41-\uff5a]+')
+# 特别的空格 ： ､ \xa0;''
+REGEX_ANSWER = (u'[\(（][A-Za-z ×√╳\uff21-\uff3a\uff41-\uff5a､ \xa0]+[\)）]',
+				u'[A-Za-z×√╳\uff21-\uff3a\uff41-\uff5a､\xa0]+ *[\r\n]+',
+				u'[对错､  ]+',
+				u'[A-Za-z×√╳\uff21-\uff3a\uff41-\uff5a､  \xa0]+')
 RIGHT_ANSWER = u'对√'
 WRONG_ANSWER = u'错xX╳×'
-REGEX_CHOICE = (u'[A-Z\uff21-\uff3a][\.,、,．]+.*',
+REGEX_CHOICE = (u'[A-Z\uff21-\uff3a][\.、．,､]+.*',
 				u'[A-Z\uff21-\uff3a].*')
-REGEX_CHOICE_INDEX = u'[A-Z\uff21-\uff3a]+[\.,、,．]|\r\n'
-REGEX_PROBLEM_INDEX = u'[0-9]+[\.,、,．]'
+REGEX_CHOICE_INDEX = (u'[A-Z\uff21-\uff3a]+[\.、．,､]|\r\n',
+						u'[A-Z\uff21-\uff3a､]+|\r\n')
+REGEX_PROBLEM_INDEX = u'[0-9]+[\.、．,､]'
 
 MESSAGE_FOR_RIGHT = u'Your are right!'
 MESSAGE_FOR_WRONG = u'Your are wrong! Right answer is %s.'

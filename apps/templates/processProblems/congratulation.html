@@ -1,0 +1,13 @@
+{% extends "mainpage.html" %}
+
+{% block metas %}
+  {{ super() }}
+  <meta http-equiv="refresh" content="3;url={{ url_for('processProblems.search') }}">
+{% endblock %}
+
+{% block content %}
+  <p>学神，你的答案全部正确！</p>
+  <p>快去做下一篇题目吧！</p><br/>
+  <hr/>
+  <p>三秒后自动跳转至搜索页面。</p>
+{% endblock %}

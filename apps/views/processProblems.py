@@ -6,8 +6,9 @@ from flask import Flask, request, session, \
 					Blueprint
 from flask.ext.login import current_user, login_required
 from apps import app, db, models
-from apps.forms import SearchProblemForm, ProblemForm, BrushForm, ChoiceForm
-import datetime
+from apps.forms import SearchProblemForm, ProblemForm, BrushForm, ChoiceForm,\
+						UploadForm
+import datetime, re
 import flask.ext.whooshalchemy
 
 processProblems = Blueprint('processProblems', __name__, 
@@ -96,14 +97,20 @@ def getAllProblem(doc) :
 				thisChoice.description = unicode(choicesDescription)
 				pro.choices.append(thisChoice)
 				countChoice += 1
-		pro.pid = x.id
+		try :
+			pro.pid = x.id
+			realPro = models.Problem.query.filter(models.Problem.id == pro.pid)
+			realPro = realPro.first()
+			pro.realAnswer = unicode(realPro.answer)
+		except Exception as e :
+			pro.realAnswer = x.answer
 		pro.index = count
 		pro.description = description
 		pro.check = 0
 		allProblem.pro.append(pro)
 	return allProblem
 
-@processProblems.route('/show/<int:did>', methods = ['GET', 'POST'])
+@processProblems.route('/show/<did>', methods = ['GET', 'POST'])
 def show(did) :
 	print 'yyyyyyyyyyyyyyyyyy'
 	
@@ -112,10 +119,13 @@ def show(did) :
 	
 	# 定义表格
 	if 'allProblem' not in dir() :
-		if did != 100 :
-			doc = models.Document.query.filter(models.Document.id == did).first()
-		else :
-			doc = session['tempfile']
+		try :
+			documentId = int(did)
+			doc = models.Document.query.filter(models.Document.id == documentId).first()
+		except Exception as e :
+			print 'hello life'
+			print session['tempfile'][0]
+			doc = models.Tempfile(session['tempfile'][0], session['tempfile'][1])
 		allProblem = getAllProblem(doc)
 	
 	# 将传过来的表单填写入对应的表格位置
@@ -147,9 +157,7 @@ def show(did) :
 				allCorret = False
 				continue
 			
-			realPro = models.Problem.query.filter(models.Problem.id == pro.pid)
-			realPro = realPro.first()
-			answer = unicode(realPro.answer)
+			answer = unicode(pro.realAnswer)
 			
 			if userAnswer == answer :
 				pro.check = 2
@@ -157,7 +165,7 @@ def show(did) :
 			else :
 				pro.check = 1
 				allCorret = False
-				pro.message = app.config['MESSAGE_FOR_WRONG'] % (realPro.answer)
+				pro.message = app.config['MESSAGE_FOR_WRONG'] % (pro.realAnswer)
 	
 	print 'how allproblems:', 'allProblem' in dir()
 	if allCorret == False :
@@ -179,11 +187,12 @@ class MyOperateError(Exception) :
 def change(x, documentType = 0) :
 	# 0 -> 答案在括号中     1 -> 答案在全文最后
 	if documentType == 0 :
-		pat = re.compile(u'\r\n *[0-9]+[\.,、,．]')
+		pat = re.compile(u'\r\n *[0-9]+[\.、,．､]|保险. ')
 		problems = pat.split(x)
 		# print problems
 		ret = []
 		for pro in problems :
+			# print 'pro:', pro[0:24]
 			if len(pro) < 3 :
 				continue
 			
@@ -196,6 +205,7 @@ def change(x, documentType = 0) :
 					pat = re.compile(reg)
 					ansMatch = pat.search(pro)
 					if ansMatch is None :
+						# print 'hi'
 						continue
 					getAnswer = True
 					
@@ -204,19 +214,19 @@ def change(x, documentType = 0) :
 						if next is None :
 							break
 						ansMatch = next
+						print ansMatch.start()
 					
 					answer = ansMatch.group()
 					answer = answer.strip()
-					# print answer
 					
-					pat = re.compile(u'[\(（\)） ]')
+					pat = re.compile(u'[\(（\)）  ]')
 					ans = pat.split(answer)
 					answer = ''
 					for i in range(0, len(ans)) :
 						ans[i] = ans[i].strip()
 						if len(ans[i]) > 0 :
 							answer += ans[i]
-					# print 'answer:', answer
+					
 					
 					panDuanTi = False
 					if answer in app.config['RIGHT_ANSWER'] or \
@@ -254,14 +264,19 @@ def change(x, documentType = 0) :
 						getChoice = True
 					allChoices = allChoices.group()
 					# print 'allchoices:', allChoices
-					pat = re.compile(app.config['REGEX_CHOICE_INDEX'])
-					choice = pat.split(allChoices)
-					choices = ""
-					for x in choice :
-						x = x.strip()
-						if len(x) > 0 :
-							choices += u'##' + x
-					choices += u"##"
+					for reg in app.config['REGEX_CHOICE_INDEX'] :
+						pat = re.compile(reg)
+						choice = pat.split(allChoices)
+						choices = ""
+						countChoice = 0
+						for x in choice :
+							x = x.strip()
+							if len(x) > 1 :
+								countChoice += 1
+								choices += u'##' + x
+						choices += u"##"
+						if countChoice > 1 :
+							break
 					# print choices
 					
 					# Get description from each problem
@@ -323,7 +338,9 @@ def upload() :
 			try :
 				
 				title = form.filename.data
+				print title
 				content = form.file.data
+				# print ord(content[24])
 				category = form.subject.data
 				
 				print 'begin change'
@@ -351,10 +368,17 @@ def upload() :
 						db.session.add(pro)
 					db.session.commit()
 					flash(app.config['SUCCESS_UPLOAD'])
+					return redirect(url_for('processProblems.show', \
+									did = unicode(doc.id)))
 				else :
+					if 'tempfile' in session :
+						session.pop('tempfile', None)
+					session['tempfile'] = (title, format_content)
+					print title
+					print 'session:', session['tempfile'][0]
 					flash(app.config['SUCCESS_PROCESS'])
-					session['tempfile'] = models.Tempfile(title = title, pros = format_content)
-					return redirect(url_for('processProblems.show', did = 100))
+					return redirect(url_for('processProblems.show', \
+									did = u'orz' + current_user.username))
 			except MyOperateError as e:
 				print '\n\n\n xxx :', e.description
 				flash(app.config['FAIL_PROCESS'])
