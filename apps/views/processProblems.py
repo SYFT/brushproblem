@@ -36,7 +36,7 @@ def search() :
 		name = form.filename.data
 		category = form.subject.data
 		timeDelta = form.timeDelta.data
-		print 'Good'
+		# print 'Good'
 		return redirect(url_for('processProblems.showResult', category = category, 
 							name = name, timeDelta = timeDelta))
 		
@@ -119,14 +119,23 @@ def show(did) :
 	
 	# 定义表格
 	if 'allProblem' not in dir() :
-		if did < 6666666 :
-			documentId = int(did)
+		# print 'not define'
+		# print did
+		documentId = int(did)
+		if documentId < 6666666 :
 			doc = models.Document.query.filter(models.Document.id == documentId).first()
 		else :
-			print 'hello life'
-			print session['tempfile'][0]
-			print session
-			doc = models.Tempfile(session['tempfile'][0], session['tempfile'][1])
+			print g
+			if 'doc' in g :
+				doc = g.doc
+			else :
+				print session
+				documentId = session['tempfile']
+				session.pop('tempfile', None)
+				doc = models.Document.query.filter(models.Document.id == documentId).first()
+				g.doc = doc
+				db.session.delete(doc)
+				db.session.commit()
 		allProblem = getAllProblem(doc)
 	
 	# 将传过来的表单填写入对应的表格位置
@@ -215,7 +224,7 @@ def change(x, documentType = 0) :
 						if next is None :
 							break
 						ansMatch = next
-						print ansMatch.start()
+						# print ansMatch.start()
 					
 					answer = ansMatch.group()
 					answer = answer.strip()
@@ -243,13 +252,13 @@ def change(x, documentType = 0) :
 					break
 				
 				if getAnswer == False :
-					print '\r\n\r\n Wrong here:', pro
-					print '\r\n\r\n unicode here:', pro.decode('utf8')
+					# print '\r\n\r\n Wrong here:', pro
+					# print '\r\n\r\n unicode here:', pro.decode('utf8')
 					
 					for reg in app.config['REGEX_ANSWER'] :
 						pat = re.compile(reg)
 						answer = pat.search(pro)
-						print answer
+						# print answer
 					raise MyOperateError(u'No Answer in brackets.')
 				
 				if not panDuanTi :
@@ -303,14 +312,21 @@ def change(x, documentType = 0) :
 				ret.append((description, choices, answer))
 			except MyOperateError as e :
 				print e.description
-				raise MyOperateError(u'Unexpected Error.')
+				# raise MyOperateError(u'Unexpected Error.')
 			except Exception as e :
 				print e
-				raise MyOperateError(u'Unexpected Error.')
+				print u'Unexpected Error.'
+				# raise MyOperateError(u'Unexpected Error.')
 		
 		return ret
 
 
+def addSessionTempFile(x) :
+	if 'tempfile' in session :
+		session.pop('tempfile', None)
+	session['tempfile'] = x
+	print session
+		
 @processProblems.route('/upload', methods = ['GET', 'POST'])
 @login_required
 def upload() :
@@ -372,16 +388,20 @@ def upload() :
 					return redirect(url_for('processProblems.show', 
 									did = unicode(doc.id)))
 				else :
-					print session
-					if 'tempfile' in session :
-						session.pop('tempfile', None)
-					session['tempfile'] = (title, format_content)
-					print session
-					print title
-					print 'session:', session['tempfile'][0]
+					doc = models.Document(title = title, author = current_user, subjectId = category)
+					db.session.add(doc)
+					for content, choices, answer in format_content :
+						pro = models.Problem(source = doc, content = content, choice = choices, answer = answer)
+						db.session.add(pro)
+					db.session.commit()
+					
+					addSessionTempFile(doc.id)
+					# print session
+					# print title
+					# print 'session:', session['tempfile'][0]
 					flash(app.config['SUCCESS_PROCESS'])
 					return redirect(url_for('processProblems.show', 
-									did = 6666666))
+									did = unicode(6666666)))
 			except MyOperateError as e:
 				print '\n\n\n xxx :', e.description
 				print '\r\n\r\n\r\n\r\n\r\n\r\n\r\n\n'
