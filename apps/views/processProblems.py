@@ -10,6 +10,8 @@ from apps.forms import SearchProblemForm, ProblemForm, BrushForm, ChoiceForm,\
 						UploadForm
 import datetime, re
 import flask.ext.whooshalchemy
+from apps.models import MyOperateError
+from processMethods import *
 
 processProblems = Blueprint('processProblems', __name__, 
 					static_folder = 'static',
@@ -56,60 +58,6 @@ def showResult(category, name, timeDelta) :
 		result.append((x.id, x.title))
 	return render_template('processProblems/showresult.html', result = result)
 
-def myValidate(arrayForm) :
-	for pro in arrayForm :
-		if not pro.validate_on_submit() :
-			return False
-		for choice in pro.choices :
-			if not choice.validate_on_submit() :
-				return False
-	return True
-
-def getAllProblem(doc) :
-	allProblem = BrushForm()
-	allProblem.pro = []
-	count = 0
-	allProblem.title = doc.title
-	for x in doc.problems :
-		count += 1
-		# description = str(count) + u'、' + x.content.title()
-		# Use ol/li to index the problems
-		description = x.content.title()
-		choices = x.choice.split(u'##')
-		# print 'x.choice:', x.choice
-		# print 'x.answer:', x.answer
-		countChoice = 0
-		pro = ProblemForm()
-		pro.choices = []
-		for y in choices :
-			y = y.strip()
-			if len(y) > 0 :
-				option = chr(countChoice + ord('A'))
-				choicesDescription = \
-					option + \
-					u'、' + unicode(y)
-				
-				thisChoice = ChoiceForm()
-				thisChoice.option.default = False
-				thisChoice.option.name = unicode(count)
-				thisChoice.option.id = unicode(count)
-				thisChoice.option.userValue = option
-				thisChoice.description = unicode(choicesDescription)
-				pro.choices.append(thisChoice)
-				countChoice += 1
-		try :
-			pro.pid = x.id
-			realPro = models.Problem.query.filter(models.Problem.id == pro.pid)
-			realPro = realPro.first()
-			pro.realAnswer = unicode(realPro.answer)
-		except Exception as e :
-			pro.realAnswer = x.answer
-		pro.index = count
-		pro.description = description
-		pro.check = 0
-		allProblem.pro.append(pro)
-	return allProblem
-
 @processProblems.route('/show/<did>', methods = ['GET', 'POST'])
 def show(did) :
 	print 'yyyyyyyyyyyyyyyyyy'
@@ -121,21 +69,18 @@ def show(did) :
 	if 'allProblem' not in dir() :
 		# print 'not define'
 		# print did
+		# print session
 		documentId = int(did)
 		if documentId < 6666666 :
 			doc = models.Document.query.filter(models.Document.id == documentId).first()
 		else :
-			print g
-			if 'doc' in g :
-				doc = g.doc
-			else :
-				print session
-				documentId = session['tempfile']
-				session.pop('tempfile', None)
-				doc = models.Document.query.filter(models.Document.id == documentId).first()
-				g.doc = doc
-				db.session.delete(doc)
-				db.session.commit()
+			documentId = session['tempfile']
+			doc = models.Document.query.filter(models.Document.id == documentId).first()
+			pros = []
+			for pro in doc.problems :
+				pros.append((pro.content, pro.choice, pro.answer))
+			tempfile = models.Tempfile(doc.title, pros)
+			g.doc = tempfile
 		allProblem = getAllProblem(doc)
 	
 	# 将传过来的表单填写入对应的表格位置
@@ -184,148 +129,20 @@ def show(did) :
 	else :
 		return render_template('processProblems/congratulation.html')
 
-		
-class MyOperateError(Exception) :
-	description = ""
-
-	def __init__(self, description = "Wrong in file!"):
-		self.description = description
-	
-	def __repr__(self):
-		return self.description
-	
-def change(x, documentType = 0) :
-	# 0 -> 答案在括号中     1 -> 答案在全文最后
-	if documentType == 0 :
-		pat = re.compile(u'\r\n *[0-9]+[\.、,．､]|保险. ')
-		problems = pat.split(x)
-		# print problems
-		ret = []
-		for pro in problems :
-			# print 'pro:', pro[0:24]
-			if len(pro) < 3 :
-				continue
-			
-			try :
-			
-				# Set the first letter in pro to be the answer
-				# Get Answer from each problem
-				getAnswer = False
-				for reg in app.config['REGEX_ANSWER'] :
-					pat = re.compile(reg)
-					ansMatch = pat.search(pro)
-					if ansMatch is None :
-						# print 'hi'
-						continue
-					getAnswer = True
-					
-					while True :
-						next = pat.search(pro, ansMatch.end())
-						if next is None :
-							break
-						ansMatch = next
-						# print ansMatch.start()
-					
-					answer = ansMatch.group()
-					answer = answer.strip()
-					
-					pat = re.compile(u'[\(（\)）  ]')
-					ans = pat.split(answer)
-					answer = ''
-					for i in range(0, len(ans)) :
-						ans[i] = ans[i].strip()
-						if len(ans[i]) > 0 :
-							answer += ans[i]
-					
-					
-					panDuanTi = False
-					if answer in app.config['RIGHT_ANSWER'] or \
-						answer in app.config['WRONG_ANSWER'] :
-						if answer in app.config['RIGHT_ANSWER'] :
-							answer = u'A'
-						else :
-							answer = u'B'
-						panDuanTi = True
-					
-					pro = pro[:ansMatch.start()] + u'___' + pro[ansMatch.end():]
-					
-					break
-				
-				if getAnswer == False :
-					# print '\r\n\r\n Wrong here:', pro
-					# print '\r\n\r\n unicode here:', pro.decode('utf8')
-					
-					for reg in app.config['REGEX_ANSWER'] :
-						pat = re.compile(reg)
-						answer = pat.search(pro)
-						# print answer
-					raise MyOperateError(u'No Answer in brackets.')
-				
-				if not panDuanTi :
-					# Get choices
-					# Choices must be set in the tail of the problem
-					
-					getChoice = False
-					for reg in app.config['REGEX_CHOICE'] :
-						pat = re.compile(reg, re.S)
-						allChoices = pat.search(pro)
-						if allChoices is None :
-							continue
-						getChoice = True
-					allChoices = allChoices.group()
-					# print 'allchoices:', allChoices
-					for reg in app.config['REGEX_CHOICE_INDEX'] :
-						pat = re.compile(reg)
-						choice = pat.split(allChoices)
-						choices = ""
-						countChoice = 0
-						for x in choice :
-							x = x.strip()
-							if len(x) > 1 :
-								countChoice += 1
-								choices += u'##' + x
-						choices += u"##"
-						if countChoice > 1 :
-							break
-					# print choices
-					
-					# Get description from each problem
-					ind = pro.index(allChoices)
-					description = pro[0 : ind]
-					description = description.strip()
-				else :
-					choices = u"##正确##错误##"
-					description = pro
-					# 题目描述已经处理，因为判断题无选项字段需要去除
-				
-				# 去除题目序号
-				# 实际不需要？分开题目时已经去除？
-				pat = re.compile(app.config['REGEX_PROBLEM_INDEX'])
-				des = pat.match(description)
-				
-				try :
-					des = des.group()
-					description = description[len(des):]
-				except Exception as e :
-					description = description
-				
-				ret.append((description, choices, answer))
-			except MyOperateError as e :
-				print e.description
-				# raise MyOperateError(u'Unexpected Error.')
-			except Exception as e :
-				print e
-				print u'Unexpected Error.'
-				# raise MyOperateError(u'Unexpected Error.')
-		
-		return ret
-
-
 def addSessionTempFile(x) :
 	if 'tempfile' in session :
+		try :
+			docId = session['tempfile']
+			if docId != x :
+				doc = models.Document.query.filter(models.Document.id == docId).first()
+				db.session.delete(doc)
+				db.session.commit()
+		except Exception as e :
+			print 'No such file'
+		
 		session.pop('tempfile', None)
 	session['tempfile'] = x
-	print session
+	# print session
 		
 @processProblems.route('/upload', methods = ['GET', 'POST'])
 @login_required
@@ -372,47 +189,43 @@ def upload() :
 					# print x.encode('gb2312'), y.encode('gb2312'), z.encode('gb2312')
 				
 				if len(format_content) < 2 :
-					raise MyOperateError('The number of problems is too small.')
+					raise MyOperateError('The number of problems is too small. \
+											Only %d problems found' % (len(format_content)))
 				
 				
 				# print 'fine'
 				
+				doc = models.Document(title = title, author = current_user, subjectId = category)
+				db.session.add(doc)
+				db.session.commit()
+				for content, choices, answer in format_content :
+					pro = models.Problem(source = doc, content = content, choice = choices, answer = answer)
+					db.session.add(pro)
+				db.session.commit()
+				
+				flash(app.config['SUCCESS_PROCESS'])
 				if current_user.isAdmin == True :
-					doc = models.Document(title = title, author = current_user, subjectId = category)
-					db.session.add(doc)
-					for content, choices, answer in format_content :
-						pro = models.Problem(source = doc, content = content, choice = choices, answer = answer)
-						db.session.add(pro)
-					db.session.commit()
-					flash(app.config['SUCCESS_UPLOAD'])
 					return redirect(url_for('processProblems.show', 
 									did = unicode(doc.id)))
 				else :
-					doc = models.Document(title = title, author = current_user, subjectId = category)
-					db.session.add(doc)
-					for content, choices, answer in format_content :
-						pro = models.Problem(source = doc, content = content, choice = choices, answer = answer)
-						db.session.add(pro)
-					db.session.commit()
-					
+					# print session
 					addSessionTempFile(doc.id)
 					# print session
 					# print title
 					# print 'session:', session['tempfile'][0]
-					flash(app.config['SUCCESS_PROCESS'])
 					return redirect(url_for('processProblems.show', 
 									did = unicode(6666666)))
 			except MyOperateError as e:
 				print '\n\n\n xxx :', e.description
 				print '\r\n\r\n\r\n\r\n\r\n\r\n\r\n\n'
-				flash(app.config['FAIL_PROCESS'] + '1')
+				flash(app.config['FAIL_PROCESS'])
 			except Exception as e:
 				print '\n\n\n yyy :', e
 				print '\r\n\r\n\r\n\r\n\r\n\r\n\r\n\n'
-				flash(app.config['FAIL_PROCESS'] + '2')
+				flash(app.config['FAIL_PROCESS'])
 		else :
 			if current_user.isAdmin :
 				flash(app.config['FAIL_UPLOAD'])
 			else :
-				flash(app.config['FAIL_PROCESS'] + '3')
+				flash(app.config['FAIL_PROCESS'])
 	return render_template('processProblems/upload.html', form = form)

@@ -39,9 +39,9 @@ CHOICE_INDEX = u'ABCDEFGHIJKLMNOPQRSTUVWXYZ'
 # 判断题特别的答案 ×√╳xX
 # 特别的空格 ： ､ \xa0;''
 REGEX_ANSWER = (u'[\(（][A-Za-z ×√╳\uff21-\uff3a\uff41-\uff5a､ \xa0]+[\)）]',
-				u'[A-Za-z×√╳\uff21-\uff3a\uff41-\uff5a､\xa0]+ *[\r\n]+',
-				u'[对错､  ]+',
-				u'[A-Za-z×√╳\uff21-\uff3a\uff41-\uff5a､  \xa0]+')
+				u'[A-Za-z×√╳\uff21-\uff3a\uff41-\uff5a]+[ ､\xa0]*[\r\n]+',
+				u'[对错]+[､ \xa0]*',
+				u'[A-Za-zX×√╳\uff21-\uff3a\uff41-\uff5a]+[､  \xa0]*')
 RIGHT_ANSWER = u'对√'
 WRONG_ANSWER = u'错xX╳×'
 REGEX_CHOICE = (u'[A-Z\uff21-\uff3a][\.、．,､]+.*',

@@ -81,6 +81,9 @@ class Tempfile(object) :
 		for content, choice, answer in pros :
 			pro = TempProblem(content, choice, answer)
 			self.problems.append(pro)
+	
+	def __repr__(self) :
+		return '%s' % (self.title)
 		
 
 class Problem(db.Model) :
@@ -155,3 +158,12 @@ class MyModelView(ModelView) :
 		return False
 
 
+		
+class MyOperateError(Exception) :
+	description = ""
+
+	def __init__(self, description = "Wrong in file!"):
+		self.description = description
+	
+	def __repr__(self):
+		return self.description
