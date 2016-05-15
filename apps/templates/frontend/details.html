@@ -5,7 +5,7 @@
   <ul class = "list-group">
     {% for doc in docs %}
       <li class = "list-group-item" style = "width: 35%;">
-        <a href = {{ url_for('viewproblems.show', did = doc.id) }}>{{doc.title}}</a><br/>
+        <a href = {{ url_for('processProblems.show', did = doc.id) }}>{{doc.title}}</a><br/>
       </li>
     {% endfor %}
   </ul>

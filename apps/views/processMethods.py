@@ -81,7 +81,7 @@ def change(x, documentType = 0) :
 					pat = re.compile(reg)
 					ansMatch = pat.search(pro)
 					if ansMatch is None :
-						print 'hi'
+						# print 'hi'
 						continue
 					
 					while True :
