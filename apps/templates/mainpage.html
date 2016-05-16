@@ -24,11 +24,12 @@
         {%- endblock styles %}
       {%- endblock head %}
     </head>
-    <body{% block body_attribs %}{% endblock body_attribs %}>
+    <body {% block body_attribs %}{% endblock body_attribs %}>
+      <a name = "my-top"></a>
       {% block body -%}
         {% set authenticated = ('user' in session and session['user'] == current_user.id) %}
         <div class = "container">
-          <div class = "navbar navbar-static-top">
+          <div id = "my-navbar" class = "navbar navbar-fixed-top">
             <div class = "navbar-inner">
               <span class = "navbar-header" style = "font-size:20px">你好，{%if current_user.username %}{{current_user.username}}{% else %}游客{% endif %} !</span>
               <ul class = "nav nav-tabs">
@@ -81,6 +82,9 @@
             </div>
           </div>
         </div>
+        
+        {% block otherNavbar %}
+        {% endblock otherNavbar %}
         
         <div class = "container">
           {% include 'flashMessage.html' %}

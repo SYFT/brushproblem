@@ -65,3 +65,11 @@ input[type = "submit"] {
 input[type = "checkbox"] {
   margin-right: 5px;
 }
+
+body {
+  padding-top: 70px;
+}
+
+.navbar {
+  opacity: 50;
+}

@@ -62,7 +62,7 @@ def showResult(category, name, timeDelta) :
 def show(did) :
 	print 'yyyyyyyyyyyyyyyyyy'
 	
-	# print 'request.form:', request.form
+	print 'request.form:', request.form
 	allCorret = False
 	
 	# 定义表格

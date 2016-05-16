@@ -15,10 +15,16 @@
   {% endfor %}
 {% endblock %}
 
+{% block body_attribs %}
+  style = "padding-bottom: 70px;"
+{% endblock %}
+
 {% block content %}
   <div class="page-header" align = "center"><h1>{{ papers.title }}</h1></div><br/>
-  <form method = "POST" action = "{{ url_for('processProblems.show', did = index) }}" name = "brushing">
+  <form id = "my-problem-submit-form" name = "my-problem-submit-form" method = "POST" action = "{{ url_for('processProblems.show', did = index) }}">
     {{papers.hidden_tag()}}
+    
+    <div class = "form-controls">
     <ol>
       {% for eachpro in papers.pro %}
         {% if not (papers.hideCorrectProblem.data and eachpro.check == 2) %}
@@ -44,7 +50,37 @@
         {% endif %}
       {% endfor %}
     </ol>
+    
+    </div>
     <p>{{ papers.hideCorrectProblem }} 隐藏正确题目，剩下错误和未做的题目。</p>
     {{ papers.submit(value = "交卷") }}
   </form>
+{% endblock %}
+
+{% block otherNavbar %}
+  <div class = "container">
+    <div id = "my-bottom-navbar" class = "navbar navbar-fixed-bottom">
+      <div class = "container-fluid">
+        <div class = "navbar-inner">
+          <ul class = "nav nav-tabs">
+            <li>
+              <button id = "my-button-toTop" type = "button" class = "btn btn-default">飞到上面</button>
+            </li>
+            <li>
+              <button id = "my-button-toBottom" type = "button" class = "btn btn-default">飞到上面</button>
+            </li>
+            <li class = "pull-right">
+              <form id = "my-problem-submit-form" name = "my-problem-submit-form" class = "narbar-form" method = "POST" action = "{{ url_for('processProblems.show', did = index) }}">
+                <div class = "form-group">
+                  <span>{{ papers.hideCorrectProblem }} 隐藏正确题目，剩下错误和未做的题目。</span>
+                  {{ papers.submit(value = "交卷") }}
+                </div>
+              </form>
+            </li>
+          </ul>
+          
+        </div>
+      </div>
+    </div>
+  </div>
 {% endblock %}
