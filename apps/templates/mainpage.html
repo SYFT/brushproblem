@@ -20,7 +20,7 @@
         {%- block styles %}
           <!-- Bootstrap -->
           <link href="{{bootstrap_find_resource('css/bootstrap.css', cdn='bootstrap')}}" rel="stylesheet" media="screen">
-          <link href = "/static/css/myCSS.css" rel = "stylesheet" media = "screen">
+          <link href = "{{url_for('static', filename = 'myCSS.css')}}" rel = "stylesheet" media = "screen">
         {%- endblock styles %}
       {%- endblock head %}
     </head>
@@ -29,7 +29,7 @@
       {% block body -%}
         {% set authenticated = ('user' in session and session['user'] == current_user.id) %}
         <div class = "container">
-          <div id = "my-navbar" class = "navbar navbar-fixed-top">
+          <div id = "my-navbar" class = "navbar navbar-static-top">
             <div class = "navbar-inner">
               <span class = "navbar-header" style = "font-size:20px">你好，{%if current_user.username %}{{current_user.username}}{% else %}游客{% endif %} !</span>
               <ul class = "nav nav-tabs">
@@ -86,7 +86,7 @@
         {% block otherNavbar %}
         {% endblock otherNavbar %}
         
-        <div class = "container">
+        <div class = "container" style = "">
           {% include 'flashMessage.html' %}
           
           {% block someerrors %}

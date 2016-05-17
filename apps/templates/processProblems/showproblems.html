@@ -15,72 +15,47 @@
   {% endfor %}
 {% endblock %}
 
-{% block body_attribs %}
-  style = "padding-bottom: 70px;"
+{% block otherNavbar %}
+  <div class = "my-floating-box">
+      <button id = "my-button-toTop" type = "button" class = "btn btn-default">飞到上面</button>
+      <button id = "my-button-toBottom" type = "button" class = "btn btn-default">飞到上面</button>
+  </div>
 {% endblock %}
 
 {% block content %}
-  <div class="page-header" align = "center"><h1>{{ papers.title }}</h1></div><br/>
+  <div class="page-header" align = "center" style="padding-top:70px;"><h1>{{ papers.title }}</h1></div><br/>
   <form id = "my-problem-submit-form" name = "my-problem-submit-form" method = "POST" action = "{{ url_for('processProblems.show', did = index) }}">
     {{papers.hidden_tag()}}
     
     <div class = "form-controls">
-    <ol>
-      {% for eachpro in papers.pro %}
-        {% if not (papers.hideCorrectProblem.data and eachpro.check == 2) %}
-          <div>
-            <li>
-              <p class = "my-problem-description">{{eachpro.description|safe}}</p><br/>
-              {% for x in eachpro.choices %}
-                <p class = "my-problem-choice">{{ x.option|safe }}{{ x.description|safe }}</p><br/>
-              {% endfor %}
-              {% if eachpro.check == 1 %}
-                <span class = "label label-danger">{{ eachpro.message|safe }}</span><br/>
-              {% elif eachpro.check == 2 %}
-                <span class = "label label-success">{{ eachpro.message|safe }}</span><br/>
-              {% endif %}
-            </li><br/>
-          </div>
-        {% else %}
-          <div class = "invisible">
-          {% for x in eachpro.choices %}
-            {{ x.option(style = "display:none;")|safe }}
-          {% endfor %}
-          </div>
-        {% endif %}
-      {% endfor %}
-    </ol>
+      <ol>
+        {% for eachpro in papers.pro %}
+          {% if not (papers.hideCorrectProblem.data and eachpro.check == 2) %}
+            <div>
+              <li>
+                <p class = "my-problem-description">{{eachpro.description|safe}}</p><br/>
+                {% for x in eachpro.choices %}
+                  <p class = "my-problem-choice">{{ x.option|safe }}{{ x.description|safe }}</p><br/>
+                {% endfor %}
+                {% if eachpro.check == 1 %}
+                  <span class = "label label-danger">{{ eachpro.message|safe }}</span><br/>
+                {% elif eachpro.check == 2 %}
+                  <span class = "label label-success">{{ eachpro.message|safe }}</span><br/>
+                {% endif %}
+              </li><br/>
+            </div>
+          {% else %}
+            <div class = "invisible">
+            {% for x in eachpro.choices %}
+              {{ x.option(style = "display:none;")|safe }}
+            {% endfor %}
+            </div>
+          {% endif %}
+        {% endfor %}
+      </ol>
     
     </div>
     <p>{{ papers.hideCorrectProblem }} 隐藏正确题目，剩下错误和未做的题目。</p>
     {{ papers.submit(value = "交卷") }}
   </form>
-{% endblock %}
-
-{% block otherNavbar %}
-  <div class = "container">
-    <div id = "my-bottom-navbar" class = "navbar navbar-fixed-bottom">
-      <div class = "container-fluid">
-        <div class = "navbar-inner">
-          <ul class = "nav nav-tabs">
-            <li>
-              <button id = "my-button-toTop" type = "button" class = "btn btn-default">飞到上面</button>
-            </li>
-            <li>
-              <button id = "my-button-toBottom" type = "button" class = "btn btn-default">飞到上面</button>
-            </li>
-            <li class = "pull-right">
-              <form id = "my-problem-submit-form" name = "my-problem-submit-form" class = "narbar-form" method = "POST" action = "{{ url_for('processProblems.show', did = index) }}">
-                <div class = "form-group">
-                  <span>{{ papers.hideCorrectProblem }} 隐藏正确题目，剩下错误和未做的题目。</span>
-                  {{ papers.submit(value = "交卷") }}
-                </div>
-              </form>
-            </li>
-          </ul>
-          
-        </div>
-      </div>
-    </div>
-  </div>
 {% endblock %}

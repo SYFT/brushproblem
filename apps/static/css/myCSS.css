@@ -67,9 +67,17 @@ input[type = "checkbox"] {
 }
 
 body {
-  padding-top: 70px;
 }
 
 .navbar {
   opacity: 50;
+}
+
+.my-floating-box {
+  width:40px;
+  height:100px;
+  position: fixed;
+  left: 5%;
+  top: 40px;
+  z-index: 999;
 }
