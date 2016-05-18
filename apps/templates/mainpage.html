@@ -13,15 +13,24 @@
         </title>
 
         {%- block metas %}
-          <meta http-equiv = "Content-Type" content = "text/html; charset=utf-8">
-          <meta name = viewport" content = "width=device-width, initial-scale=1.0">
+          <meta http-equiv="X-UA-Compatible" content="IE=9" />
+          <meta http-equiv="X-UA-Compatible" content="IE=edge,Chrome=1" />
+          <meta http-equiv = "Content-Type" content = "text/html; charset=utf-8"/>
+          <meta name = "viewport" content = "width=device-width, initial-scale=1.0"/>
         {%- endblock metas %}
-
+        
         {%- block styles %}
           <!-- Bootstrap -->
           <link href="{{bootstrap_find_resource('css/bootstrap.css', cdn='bootstrap')}}" rel="stylesheet" media="screen">
-          <link href = "{{url_for('static', filename = 'myCSS.css')}}" rel = "stylesheet" media = "screen">
+          <link href = "{{url_for('static', filename = 'css/myCSS.css')}}" rel = "stylesheet" media = "screen">
         {%- endblock styles %}
+        
+        {% block javascripts %}
+          <script src="{{bootstrap_find_resource('jquery.js', cdn='jquery')}}"></script>
+          <script src="{{bootstrap_find_resource('js/bootstrap.js', cdn='bootstrap')}}"></script>
+          <script type = "text/javascript" src = "{{url_for('static', filename = 'js/myJS.js')}}"></script>
+        {% endblock javascripts%}
+
       {%- endblock head %}
     </head>
     <body {% block body_attribs %}{% endblock body_attribs %}>
@@ -94,13 +103,8 @@
           
           {% block content -%}
           {%- endblock content %}
-
-          {% block scripts %}
-            <script src="{{bootstrap_find_resource('jquery.js', cdn='jquery')}}"></script>
-            <script src="{{bootstrap_find_resource('js/bootstrap.js', cdn='bootstrap')}}"></script>
-          {%- endblock scripts %}
-        {%- endblock body %}
-      </div>
+        </div>
+      {%- endblock body %}
     </body>
   {%- endblock html %}
   </html>
