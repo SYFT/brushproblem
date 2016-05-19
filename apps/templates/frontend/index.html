@@ -1,10 +1,49 @@
 {% extends "mainpage.html" %}
 
+
+{% import "bootstrap/wtf.html" as wtf %}
+
 {% block content %}
   {{ super() }}
   {% set authenticated = ('user' in session and session['user'] == current_user.id) %}
   <div class = "jumbotron">
-    <h1>开始<a href = "{{url_for('processProblems.search')}}">刷题</a>。</h1><br/>
+    <div class = "form-group">
+      <form action = "{{ url_for('processProblems.search') }}" 
+            method = "post" id = "login">
+        {{ form.hidden_tag() }}
+        <div class = "container">
+          <div class = "row" align = "middle">
+            <div class = "col-lg-3">
+              <p>科目： {{ form.subject(class = "my-input-field")|safe }} </p> <br/>
+            </div>
+            <div class = "col-lg-3">
+              <p>文件名关键字：{{ form.filename(class = "my-input-field")|safe }}</p><br/>
+            </div>
+            <div class = "col-lg-3">
+              <p>上传时间：{{ form.timeDelta(class = "my-input-field")|safe }}</p><br/>
+            </div>
+            <div style = "margin-top: 26px;"align = "pull-right">
+              {{ wtf.form_field(form.submit, value = "开始查找")|safe }}
+            </div>
+          </div>
+        </div>
+      </form>
+    </div>
     <p>这是一个能够处理题目，使其变成我们容易刷题的形式的网站。</p>
+  </div>
+  
+  <div class = "row">
+    <div class = "col-lg-4">
+      <h2>统计</h2><br/>
+      <p>共有：<b>{{numberOfDocuments}}</b>份题目。</p><br/>
+      <p>共有：<b>{{numberOfUser}}</b>位用户。</p><br/>
+    </div>
+    
+    <div class = "col-lg-4">
+      <h2>最近上传的题目：</h2><br/>
+      {% for doc in listOfRecentDocument %}
+        <a href = "{{url_for('processProblems.show', did = doc.id)}}">{{doc.title}}</a><br/>
+      {% endfor %}
+    </div>
   </div>
 {% endblock %}

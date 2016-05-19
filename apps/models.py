@@ -13,6 +13,8 @@ class User(db.Model) :
 	email = db.Column(db.String(64), index = True)
 	isAdmin = db.Column(db.Boolean)
 	contributions = db.relationship('Document', backref = 'author', lazy = 'dynamic')
+	lastVisit = db.Column(db.Integer)
+	lastSubmit = db.Column(db.String(5096))
 	
 	def __init__(self, username, password, email, isAdmin = False) :
 		self.username = username

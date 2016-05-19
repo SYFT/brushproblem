@@ -4,7 +4,7 @@ from flask import Flask, Blueprint, render_template, \
 from flask.ext.login import login_required, \
 					current_user, login_required,\
 					fresh_login_required
-from apps.forms import SuggestionForm, EditForm
+from apps.forms import SuggestionForm, EditForm, SearchProblemForm
 frontend = Blueprint('frontend', __name__, 
 					static_folder = 'static',
 					template_folder = 'templates')
@@ -21,7 +21,34 @@ def index():
 		# print session['_fresh']
 	# if 'user' in session : 
 		# print session['user']
-	return render_template('frontend/index.html')
+	
+	form = SearchProblemForm()
+	categories = models.Subject.query.order_by('name')
+	nameOfCategories = []
+	for x in categories :
+		nameOfCategories.append((x.id, x.name))
+	form.subject.choices = nameOfCategories
+	typeOfTimeDelta = []
+	for x, y in app.config['TIMEDELTA_CHOICE'] :
+		typeOfTimeDelta.append((x, y))
+	form.timeDelta.choices = typeOfTimeDelta
+	form.timeDelta.data = app.config['DEFAULT_TIME_DELTA']
+	
+	docs = models.Document.query.all()
+	numberOfDocuments = len(docs)
+	users = models.User.query.all()
+	numberOfUser = len(users)
+	
+	listOfRecentDocument = models.Document.query.\
+								limit(numberOfDocuments).from_self().\
+								order_by(models.Document.timeStamp)
+	listOfRecentDocument = list(listOfRecentDocument)
+	listOfRecentDocument = listOfRecentDocument[max(0, len(listOfRecentDocument) - 5):]
+	return render_template('frontend/index.html', 
+							form = form,
+							numberOfDocuments = numberOfDocuments,
+							numberOfUser = numberOfUser,
+							listOfRecentDocument = listOfRecentDocument)
 	
 @frontend.route('/details')
 @login_required

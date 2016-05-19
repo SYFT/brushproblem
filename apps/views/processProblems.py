@@ -84,13 +84,48 @@ def show(did) :
 		allProblem = getAllProblem(doc)
 	
 	# 将传过来的表单填写入对应的表格位置
+	userLogin = 'user' in session and session['user'] == current_user.id
+	userLastSubmitDict = {}
+	if userLogin :
+		u = models.User.query.filter(models.User.id == current_user.id).first()
+		if u.lastVisit == documentId :
+			tmpAnswer = u.lastSubmit.split('##')
+			print 'dddd'
+			print tmpAnswer
+			length = len(tmpAnswer) / 2
+			for i in range(0, length) :
+				userLastSubmitDict[int(tmpAnswer[2 * i])] = unicode(tmpAnswer[2 * i + 1])
+	
 	if request.method == 'POST' :
+		recordUserId = documentId
+		recordUserAnswer = ''
 		for pro in allProblem.pro :
 			userChoices_list = request.form.getlist(str(pro.index))
+			if len(userChoices_list) < 1 and userLogin :
+				if userLastSubmitDict.has_key(pro.index) :
+					userChoices_list = userLastSubmitDict[pro.index]
+			
+			tmpAnswer = ''
 			for c in userChoices_list :
 				index = ord(c) - ord('A')
 				# pro.choices[index].option.checked = True
 				pro.choices[index].option.data = True
+				tmpAnswer += c
+			
+			if len(tmpAnswer) > 0 :
+				recordUserAnswer += unicode(pro.index) + "##"
+				recordUserAnswer += tmpAnswer + "##"
+		
+		try :
+			if userLogin and len(recordUserAnswer) < 1 :
+				u = models.User.query.filter(models.User.id == current_user.id).first()
+				u.lastVisit = recordUserId
+				u.lastSubmit = recordUserAnswer
+				db.session.commit()
+				print 'record:', recordUserAnswer
+		except Exception as e :
+			pass
+				
 		# print request.Form['1']
 	
 	# 检查答案，给予反馈
