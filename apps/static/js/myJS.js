@@ -10,9 +10,14 @@ JQ(document).ready(function() {
 			500);
 	})
 	
+	JQ("#my-problem-form").submit(function() {
+		alert('submit');
+	})
+	
 	JQ("button[id^='my-button-submit-']").each(function() {
 		JQ(this).click(function() {
-			prefix = "my-submit-";
+			alert('dddd');
+			prefix = "my-button-submit-";
 			formname = this.id.substring(prefix.length);
 			JQ("#my-problem-form").submit();
 		})
@@ -23,19 +28,19 @@ JQ(document).ready(function() {
 		if(formCheckbox.is(':checked')) {
 			formCheckbox.prop("checked", false);
 			JQ("[canhide = 'true']").each(function() {
-				this.css("display", "");
+				JQ(this).css("display", "");
 			})
 		} else {
 			formCheckbox.prop("checked", true);
 			JQ("[canhide = 'true']").each(function() {
-				this.css("display", "none");
+				JQ(this).css("display", "none");
 			})
 		}
 	})
 	
 	JQ("#my-problem-form").submit(function() {
 		var tmp = JQ("#my-problem-answer");
-		if(tmp.style.display == "none")
+		if(tmp.css("display") === "none")
 			tmp.val("");
 	})
 	

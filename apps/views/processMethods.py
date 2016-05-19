@@ -23,7 +23,7 @@ def getAllProblem(doc) :
 		count += 1
 		# description = str(count) + u'、' + x.content.title()
 		# Use ol/li to index the problems
-		description = x.content.title()
+		description = x.content
 		choices = x.choice.split(u'##')
 		# print 'x.choice:', x.choice
 		# print 'x.answer:', x.answer
@@ -55,11 +55,13 @@ def getAllProblem(doc) :
 			pro.realAnswer = x.answer
 		pro.index = count
 		pro.description = description
+		# print 'sssss:', pro.description
 		pro.check = 0
 		allProblem.pro.append(pro)
 	return allProblem
 
 def getDescriptionAndChoices(pro, panDuanTi) :
+	# print pro
 	if not panDuanTi :
 		# Get choices
 		# Choices must be set in the tail of the problem
@@ -71,6 +73,7 @@ def getDescriptionAndChoices(pro, panDuanTi) :
 			if allChoices is None :
 				continue
 			getChoice = True
+			break
 		allChoices = allChoices.group()
 		# print 'allchoices:', allChoices
 		for reg in app.config['REGEX_CHOICE_INDEX'] :
@@ -80,6 +83,7 @@ def getDescriptionAndChoices(pro, panDuanTi) :
 			countChoice = 0
 			for x in choice :
 				x = x.strip()
+				x = x.replace(' ', '')
 				if len(x) > 1 :
 					countChoice += 1
 					choices += u'##' + x
@@ -108,10 +112,11 @@ def getDescriptionAndChoices(pro, panDuanTi) :
 	except Exception as e :
 		description = description
 		
+	# print description, choices
 	return (description, choices)
 	
 def change1(x) :
-	x = x.replace(unicode(chr(63)), u'_')
+	# x = x.replace(unicode(chr(63)), u'_')
 	pat = re.compile(u'\r\n *[0-9]+[\.、,．､]|保险. ')
 	problems = pat.split(x)
 	# print problems
@@ -202,23 +207,27 @@ def change1(x) :
 	return ret
 	
 def change2(x, y) :
-	x = x.replace(unicode(chr(63)), u'_')
+	# x = x.replace(unicode(chr(63)), u'_')
 	pat = re.compile(u'\r\n *[0-9]+[\.、,．､]|保险. ')
 	problems = pat.split(x)
+	pat = re.compile(u'[0-9]+[\.、,．､]*')
 	answers = pat.split(y)
 	
 	retAnswer = []
 	panDuanTi = []
 	# A boolean array indicate wheather the ith problem is a judge question or not
 	index1 = 0
+	retAnswer.append('')
+	panDuanTi.append('')
+	# print 'dddd'
 	for ans in answers :
 		tmpAns = ans.strip()
 		if len(tmpAns) < 1 :
 			continue
-		index = 1
+		index1 += 1
 		tmpAns = tmpAns.upper()
 		tmpAns = tmpAns.replace(' ', '')
-		pat = app.config['REGEX_JUDGEANSWER']
+		pat = re.compile(app.config['REGEX_JUDGEANSWER'])
 		tmp = pat.search(tmpAns)
 		if tmp is None :
 			panDuanTi.append(False)
@@ -234,21 +243,33 @@ def change2(x, y) :
 				tmpAns = u'B'
 		retAnswer.append(tmpAns)
 	
+	# print len(retAnswer)
+	# print panDuanTi
+	
+	# print 'hhhh'
 	retProblem = []
 	retChoices = []
+	retProblem.append('')
+	retChoices.append('')
 	index2 = 0
 	for pro in problems :
-		# print 'pro:', pro[0:24]
+		# print 'pro:', pro
 		if len(pro) < 3 :
 			continue
 		
 		try :
-			index += 1
+			index2 += 1
 			retProblem.append('')
 			retChoices.append('')
-			x = getDescriptionAndChoices(pro, panDuanTi[index])
-			retProblem[index] = x[0]
-			retChoices[index] = x[1]
+			# print 'begin'
+			x = getDescriptionAndChoices(pro, panDuanTi[index2])
+			# print 'end'
+			# print len(retProblem), index2
+			# print len(x)
+			# print x
+			retProblem[index2] = x[0]
+			retChoices[index2] = x[1]
+			# print 'okay'
 		except MyOperateError as e :
 			print e.description
 		except Exception as e :
@@ -256,11 +277,13 @@ def change2(x, y) :
 			print u'Unexpected Error.'
 	
 	
+	# print 'qqqq'
 	ret = []
-	for i in range(0, min(index1, index2)) :
+	for i in range(1, min(index1, index2) + 1) :
 		if len(retAnswer[i]) > 0 and len(retProblem[i]) > 0 \
 			and len(retChoices[i]) > 0 :
 			ret.append((retProblem[i], retChoices[i], retAnswer[i]))
+	# print ret
 	return ret
 	
 

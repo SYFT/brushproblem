@@ -172,8 +172,10 @@ def upload() :
 			try :
 				
 				title = form.filename.data
+				title = title.title()
 				print title
 				content = form.file.data
+				print 'content:', content
 				# print ord(content[24])
 				answer = None
 				if form.answer.data :

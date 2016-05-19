@@ -29,7 +29,7 @@
         </div>
         <div class = "navbar-right">
           <button id = "my-button-hide-correct" type = "button" class = "btn btn-default">隐藏正确题目</button>
-          <button id = "my-button-submit-my-problem-form" type = "button" class = "btn btn-default">提交试卷</button>
+          <button id = "my-button-submit-my-problem-form" class = "btn btn-default">提交试卷</button>
         </div>
       </div>
     </div>
@@ -38,7 +38,7 @@
 
 {% block content %}
   <div class="page-header" align = "center" style="padding-top:70px;"><h1>{{ papers.title }}</h1></div><br/>
-  <form id = "my-problem-form" name = "my-problem-form" method = "POST" action = "{{ url_for('processProblems.show', did = index) }}">
+  <form id = "my-problem-form" method = "POST" action = "{{ url_for('processProblems.show', did = index) }}">
     {{papers.hidden_tag()}}
     
     <div class = "form-controls">
