@@ -7,28 +7,7 @@
   {{ super() }}
   {% set authenticated = ('user' in session and session['user'] == current_user.id) %}
   <div class = "jumbotron">
-    <div class = "form-group">
-      <form action = "{{ url_for('processProblems.search') }}" 
-            method = "post" id = "login">
-        {{ form.hidden_tag() }}
-        <div class = "container">
-          <div class = "row" align = "middle">
-            <div class = "col-lg-3">
-              <p>科目： {{ form.subject(class = "my-input-field")|safe }} </p> <br/>
-            </div>
-            <div class = "col-lg-3">
-              <p>文件名关键字：{{ form.filename(class = "my-input-field")|safe }}</p><br/>
-            </div>
-            <div class = "col-lg-3">
-              <p>上传时间：{{ form.timeDelta(class = "my-input-field")|safe }}</p><br/>
-            </div>
-            <div style = "margin-top: 26px;"align = "pull-right">
-              {{ wtf.form_field(form.submit, value = "开始查找")|safe }}
-            </div>
-          </div>
-        </div>
-      </form>
-    </div>
+    <h1>题目处理+刷题网</h1>
     <p>这是一个能够处理题目，使其变成我们容易刷题的形式的网站。</p>
   </div>
   
@@ -44,6 +23,17 @@
       {% for doc in listOfRecentDocument %}
         <a href = "{{url_for('processProblems.show', did = doc.id)}}">{{doc.title}}</a><br/>
       {% endfor %}
+    </div>
+    
+    <div class = "col-lg-4">
+      <h2>搜索：</h2><br/>
+      <form action = "{{ url_for('processProblems.search') }}" method = "post" id = "login">
+        {{ form.hidden_tag() }}
+        <p>科目： {{ form.subject(class = "my-input-field")|safe }} </p>
+        <p>文件名关键字：{{ form.filename(class = "my-input-field")|safe }}</p>
+        <p>上传时间：{{ form.timeDelta(class = "my-input-field")|safe }}</p>
+        {{ wtf.form_field(form.submit, value = "开始查找")|safe }}
+      </form>
     </div>
   </div>
 {% endblock %}

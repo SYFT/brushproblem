@@ -92,9 +92,7 @@ class SearchProblemForm(Form) :
 				validators = [DataRequired(message = ERROR_EMPTY(FILENAME)), 
 					Length(min = 2, max = 16, 
 						message = ERROR_LENGTH(FILENAME, min = 2, max = 16))])
-	timeDelta = SelectField('timedelta', 
-					validators = [DataRequired(message = ERROR_EMPTY(TIMEDELTA))], 
-					coerce = int)
+	timeDelta = SelectField('timedelta', coerce = int)
 	submit = SubmitField(u'submit')
 							
 # SelectField->coerce is the return type, which is the first part of choices

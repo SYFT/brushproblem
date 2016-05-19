@@ -19,20 +19,22 @@ processProblems = Blueprint('processProblems', __name__,
 
 @processProblems.route('/search', methods=['GET', 'POST'])
 def search() :
-	if 'form' not in dir() :
-		form = SearchProblemForm()
-		categories = models.Subject.query.order_by('name')
-		
-		nameOfCategories = []
-		for x in categories :
-			nameOfCategories.append((x.id, x.name))
-		form.subject.choices = nameOfCategories
-		
-		typeOfTimeDelta = []
-		for x, y in app.config['TIMEDELTA_CHOICE'] :
-			typeOfTimeDelta.append((x, y))
-		form.timeDelta.choices = typeOfTimeDelta
+	form = SearchProblemForm()
+	categories = models.Subject.query.order_by('name')
+	
+	nameOfCategories = []
+	for x in categories :
+		nameOfCategories.append((x.id, x.name))
+	form.subject.choices = nameOfCategories
+	
+	typeOfTimeDelta = []
+	for x, y in app.config['TIMEDELTA_CHOICE'] :
+		typeOfTimeDelta.append((x, y))
+	form.timeDelta.choices = typeOfTimeDelta
+	if request.method == 'GET' :
 		form.timeDelta.data = app.config['DEFAULT_TIME_DELTA']
+	
+	print 'data:', form.timeDelta.data
 	
 	if request.method == 'POST' and form.validate_on_submit() :
 		name = form.filename.data
@@ -48,8 +50,12 @@ def search() :
 
 @processProblems.route('/show/<int:category>&<string:name>&<int:timeDelta>', methods = ['GET'])
 def showResult(category, name, timeDelta) :
+	print timeDelta
 	timeDelta = app.config['TIMEDELTA'][timeDelta]
 	startTime = datetime.datetime.utcnow() - timeDelta
+	print datetime.datetime.utcnow()
+	print timeDelta
+	print startTime
 	results = models.Document.query.\
 					filter(models.Document.timeStamp >= startTime)\
 					.whoosh_search(name, limit = 50).all()
