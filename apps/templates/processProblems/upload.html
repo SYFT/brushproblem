@@ -13,14 +13,24 @@
 {% endblock %}
 
 {% block content %}
-  <form method = "POST" action = "{{ url_for('processProblems.upload') }}" name = "upload">
+  <button id = "my-button-problem-type-1" class = "btn btn-default" type = "button">答案在题目中</button>
+  <button id = "my-button-problem-type-2" class = "btn btn-default" type = "button">答案在题目外</button><br/>
+  <form id = "my-problem-form" method = "POST" action = "{{ url_for('processProblems.upload') }}" name = "upload">
 <!--       <input type = "file" name = "problem"> -->
 <!--       <hr/> -->
 <!--       <input type = "submit" name = "submit" value = "submit" id = "submit"> -->
     {{form.hidden_tag()}}
     <hr/>
-    <p>标题：{{form.filename(size = 50, placeholder = "标题将作为日后检索题目的文件名！")|safe}} </p><br/>
-    <p>题目内容：<br/>{{form.file(rows = 10, cols = 100, placeholder = "直接粘帖题目即可，不支持图片。")|safe}} </p><br/>
+    <p>标题：</p><br/>
+    {{form.filename(size = 50, placeholder = "标题将作为日后检索题目的文件名！")|safe}} <br/>
+    <div id = "my-problem-content">
+      <p>题目内容：</p><br/>
+      {{form.file(rows = 10, cols = 100, placeholder = "直接粘帖题目即可，不支持图片。")|safe}} <br/>
+    </div><br/>
+    <div id = "my-problem-answer" style = "display: none;">
+      <p>题目答案：</p><br/>
+      {{form.answer(rows = 10, cols = 100, placeholder = "直接粘帖答案部分即可，不支持图片。")|safe}} <br/>
+    </div>
     <p>分类：</p>{{form.subject|safe}} <br/>
     <hr/>
     <span style="color: red;">以上内容一旦提交<strong>不可更改</strong>。</span></p> 

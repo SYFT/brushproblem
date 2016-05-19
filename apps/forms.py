@@ -68,6 +68,7 @@ SUBJECT = u'科目'
 class UploadForm(Form) :
 	file = TextAreaField('file', 
 				validators = [DataRequired(message = ERROR_EMPTY(FILE))])
+	answer = TextAreaField('answer')
 	filename = StringField('filename', 
 				validators = [DataRequired(message = ERROR_EMPTY(FILENAME)), 
 					Length(min = 2, max = 16, 

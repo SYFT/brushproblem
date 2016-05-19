@@ -175,10 +175,13 @@ def upload() :
 				print title
 				content = form.file.data
 				# print ord(content[24])
+				answer = None
+				if form.answer.data :
+					answer = form.answer.data
 				category = form.subject.data
 				
 				print 'begin change'
-				format_content = change(content)
+				format_content = change(content, answer)
 				print 'end change'
 	#			format_content should be a pair list
 	#			the first element should be problem's description

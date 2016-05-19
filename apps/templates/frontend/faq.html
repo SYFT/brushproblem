@@ -13,16 +13,35 @@
 {% endblock %}
 
 {% block content %}
-  <ol>
-    <li>The file will turn to ".txt"</li>
-  </ol>
+  <div>
+    <p>通用的事项：</p>
+    <ol style = "font-size: 15px;">
+      <li>上传的题目只支持选择题和判断题。</li><br/>
+      <li>上传的可识别的题目数量要求大于两道。</li><br/>
+      <li>题目长度不少于3个字。</li><br/>
+      <li>不可识别的题目将被忽略。</li><br/>
+      <li>只有管理员才可以保存所有上传的题目，非管理员只能保存最后一次上传的题目。</li><br/>
+    </ol><br/>
+    <hr/>
+    <p>关于答案在题目<b>中</b>的类型试卷的事项：</p><br/>
+    <ol style = "font-size: 15px;">
+      <li>将优先寻找括号内的答案符号。</li><br/>
+      <li>其次是在行末尾的答案符号。</li><br/>
+      <li>其次是最后一个“对”“错”的中文。</li><br/>
+      <li>最后是最后一个可以识别的英文字母。</li><br/>
+    </ol><br/>
+    <hr/>
+    <p>关于答案在题目<b>后</b>的类型试卷的事项：</p><br/>
+    <ol style = "font-size: 15px;">
+      <li>请保证题目易于识别，否则不保证题目匹配答案的成功率。</li><br/>
+    </ol><br/>
+    
+  <div>
   
-  <p>Some else questions?</p>
+  <p>上述没有解决你的问题？</p>
   <form method = "POST" action = "{{ url_for('frontend.suggest') }}" name = "suggest">
     <hr/>
-      {{form.suggestion(rows = 5, cols = 20)|safe}}<br/>
-      <hr/>
-      {{form.submit|safe}}
-      <hr/>
+      {{form.suggestion(rows = 10, cols = 100, placeholder = "输入你的问题，我们将会反馈。")|safe}}<br/>
+      {{form.submit(value = "提交")|safe}}
   </form>
 {% endblock %}

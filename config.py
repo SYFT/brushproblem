@@ -49,6 +49,8 @@ REGEX_CHOICE = (u'[A-Z\uff21-\uff3a][\.、．,､]+.*',
 REGEX_CHOICE_INDEX = (u'[A-Z\uff21-\uff3a]+[\.、．,､]|\r\n',
 						u'[A-Z\uff21-\uff3a､]+|\r\n')
 REGEX_PROBLEM_INDEX = u'[0-9]+[\.、．,､]'
+REGEX_JUDGEANSWER = u'[对√错xX╳×]+'
+REGEX_NORMALANSWER = u'[A-Za-z\uff21-\uff3a\uff41-\uff5a]+'
 
 MESSAGE_FOR_RIGHT = u'Your are right!'
 MESSAGE_FOR_WRONG = u'Your are wrong! Right answer is %s.'

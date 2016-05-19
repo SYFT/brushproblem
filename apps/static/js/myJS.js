@@ -23,14 +23,28 @@ JQ(document).ready(function() {
 		if(formCheckbox.is(':checked')) {
 			formCheckbox.prop("checked", false);
 			JQ("[canhide = 'true']").each(function() {
-				this.style.display = "";
+				this.css("display", "");
 			})
 		} else {
 			formCheckbox.prop("checked", true);
 			JQ("[canhide = 'true']").each(function() {
-				this.style.display = "none";
+				this.css("display", "none");
 			})
 		}
+	})
+	
+	JQ("#my-problem-form").submit(function() {
+		var tmp = JQ("#my-problem-answer");
+		if(tmp.style.display == "none")
+			tmp.val("");
+	})
+	
+	JQ("#my-button-problem-type-1").click(function() {
+		JQ("#my-problem-answer").css("display", "none");
+	})
+	
+	JQ("#my-button-problem-type-2").click(function() {
+		JQ("#my-problem-answer").css("display", "");
 	})
 	
 	JQ('input, textarea').placeholder();
