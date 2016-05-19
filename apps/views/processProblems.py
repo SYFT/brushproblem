@@ -89,21 +89,31 @@ def show(did) :
 	if userLogin :
 		u = models.User.query.filter(models.User.id == current_user.id).first()
 		if u.lastVisit == documentId :
+			# print u.lastSubmit
 			tmpAnswer = u.lastSubmit.split('##')
 			print 'dddd'
 			print tmpAnswer
+			temp = []
+			for x in tmpAnswer :
+				if len(x) > 0 :
+					temp.append(x)
+			tmpAnswer = temp
 			length = len(tmpAnswer) / 2
 			for i in range(0, length) :
+				print int(tmpAnswer[2 * i]), unicode(tmpAnswer[2 * i + 1])
 				userLastSubmitDict[int(tmpAnswer[2 * i])] = unicode(tmpAnswer[2 * i + 1])
 	
 	if request.method == 'POST' :
+		print 'POST'
 		recordUserId = documentId
 		recordUserAnswer = ''
 		for pro in allProblem.pro :
+			# print pro.index
 			userChoices_list = request.form.getlist(str(pro.index))
-			if len(userChoices_list) < 1 and userLogin :
-				if userLastSubmitDict.has_key(pro.index) :
-					userChoices_list = userLastSubmitDict[pro.index]
+			# print pro.index, userChoices_list
+			# if len(userChoices_list) < 1 and userLogin :
+				# if userLastSubmitDict.has_key(pro.index) :
+					# userChoices_list = userLastSubmitDict[pro.index]
 			
 			tmpAnswer = ''
 			for c in userChoices_list :
@@ -113,20 +123,32 @@ def show(did) :
 				tmpAnswer += c
 			
 			if len(tmpAnswer) > 0 :
+				# print tmpAnswer
 				recordUserAnswer += unicode(pro.index) + "##"
 				recordUserAnswer += tmpAnswer + "##"
 		
 		try :
-			if userLogin and len(recordUserAnswer) < 1 :
+			print 'userLogin', userLogin
+			print 'recordUserId', recordUserId
+			print 'recordUserAnswer', recordUserAnswer
+			if userLogin and len(recordUserAnswer) > 0 :
 				u = models.User.query.filter(models.User.id == current_user.id).first()
 				u.lastVisit = recordUserId
 				u.lastSubmit = recordUserAnswer
 				db.session.commit()
 				print 'record:', recordUserAnswer
 		except Exception as e :
+			print 'error', e
 			pass
-				
-		# print request.Form['1']
+	elif userLogin :
+		for pro in allProblem.pro :
+			# print pro.index
+			userChoices_list = ''
+			if userLastSubmitDict.has_key(pro.index) :
+				userChoices_list = userLastSubmitDict[pro.index]
+			for c in userChoices_list :
+				index = ord(c) - ord('A')
+				pro.choices[index].option.data = True
 	
 	# 检查答案，给予反馈
 	if allProblem.validate_on_submit() and myValidate(allProblem.pro) :
