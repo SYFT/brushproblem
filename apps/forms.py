@@ -88,10 +88,7 @@ TIMEDELTA = u'时间范围'
 class SearchProblemForm(Form) :
 	subject = SelectField('subject', coerce = int, 
 				validators = [DataRequired(message = ERROR_EMPTY(SUBJECT))])
-	filename = StringField('filename', 
-				validators = [DataRequired(message = ERROR_EMPTY(FILENAME)), 
-					Length(min = 2, max = 256, 
-						message = ERROR_LENGTH(FILENAME, min = 2, max = 256))])
+	filename = StringField('filename')
 	timeDelta = SelectField('timedelta', coerce = int)
 	submit = SubmitField(u'submit')
 							

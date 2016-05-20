@@ -30,7 +30,7 @@
       <form action = "{{ url_for('processProblems.search') }}" method = "post" id = "login">
         {{ form.hidden_tag() }}
         <p>科目： {{ form.subject(class = "my-input-field")|safe }} </p>
-        <p>文件名关键字：{{ form.filename(class = "my-input-field")|safe }}</p>
+        <p>文件名关键字：{{ form.filename(class = "my-input-field", placeholder = "不填将显示所有题目")|safe }}</p>
         <p>上传时间：{{ form.timeDelta(class = "my-input-field")|safe }}</p>
         {{ wtf.form_field(form.submit, value = "开始查找")|safe }}
       </form>

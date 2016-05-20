@@ -6,7 +6,9 @@
     <ul>
       <div>
         {% for x in result %}
-          <li> <a href = "{{url_for('processProblems.show', did = x[0])}}">{{x[1]|safe}}</a></li><br/>
+          <li>
+            <p><a href = "{{url_for('processProblems.show', did = x[0])}}">{{x[1]|safe}}</a> —— {{x[2]|safe}}</p>
+          </li><br/>
         {% endfor %}
       </div>
     </ul>

@@ -39,12 +39,18 @@ def search() :
 	# print 'data:', form.timeDelta.data
 	
 	if request.method == 'POST' and form.validate_on_submit() :
-		name = form.filename.data
+		name = 'allproblems'
+		showAll = 1
+		if form.filename.data :
+			name = form.filename.data
+			showAll = 0
+		print 'name:', name
+		# print len(name)
 		category = form.subject.data
 		timeDelta = form.timeDelta.data
 		# print 'Good'
 		return redirect(url_for('processProblems.showResult', category = category, 
-							name = name, timeDelta = timeDelta))
+							name = name, timeDelta = timeDelta, showAll = showAll))
 	
 	docs = models.Document.query.all()
 	numberOfDocuments = len(docs)
@@ -60,20 +66,24 @@ def search() :
 							form = form,
 							listOfRecentDocument = listOfRecentDocument)
 
-@processProblems.route('/show/<int:category>&<string:name>&<int:timeDelta>', methods = ['GET'])
-def showResult(category, name, timeDelta) :
+@processProblems.route('/show/<string:name>&<int:category>&<int:timeDelta>&<int:showAll>', methods = ['GET'])
+def showResult(category, name, timeDelta, showAll = 0) :
 	print timeDelta
 	timeDelta = app.config['TIMEDELTA'][timeDelta]
 	startTime = datetime.datetime.utcnow() - timeDelta
 	print datetime.datetime.utcnow()
 	print timeDelta
 	print startTime
-	results = models.Document.query.\
+	if showAll == 0 :
+		results = models.Document.query.\
 					filter(models.Document.timeStamp >= startTime)\
 					.whoosh_search(name, limit = 50).all()
+	else :
+		results = models.Document.query.all()
+		
 	result = []
 	for x in results :
-		result.append((x.id, x.title))
+		result.append((x.id, x.title, x.author.username))
 	return render_template('processProblems/showresult.html', result = result)
 
 @processProblems.route('/show/<did>', methods = ['GET', 'POST'])
@@ -88,7 +98,12 @@ def show(did) :
 		# print 'not define'
 		# print did
 		# print session
-		documentId = int(did)
+		try :
+			documentId = int(did)
+		except Exception as e :
+			flash(app.config['HOWDOYOUFINDTHISPAGE'])
+			return redirect(url_for('processProblems.search'))
+		
 		try :
 			if documentId < 6666666 :
 				doc = models.Document.query.filter(models.Document.id == documentId).first()

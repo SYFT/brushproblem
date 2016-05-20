@@ -28,7 +28,7 @@
                 method = "post" name = "login">
             {{ form.hidden_tag() }}
             <p>科目： {{ form.subject(class = "my-input-field")|safe }} </p> <br/>
-            <p>文件名称关键字：<br/>{{ form.filename(class = "my-input-field")|safe }}</p><br/>
+            <p>文件名称关键字：<br/>{{ form.filename(class = "my-input-field", placeholder = "不填将显示所有题目")|safe }}</p><br/>
             <p>时间段：<br/>{{ form.timeDelta(class = "my-input-field")|safe }}</p><br/>
             <!--<button type = "submit" class="btn btn-default">{{ form.submit(value = "我选好了") }}</button>
             {{ form.submit(value = "我选好了") }}-->
