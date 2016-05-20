@@ -30,10 +30,10 @@ ERROR_NOT_EMAIL = u'在下判断这不是邮箱地址。'
 class UserForm(Form) :
 	username = StringField('username', 
 				validators = [DataRequired(message = ERROR_EMPTY(USERNAME)), 
-					Length(max = 16, message = ERROR_LENGTH(USERNAME))])
+					Length(max = 16, message = ERROR_LENGTH(USERNAME, max = 16))])
 	password = PasswordField('password', 
 				validators = [DataRequired(message = ERROR_EMPTY(PASSWORD)), 
-					Length(max = 16, message = ERROR_LENGTH(PASSWORD))])
+					Length(max = 16, message = ERROR_LENGTH(PASSWORD, max = 16))])
 	submit = SubmitField(u'submit')
 
 class LoginForm(UserForm):
@@ -44,22 +44,22 @@ class RegisterForm(UserForm) :
 	password = PasswordField('password', 
 				validators = [DataRequired(message = ERROR_EMPTY(PASSWORD)), 
 					EqualTo('confirm', message = ERROR_NOT_MATCH), 
-					Length(max = 16, message = ERROR_LENGTH(PASSWORD))])
+					Length(max = 16, message = ERROR_LENGTH(PASSWORD, max = 16))])
 	confirm  = PasswordField('repeatPassword')
 	email = StringField('emailaddress', 
 				validators = [DataRequired(message = ERROR_EMPTY(EMAIL)), 
-					Length(max = 64, message = ERROR_LENGTH(EMAIL)), 
+					Length(max = 64, message = ERROR_LENGTH(EMAIL, max = 64)), 
 					Email(message = ERROR_NOT_EMAIL)])
 
 class EditForm(UserForm) :
 	newPassword = PasswordField('password', 
 				validators = [
 					EqualTo('confirm', message = ERROR_NOT_MATCH), 
-					Length(max = 16, message = ERROR_LENGTH(NEWPASSWORD))])
+					Length(max = 16, message = ERROR_LENGTH(NEWPASSWORD, max = 16))])
 	confirm  = PasswordField('repeatPassword')
 	email = StringField('emailaddress', 
 				validators = [DataRequired(message = ERROR_EMPTY(EMAIL)), 
-					Length(max = 64, message = ERROR_LENGTH(EMAIL)), 
+					Length(max = 64, message = ERROR_LENGTH(EMAIL, max = 64)), 
 					Email(message = ERROR_NOT_EMAIL)])
 
 FILENAME = u'文件名称'
@@ -71,8 +71,8 @@ class UploadForm(Form) :
 	answer = TextAreaField('answer')
 	filename = StringField('filename', 
 				validators = [DataRequired(message = ERROR_EMPTY(FILENAME)), 
-					Length(min = 2, max = 16, 
-						message = ERROR_LENGTH(FILENAME, min = 2, max = 16))])
+					Length(min = 2, max = 256, 
+						message = ERROR_LENGTH(FILENAME, min = 2, max = 256))])
 	subject = SelectField('subject', coerce = int, 
 		validators = [DataRequired(message = ERROR_EMPTY(SUBJECT))])
 	submit = SubmitField(u'submit')
@@ -81,7 +81,7 @@ SUGGEST = u'建议'
 class SuggestionForm(Form) :
 	suggestion = TextAreaField('suggestion', 
 		validators = [DataRequired(message = ERROR_EMPTY(SUGGEST)), 
-			Length(max = 64, message = ERROR_LENGTH(SUGGEST, max = 64))])
+			Length(max = 256, message = ERROR_LENGTH(SUGGEST, max = 256))])
 	submit = SubmitField(u'submit')
 
 TIMEDELTA = u'时间范围'
@@ -90,8 +90,8 @@ class SearchProblemForm(Form) :
 				validators = [DataRequired(message = ERROR_EMPTY(SUBJECT))])
 	filename = StringField('filename', 
 				validators = [DataRequired(message = ERROR_EMPTY(FILENAME)), 
-					Length(min = 2, max = 16, 
-						message = ERROR_LENGTH(FILENAME, min = 2, max = 16))])
+					Length(min = 2, max = 256, 
+						message = ERROR_LENGTH(FILENAME, min = 2, max = 256))])
 	timeDelta = SelectField('timedelta', coerce = int)
 	submit = SubmitField(u'submit')
 							

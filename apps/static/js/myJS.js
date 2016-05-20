@@ -10,14 +10,11 @@ JQ(document).ready(function() {
 			500);
 	})
 	
-	JQ("#my-problem-form").submit(function() {
-	})
-	
 	JQ("button[id^='my-button-submit-']").each(function() {
 		JQ(this).click(function() {
 			prefix = "my-button-submit-";
 			formname = this.id.substring(prefix.length);
-			JQ("#my-problem-form").submit();
+			JQ("#my-show-problem-form").submit();
 		})
 	})
 	

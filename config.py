@@ -68,3 +68,7 @@ SUCCESS_PROCESS = u'成功处理！'
 FAIL_LOGIN = u'登入失败！'
 FAIL_UPLOAD = u'上传失败！'
 FAIL_PROCESS = u'处理异常！'
+
+
+NOSUCHFILE = u'此记录已被删除，请尝试搜索此题。'
+HOWDOYOUFINDTHISPAGE = u'你怎么找到这一页的。'

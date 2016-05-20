@@ -19,6 +19,7 @@ processProblems = Blueprint('processProblems', __name__,
 
 @processProblems.route('/search', methods=['GET', 'POST'])
 def search() :
+	print 'search begin'
 	form = SearchProblemForm()
 	categories = models.Subject.query.order_by('name')
 	
@@ -34,7 +35,8 @@ def search() :
 	if request.method == 'GET' :
 		form.timeDelta.data = app.config['DEFAULT_TIME_DELTA']
 	
-	print 'data:', form.timeDelta.data
+	print 'search fine'
+	# print 'data:', form.timeDelta.data
 	
 	if request.method == 'POST' and form.validate_on_submit() :
 		name = form.filename.data
@@ -43,10 +45,20 @@ def search() :
 		# print 'Good'
 		return redirect(url_for('processProblems.showResult', category = category, 
 							name = name, timeDelta = timeDelta))
-		
+	
+	docs = models.Document.query.all()
+	numberOfDocuments = len(docs)
+	listOfRecentDocument = models.Document.query.\
+								limit(numberOfDocuments).from_self().\
+								order_by(models.Document.timeStamp)
+	listOfRecentDocument = list(listOfRecentDocument)
+	listOfRecentDocument.reverse()
+	listOfRecentDocument = listOfRecentDocument[0:7]
+	
 	return render_template('processProblems/search.html', 
 							title = u'Select your want!',
-							form = form)
+							form = form,
+							listOfRecentDocument = listOfRecentDocument)
 
 @processProblems.route('/show/<int:category>&<string:name>&<int:timeDelta>', methods = ['GET'])
 def showResult(category, name, timeDelta) :
@@ -77,20 +89,31 @@ def show(did) :
 		# print did
 		# print session
 		documentId = int(did)
-		if documentId < 6666666 :
-			doc = models.Document.query.filter(models.Document.id == documentId).first()
-		else :
-			documentId = session['tempfile']
-			doc = models.Document.query.filter(models.Document.id == documentId).first()
-			pros = []
-			for pro in doc.problems :
-				pros.append((pro.content, pro.choice, pro.answer))
-			tempfile = models.Tempfile(doc.title, pros)
-			g.doc = tempfile
+		try :
+			if documentId < 6666666 :
+				doc = models.Document.query.filter(models.Document.id == documentId).first()
+				print 'doc,', doc
+				if doc is None :
+					raise Exception(app.config['HOWDOYOUFINDTHISPAGE'])
+			else :
+				documentId = session['tempfile']
+				doc = models.Document.query.filter(models.Document.id == documentId).first()
+				if doc is None :
+					raise Exception(app.config['NOSUCHFILE'])
+				pros = []
+				for pro in doc.problems :
+					pros.append((pro.content, pro.choice, pro.answer))
+				tempfile = models.Tempfile(doc.title, pros)
+				g.doc = tempfile
+		except Exception as e :
+			print e
+			flash(e.message)
+			print 'hello'
+			return redirect(url_for('processProblems.search'))
 		allProblem = getAllProblem(doc)
 	
 	# 将传过来的表单填写入对应的表格位置
-	userLogin = 'user' in session and session['user'] == current_user.id
+	userLogin = ('user' in session and session['user'] == current_user.id)
 	userLastSubmitDict = {}
 	if userLogin :
 		u = models.User.query.filter(models.User.id == current_user.id).first()
@@ -134,15 +157,15 @@ def show(did) :
 				recordUserAnswer += tmpAnswer + "##"
 		
 		try :
-			print 'userLogin', userLogin
-			print 'recordUserId', recordUserId
-			print 'recordUserAnswer', recordUserAnswer
+			# print 'userLogin', userLogin
+			# print 'recordUserId', recordUserId
+			# print 'recordUserAnswer', recordUserAnswer
 			if userLogin and len(recordUserAnswer) > 0 :
 				u = models.User.query.filter(models.User.id == current_user.id).first()
 				u.lastVisit = recordUserId
 				u.lastSubmit = recordUserAnswer
 				db.session.commit()
-				print 'record:', recordUserAnswer
+				# print 'record:', recordUserAnswer
 		except Exception as e :
 			print 'error', e
 			pass
@@ -231,14 +254,14 @@ def upload() :
 	
 	if request.method == 'POST' :
 		if form.validate_on_submit() :
-			print "here"
+			# print "here"
 			try :
 				
 				title = form.filename.data
 				title = title.title()
-				print title
+				# print title
 				content = form.file.data
-				print 'content:', content
+				# print 'content:', content
 				# print ord(content[24])
 				answer = None
 				if form.answer.data :

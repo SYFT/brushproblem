@@ -31,15 +31,14 @@
       <p>题目答案：</p><br/>
       {{form.answer(rows = 10, cols = 100, placeholder = "直接粘帖答案部分即可，不支持图片。")|safe}} <br/>
     </div>
-    <p>分类：</p>{{form.subject|safe}} <br/>
+    <p>分类：</p>{{form.subject(class = "my-input-field")|safe}} <br/>
     <hr/>
     <span style="color: red;">以上内容一旦提交<strong>不可更改</strong>。</span></p> 
     <hr/>
-    {{form.submit|safe}} <br/>
+    {{form.submit(value = "提交")|safe}} <br/>
     <hr/>
   </form>
   
   <hr/>
-  <p>Have some questions with this process ?</p><br/>
-  <p>Don't Worry. You can find answer <a href = "{{url_for('frontend.faq')}}">here</a>!</p><br/>
+  <h2><a href = "{{url_for('frontend.faq')}}">注意事项</a></h2>
 {% endblock %}

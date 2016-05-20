@@ -43,12 +43,19 @@ def index():
 								limit(numberOfDocuments).from_self().\
 								order_by(models.Document.timeStamp)
 	listOfRecentDocument = list(listOfRecentDocument)
-	listOfRecentDocument = listOfRecentDocument[max(0, len(listOfRecentDocument) - 5):]
+	resultlist = []
+	for i in range(len(listOfRecentDocument) - 1, -1, -1) :
+		doc = listOfRecentDocument[i]
+		if doc.author.isAdmin :
+			resultlist.append(doc)
+			if len(resultlist) > 5 :
+				break
+	
 	return render_template('frontend/index.html', 
 							form = form,
 							numberOfDocuments = numberOfDocuments,
 							numberOfUser = numberOfUser,
-							listOfRecentDocument = listOfRecentDocument)
+							listOfRecentDocument = resultlist)
 	
 @frontend.route('/details')
 @login_required

@@ -35,10 +35,10 @@
 
       {%- endblock head %}
     </head>
-    <body {% block body_attribs %}{% endblock body_attribs %}>
+    <body background = "{{url_for('static', filename = 'img/background1.png')}}" {% block body_attribs %}{% endblock body_attribs %}>
       {% block body -%}
         {% set authenticated = ('user' in session and session['user'] == current_user.id) %}
-        <div class = "container">
+        <div id = "my-container-navbar" class = "container">
           <div id = "my-navbar" class = "navbar navbar-static-top">
             <div class = "navbar-inner">
               <ul class = "nav nav-tabs">
@@ -95,12 +95,10 @@
               </ul>
             </div>
           </div>
+          
         </div>
         
-        {% block otherNavbar %}
-        {% endblock otherNavbar %}
-        
-        <div class = "container" style = "">
+        <div id = "my-container-content" class = "container">
           {% include 'flashMessage.html' %}
           
           {% block someerrors %}
@@ -108,11 +106,16 @@
           
           {% block content -%}
           {%- endblock content %}
+            
+          {% block otherNavbar %}
+          {% endblock otherNavbar %}
+        </div><br/>
+        
+        <div id = "my-footer" class = "container" align = "middle">
+          <hr/>
+          <p style = "font-size: 5px;">By -yzx</p><br/>
         </div>
         
-        <footer class = "footer" align = "middle">
-          <p style = "font-size: 5px;">By -yzx</p>
-        </footer>
       {%- endblock body %}
     </body>
   {%- endblock html %}
