@@ -21,8 +21,8 @@ JQ(document).ready(function() {
 		})
 	})
 	
-	JQ("#my-button-hide-correct").click(function() {
-		var formCheckbox = JQ("#my-hide-correct-checkbox");
+	var myCheckboxToggle = function(formCheckbox) {
+		// alert(formCheckbox);
 		if(formCheckbox.is(':checked')) {
 			formCheckbox.prop("checked", false);
 			JQ("[canhide = 'true']").each(function() {
@@ -34,6 +34,28 @@ JQ(document).ready(function() {
 				JQ(this).css("display", "none");
 			})
 		}
+	}
+	
+	JQ("#my-button-hide-correct").click(function() {
+		// var formCheckbox = JQ("#my-hide-correct-checkbox");
+		myCheckboxToggle(JQ("#my-hide-correct-checkbox"));
+		// if(formCheckbox.is(':checked')) {
+			// formCheckbox.prop("checked", false);
+			// JQ("[canhide = 'true']").each(function() {
+				// JQ(this).css("display", "");
+			// })
+		// } else {
+			// formCheckbox.prop("checked", true);
+			// JQ("[canhide = 'true']").each(function() {
+				// JQ(this).css("display", "none");
+			// })
+		// }
+	})
+	
+	
+	JQ("#my-hide-correct-checkbox").click(function() {
+		myCheckboxToggle(JQ(this));
+		myCheckboxToggle(JQ(this));
 	})
 	
 	JQ("#my-problem-form").submit(function() {

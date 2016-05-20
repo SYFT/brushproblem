@@ -47,7 +47,7 @@
           <li style = "display: {% if eachpro.check == 2 and papers.hideCorrectProblem.data %} none {% endif %};" {% if eachpro.check == 2 %} canHide = "true" {% endif %}>
             <p class = "my-problem-description">{{eachpro.description|safe}}</p><br/>
             {% for x in eachpro.choices %}
-              <p class = "my-problem-choice">{{ x.option|safe }}{{ x.description|safe }}</p><br/>
+              <p class = "my-problem-choice">{% if eachpro.singleSelect == True %}{{ x.option(type = 'radio')|safe }}{% else %}{{ x.option|safe }}{% endif %}{{ x.description|safe }}</p><br/>
             {% endfor %}
             {% if eachpro.check == 1 %}
               <span class = "label label-danger">{{ eachpro.message|safe }}</span><br/>

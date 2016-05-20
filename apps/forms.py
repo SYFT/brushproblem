@@ -110,6 +110,7 @@ class ProblemForm(Form) :
 	check = 0
 	message = ''
 	realAnswer = ''
+	singleSelect = False
 	# 0 -> unSelect  1 -> Wrong  2 -> Right
 
 class BrushForm(Form) :

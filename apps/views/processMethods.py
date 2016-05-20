@@ -30,6 +30,22 @@ def getAllProblem(doc) :
 		countChoice = 0
 		pro = ProblemForm()
 		pro.choices = []
+		
+		# get answer
+		try :
+			pro.pid = x.id
+			realPro = models.Problem.query.filter(models.Problem.id == pro.pid)
+			realPro = realPro.first()
+			pro.realAnswer = unicode(realPro.answer)
+		except Exception as e :
+			pro.realAnswer = x.answer
+		
+		if len(pro.realAnswer) == 1 :
+			pro.singleSelect = True
+		else :
+			pro.singleSelect = False
+		
+		# get choices
 		for y in choices :
 			y = y.strip()
 			if len(y) > 0 :
@@ -46,13 +62,8 @@ def getAllProblem(doc) :
 				thisChoice.description = unicode(choicesDescription)
 				pro.choices.append(thisChoice)
 				countChoice += 1
-		try :
-			pro.pid = x.id
-			realPro = models.Problem.query.filter(models.Problem.id == pro.pid)
-			realPro = realPro.first()
-			pro.realAnswer = unicode(realPro.answer)
-		except Exception as e :
-			pro.realAnswer = x.answer
+		
+		# fullfill the field
 		pro.index = count
 		pro.description = description
 		# print 'sssss:', pro.description
