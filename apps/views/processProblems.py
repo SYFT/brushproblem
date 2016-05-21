@@ -96,7 +96,7 @@ def showResult(category, name, timeDelta, showAll = 0) :
 def show(did) :
 	print 'yyyyyyyyyyyyyyyyyy'
 	
-	print 'request.form:', request.form
+	# print 'request.form:', request.form
 	allCorret = False
 	
 	# 定义表格
@@ -174,6 +174,8 @@ def show(did) :
 					# userChoices_list = userLastSubmitDict[pro.index]
 			
 			tmpAnswer = ''
+			if len(userChoices_list) > 0 :
+				print userChoices_list
 			for c in userChoices_list :
 				index = ord(c) - ord('A')
 				# pro.choices[index].option.checked = True

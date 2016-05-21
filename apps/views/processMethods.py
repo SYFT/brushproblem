@@ -33,8 +33,8 @@ def getAllProblem(doc) :
 		
 		# get answer
 		try :
-			pro.index = x.id
-			realPro = models.Problem.query.filter(models.Problem.id == pro.index)
+			pro.pid = x.id
+			realPro = models.Problem.query.filter(models.Problem.id == pro.pid)
 			realPro = realPro.first()
 			pro.realAnswer = unicode(realPro.answer)
 		except Exception as e :
@@ -64,6 +64,7 @@ def getAllProblem(doc) :
 				countChoice += 1
 		
 		# fullfill the field
+		pro.index = count
 		pro.description = description
 		# print 'sssss:', pro.description
 		pro.check = 0
