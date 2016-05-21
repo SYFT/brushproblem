@@ -1,10 +1,3 @@
-/*!
- * jQuery Placeholder Plugin v2.3.1
- * https://github.com/mathiasbynens/jquery-placeholder
- *
- * Copyright 2011, 2015 Mathias Bynens
- * Released under the MIT license
- */
 (function(factory) {
     if (typeof define === 'function' && define.amd) {
         // AMD
@@ -15,13 +8,10 @@
         // Browser globals
         factory(jQuery);
     }
-}(function($) {
+}
 
-    /****
-     * Allows plugin behavior simulation in modern browsers for easier debugging. 
-     * When setting to true, use attribute "placeholder-x" rather than the usual "placeholder" in your inputs/textareas 
-     * i.e. <input type="text" placeholder-x="my placeholder text" />
-     */
+
+(function($) {
     var debugMode = false; 
 
     // Opera Mini v7 doesn't support placeholder although its DOM seems to indicate so
@@ -120,7 +110,6 @@
 
                     element.value = value;
                 }
-                // `set` can not return `undefined`; see http://jsapi.info/jquery/1.7.1/val#L2363
                 return $element;
             }
         };

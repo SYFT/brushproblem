@@ -52,12 +52,12 @@ REGEX_PROBLEM_INDEX = u'[0-9]+[\.、．,､]'
 REGEX_JUDGEANSWER = u'[对√错xX╳×]+'
 REGEX_NORMALANSWER = u'[A-Za-z\uff21-\uff3a\uff41-\uff5a]+'
 
-MESSAGE_FOR_RIGHT = u'Your are right!'
-MESSAGE_FOR_WRONG = u'Your are wrong! Right answer is %s.'
+MESSAGE_FOR_RIGHT = u'正确！'
+MESSAGE_FOR_WRONG = u'错误！正确答案为 %s.'
 
 PASSWROD_NOT_MATCH = u'Old password do not match!'
 
-LOGIN_MESSAGE = u'Please login first.'
+LOGIN_MESSAGE = u'请先登入。'
 # flash while access some login_required pages
 # without login
 REFRESH_MESSAGE = (u"To protect your account, please reauthenticate to access this page.")

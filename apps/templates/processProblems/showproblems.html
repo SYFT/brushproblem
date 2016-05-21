@@ -37,6 +37,15 @@
 {% endblock %}
 
 {% block content %}
+  <div id = "my-rightclick-menu" style = "display:none;">
+    <ul id = "my-rightclick-list">
+      <li><button id = "my-button-cheat" type = "button" class = "btn btn-default">作弊</button></li>
+      <li><button id = "my-button-hideCheat" type = "button" class = "btn btn-default">藏起来</button></li>
+      <li><button id = "my-button-hideAllCheat" type = "button" class = "btn btn-default">全藏起来</button></li>
+    </ul>
+  </div>
+
+
   <div class="page-header" align = "center" style="padding-top:70px;"><h1>{{ papers.title|safe }}</h1></div><br/>
   <form id = "my-show-problem-form" method = "POST" action = "{{ url_for('processProblems.show', did = index) }}">
     {{papers.hidden_tag()}}
@@ -44,7 +53,7 @@
     <div class = "form-controls">
       <ol type = 1 start = 1>
         {% for eachpro in papers.pro %}
-          <li style = "display: {% if eachpro.check == 2 and papers.hideCorrectProblem.data %} none {% endif %};" {% if eachpro.check == 2 %} canHide = "true" {% endif %}>
+          <li id = "my-problem-{{eachpro.index}}" style = "display: {% if eachpro.check == 2 and papers.hideCorrectProblem.data %} none {% endif %};" {% if eachpro.check == 2 %} canHide = "true" {% endif %}>
             <p class = "my-problem-description">{{eachpro.description|safe}}</p><br/>
             {% for x in eachpro.choices %}
               <p class = "my-problem-choice">{% if eachpro.singleSelect == True %}{{ x.option(type = 'radio')|safe }}{% else %}{{ x.option|safe }}{% endif %}{{ x.description|safe }}</p><br/>

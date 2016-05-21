@@ -49,8 +49,11 @@ def search() :
 		category = form.subject.data
 		timeDelta = form.timeDelta.data
 		# print 'Good'
-		return redirect(url_for('processProblems.showResult', category = category, 
-							name = name, timeDelta = timeDelta, showAll = showAll))
+		return redirect(url_for('processProblems.showResult', \
+								category = category, 
+								name = name, \
+								timeDelta = timeDelta, \
+								showAll = showAll))
 	
 	docs = models.Document.query.all()
 	numberOfDocuments = len(docs)
@@ -66,7 +69,9 @@ def search() :
 							form = form,
 							listOfRecentDocument = listOfRecentDocument)
 
-@processProblems.route('/show/<string:name>&<int:category>&<int:timeDelta>&<int:showAll>', methods = ['GET'])
+@processProblems.route('/show/<string:name>&<int:category>\
+						&<int:timeDelta>&<int:showAll>', \
+						methods = ['GET'])
 def showResult(category, name, timeDelta, showAll = 0) :
 	print timeDelta
 	timeDelta = app.config['TIMEDELTA'][timeDelta]
@@ -107,13 +112,17 @@ def show(did) :
 		
 		try :
 			if documentId < 6666666 :
-				doc = models.Document.query.filter(models.Document.id == documentId).first()
+				doc = models.Document.query.filter(\
+									models.Document.id == documentId\
+									).first()
 				print 'doc,', doc
 				if doc is None :
 					raise Exception(app.config['HOWDOYOUFINDTHISPAGE'])
 			else :
 				documentId = session['tempfile']
-				doc = models.Document.query.filter(models.Document.id == documentId).first()
+				doc = models.Document.query.filter(\
+									models.Document.id == documentId\
+									).first()
 				if doc is None :
 					raise Exception(app.config['NOSUCHFILE'])
 				pros = []
@@ -131,8 +140,11 @@ def show(did) :
 	# 将传过来的表单填写入对应的表格位置
 	userLogin = ('user' in session and session['user'] == current_user.id)
 	userLastSubmitDict = {}
+	# 获取用户上次提交的答案
 	if userLogin :
-		u = models.User.query.filter(models.User.id == current_user.id).first()
+		u = models.User.query.filter(\
+									models.User.id == current_user.id\
+									).first()
 		if u.lastVisit == documentId :
 			# print u.lastSubmit
 			tmpAnswer = u.lastSubmit.split('##')
@@ -178,7 +190,9 @@ def show(did) :
 			# print 'recordUserId', recordUserId
 			# print 'recordUserAnswer', recordUserAnswer
 			if userLogin and len(recordUserAnswer) > 0 :
-				u = models.User.query.filter(models.User.id == current_user.id).first()
+				u = models.User.query.filter(\
+									models.User.id == current_user.id\
+									).first()
 				u.lastVisit = recordUserId
 				u.lastSubmit = recordUserAnswer
 				db.session.commit()
@@ -200,30 +214,9 @@ def show(did) :
 	if allProblem.validate_on_submit() and myValidate(allProblem.pro) :
 		allCorret = True
 		for pro in allProblem.pro :
-			userAnswer = unicode('')
-			choiceIndex = 0
-			for choice in pro.choices :
-				# print choice.option.data
-				if choice.option.data == True :
-					userAnswer += unicode(chr(choiceIndex + ord('A')))
-				choiceIndex += 1
-			userAnswer = userAnswer.strip()
-			# print pro.index, ':', userAnswer
-			
-			if len(userAnswer) < 1 :
-				pro.check = 0
-				allCorret = False
-				continue
-			
-			answer = unicode(pro.realAnswer)
-			
-			if userAnswer == answer :
-				pro.check = 2
-				pro.message = app.config['MESSAGE_FOR_RIGHT']
-			else :
-				pro.check = 1
-				allCorret = False
-				pro.message = app.config['MESSAGE_FOR_WRONG'] % (pro.realAnswer)
+			ret = checkAnswer(pro, allCorret)
+			pro = ret[0]
+			allCorret = ret[1]
 	
 	print 'how allproblems:', 'allProblem' in dir()
 	if allCorret == False :
@@ -237,7 +230,9 @@ def addSessionTempFile(x) :
 		try :
 			docId = session['tempfile']
 			if docId != x :
-				doc = models.Document.query.filter(models.Document.id == docId).first()
+				doc = models.Document.query.filter(\
+											models.Document.id == docId\
+											).first()
 				db.session.delete(doc)
 				db.session.commit()
 		except Exception as e :
@@ -298,16 +293,22 @@ def upload() :
 				
 				if len(format_content) < 2 :
 					raise MyOperateError('The number of problems is too small. \
-											Only %d problems found' % (len(format_content)))
+											Only %d problems found' % \
+											(len(format_content)))
 				
 				
 				# print 'fine'
 				
-				doc = models.Document(title = title, author = current_user, subjectId = category)
+				doc = models.Document(title = title, \
+										author = current_user, \
+										subjectId = category)
 				db.session.add(doc)
 				db.session.commit()
 				for content, choices, answer in format_content :
-					pro = models.Problem(source = doc, content = content, choice = choices, answer = answer)
+					pro = models.Problem(source = doc, \
+										content = content, \
+										choice = choices, \
+										answer = answer)
 					db.session.add(pro)
 				db.session.commit()
 				

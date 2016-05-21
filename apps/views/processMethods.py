@@ -33,12 +33,12 @@ def getAllProblem(doc) :
 		
 		# get answer
 		try :
-			pro.pid = x.id
-			realPro = models.Problem.query.filter(models.Problem.id == pro.pid)
+			pro.index = x.id
+			realPro = models.Problem.query.filter(models.Problem.id == pro.index)
 			realPro = realPro.first()
 			pro.realAnswer = unicode(realPro.answer)
 		except Exception as e :
-			pro.realAnswer = x.answer
+			continue
 		
 		if len(pro.realAnswer) == 1 :
 			pro.singleSelect = True
@@ -64,7 +64,6 @@ def getAllProblem(doc) :
 				countChoice += 1
 		
 		# fullfill the field
-		pro.index = count
 		pro.description = description
 		# print 'sssss:', pro.description
 		pro.check = 0
@@ -305,3 +304,40 @@ def change(x, y) :
 	else :
 		ret = change2(x, y)
 	return ret
+
+def mySortAnswer(x) :
+	x = list(x)
+	x.sort()
+	x = ''.join(x)
+	return x
+	
+def checkAnswer(pro, allCorret) :
+	userAnswer = unicode('')
+	choiceIndex = 0
+	for choice in pro.choices :
+		# print choice.option.data
+		if choice.option.data == True :
+			userAnswer += unicode(chr(choiceIndex + ord('A')))
+		choiceIndex += 1
+	userAnswer = userAnswer.strip()
+	# print pro.index, ':', userAnswer
+	
+	if len(userAnswer) < 1 :
+		pro.check = 0
+		allCorret = False
+		return (pro, allCorret)
+	
+	answer = unicode(pro.realAnswer)
+	
+	userAnswer = mySortAnswer(userAnswer)
+	answer = mySortAnswer(answer)
+	
+	if userAnswer == answer :
+		pro.check = 2
+		pro.message = app.config['MESSAGE_FOR_RIGHT']
+	else :
+		pro.check = 1
+		allCorret = False
+		pro.message = app.config['MESSAGE_FOR_WRONG'] %\
+								(pro.realAnswer)
+	return (pro, allCorret)

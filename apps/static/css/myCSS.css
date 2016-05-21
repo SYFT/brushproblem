@@ -117,3 +117,26 @@ div#my-index-jumbotron p {
   font-size: 15px;
   margin: 0 0 0 0px;
 }
+
+div#my-rightclick-menu {
+  position: fixed;
+  height: auto;
+  width: auto;
+}
+div#my-rightclick-menu ul {
+  margin-left: 0px;
+  padding-left: 0px;
+  padding-right: 0px;
+  border: 1px solid gray;
+}
+
+div#my-rightclick-menu li {
+  list-style: none;
+  padding-left: 0px;
+  padding-right: 0px;
+}
+
+ul#my-rightclick-list li button {
+  width: 100%;
+  border: none;
+}

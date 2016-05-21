@@ -25,7 +25,9 @@ def register() :
 		if queryByName.first() is not None :
 			flash(u'This username has been used')
 		else :
-			u = models.User(username = username, password = password, email = email)
+			u = models.User(username = username, \
+							password = password, \
+							email = email)
 			db.session.add(u)
 			db.session.commit()
 			flash(u'Successfully registed !!')

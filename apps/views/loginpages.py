@@ -68,7 +68,9 @@ def login() :
 		# flash('username: ' + form.username.data + '\n')
 		# flash('remember_me : ' + str(form.remember_me.data) + '\n')
 		return tryLogin(form)
-	return render_template('loginpages/login.html', title = 'Sign In', form = form)	
+	return render_template('loginpages/login.html', \
+							title = 'Sign In', \
+							form = form)	
 
 @loginpages.route('/logout')
 @login_required

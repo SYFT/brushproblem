@@ -8,11 +8,17 @@ class User(db.Model) :
 	__searchable__ = ['username']
 
 	id = db.Column(db.Integer, primary_key = True)
-	username = db.Column(db.String(16, convert_unicode = True), index = True, unique = True)
+	username = db.Column(
+						db.String(16, convert_unicode = True), \
+						index = True, \
+						unique = True
+						)
 	password = db.Column(db.String(32))
 	email = db.Column(db.String(64), index = True)
 	isAdmin = db.Column(db.Boolean)
-	contributions = db.relationship('Document', backref = 'author', lazy = 'dynamic')
+	contributions = db.relationship('Document', \
+									backref = 'author', \
+									lazy = 'dynamic')
 	lastVisit = db.Column(db.Integer)
 	lastSubmit = db.Column(db.String(5096))
 	
@@ -50,7 +56,11 @@ class Document(db.Model) :
 	problems = db.relationship('Problem', backref = 'source', lazy = 'dynamic')
 	countUsed = db.Column(db.Integer)
 	
-	def __init__(self, title, author, subjectId, timeStamp = datetime.datetime.utcnow()) :
+	def __init__(self, \
+				title, \
+				author, \
+				subjectId, \
+				timeStamp = datetime.datetime.utcnow()) :
 		self.title = unicode(title)
 		self.author = author
 		self.subjectId = subjectId
@@ -111,13 +121,16 @@ class Problem(db.Model) :
 		self.answer = unicode(answer)
 	
 	def __repr__(self) :
-		return '<Problem %d : \n %r \n %r \n>' % (self.id, self.content, self.answer)
+		return '<Problem %d : \n %r \n %r \n>' % \
+				(self.id, self.content, self.answer)
 		
 
 class Subject(db.Model) :
 	id = db.Column(db.Integer, primary_key = True)
 	name = db.Column(db.Unicode(32), index = True)
-	ducuments = db.relationship('Document', backref = 'category', lazy = 'dynamic')
+	ducuments = db.relationship('Document', \
+								backref = 'category', \
+								lazy = 'dynamic')
 
 	def __init__(self, name) :
 		self.name = unicode(name)
