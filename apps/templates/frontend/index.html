@@ -6,22 +6,24 @@
 {% block content %}
   {{ super() }}
   {% set authenticated = ('user' in session and session['user'] == current_user.id) %}
-  <div class = "jumbotron">
-    <h1>题目处理+刷题网</h1>
-    <p>这是一个能够处理题目，使其变成我们容易刷题的形式的网站。</p>
+  <div id = "my-index-jumbotron" class = "jumbotron">
+    <h1>题目处理+刷题网</h1><br/>
+    <p>这是一个能够处理题目，使其变成我们容易刷题的形式的网站。</p><br/>
+    <p>网站能够支持大多数主流的试卷，并将其保存为利于刷题的形式。</p><br/>
+    <p>最后一次提交的信息将被保存下来，即使中途离开也不必担心。</p><br/>
   </div>
   
   <div class = "row">
     <div class = "col-lg-4">
       <h2>统计</h2><br/>
-      <p>共有：<b>{{numberOfDocuments}}</b>份题目。</p><br/>
-      <p>共有：<b>{{numberOfUser}}</b>位用户。</p><br/>
+      <p>共有：<b>{{numberOfDocuments|safe}}</b>份题目。</p><br/>
+      <p>共有：<b>{{numberOfUser|safe}}</b>位用户。</p><br/>
     </div>
     
     <div class = "col-lg-4">
       <h2>最近上传的题目：</h2><br/>
       {% for doc in listOfRecentDocument %}
-        <a href = "{{url_for('processProblems.show', did = doc.id)}}">{{doc.title}}</a><br/>
+        <a href = "{{url_for('processProblems.show', did = doc.id)}}">{{doc.title|safe}}</a><br/>
       {% endfor %}
     </div>
     

@@ -23,9 +23,7 @@
     <p><strong>请输入密码：</strong></p><br/>
     {{form.password(size = 16, placeholder = "password")|safe}}<br/>
     <hr/>
-    
-    <p>{{form.remember_me|safe}}&nbsp;记住我</p><br/>
-    <hr/>
-    {{ form.submit }}
+    <p>{{form.remember_me|safe}}&nbsp;记住我</p>
+    {{ wtf.form_field(form.submit, value = "登录")|safe }}
   </form>
 {% endblock %}

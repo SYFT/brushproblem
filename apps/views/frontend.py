@@ -59,18 +59,37 @@ def index():
 	
 @frontend.route('/details')
 @login_required
-def details(uid = None):
-	if not uid :
-		uid = current_user.id
+def details():
+	uid = current_user.id
 	u = models.User.query.filter(models.User.id == uid).first()
 	docs = []
 	for x in u.contributions :
 		docs.append(x)
+	doc = models.Document.query.filter(models.Document.id == u.lastVisit).first()
 	
 	return render_template('frontend/details.html', 
 							titile = 'Home', 
 							username = u.username, 
-							docs = docs)
+							docs = docs,
+							doc = doc)
+
+@frontend.route('/details/<int:uid>')
+def otherUserDetails(uid):
+	u = models.User.query.filter(models.User.id == uid).first()
+	if u == None :
+		flash(app.config['HOWDOYOUFINDTHISPAGE'])
+		return redirect(url_for('frontend.index'))
+	
+	docs = []
+	for x in u.contributions :
+		docs.append(x)
+	doc = models.Document.query.filter(models.Document.id == u.lastVisit).first()
+	
+	return render_template('frontend/details.html', 
+							titile = 'Home', 
+							username = u.username, 
+							docs = docs,
+							doc = doc)
 	
 @frontend.route('/FAQ', methods = ['POST', 'GET'])
 def faq() :

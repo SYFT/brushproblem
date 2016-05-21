@@ -2,12 +2,14 @@ var JQ = $.noConflict();
 JQ(document).ready(function() {
 	JQ("#my-button-toTop").click(function() {
 		JQ(document.body).animate({scrollTop : 0}, 500);
+		JQ(window).scrollTo = (0, 0);
 	})
 	
 	JQ("#my-button-toBottom").click(function() {
 		JQ(document.body).animate(
 			{scrollTop : JQ(document).height() - JQ(window).height()}, 
 			500);
+		JQ(window).scrollTo = (0, JQ(document).height() - JQ(window).height());
 	})
 	
 	JQ("button[id^='my-button-submit-']").each(function() {

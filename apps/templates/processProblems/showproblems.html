@@ -37,7 +37,7 @@
 {% endblock %}
 
 {% block content %}
-  <div class="page-header" align = "center" style="padding-top:70px;"><h1>{{ papers.title }}</h1></div><br/>
+  <div class="page-header" align = "center" style="padding-top:70px;"><h1>{{ papers.title|safe }}</h1></div><br/>
   <form id = "my-show-problem-form" method = "POST" action = "{{ url_for('processProblems.show', did = index) }}">
     {{papers.hidden_tag()}}
     

@@ -1,13 +1,20 @@
 {% extends "mainpage.html" %}
 
 {% block content %}
-  <p>此用户共上传{{ docs.__len__() }}份题目！</p>
-  <ul class = "list-group">
-    {% for doc in docs %}
-      <li class = "list-group-item" style = "width: 35%;">
-        <a href = {{ url_for('processProblems.show', did = doc.id) }}>{{doc.title}}</a><br/>
-      </li>
-    {% endfor %}
-  </ul>
+  <p>此用户共上传{{ docs.__len__()|safe}}份题目！</p>
+  <div id = "my-user-details">
+    <ul class = "list-group">
+      {% for doc in docs %}
+        <li class = "list-group-item" style = "width: 35%;">
+          <a href = {{ url_for('processProblems.show', did = doc.id) }}>{{doc.title|safe}}</a><br/>
+        </li>
+      {% endfor %}
+    </ul>
+    {% if doc %}
+      <p>他（她）最近在刷<a href = "url_for('processProblems.show', did = doc.id)">{{doc.title|safe}}。</a></p>
+    {% else %}
+      <p>他（她）最近没有刷题。</p>
+    {% endif %}
+  </div>
   <p>返回<a href="{{url_for('frontend.index')}}">首页</a>！</p>
 {% endblock %}

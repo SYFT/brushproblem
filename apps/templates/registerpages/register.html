@@ -13,17 +13,13 @@
 {% endblock %}
 
 {% block content %}
-  <p>Already have a account? <a href = "{{url_for('loginpages.login')}}"> Login </a></p>
+  <p>已经有了账户？ <a href = "{{url_for('loginpages.login')}}"> 登录 </a></p>
   <form action = "" method = "post" name = "login">
     {{form.hidden_tag()}}
-    <p><strong>请输入用户名：</strong>{{form.username(size = 16, placeholder = "username")|safe}}</p><br/>
-    <hr/>
-    <p><strong>请输入密码：</strong>{{form.password(size = 16, placeholder = "password")|safe}}</p><br/>
-    <hr/>
-    <p><strong>请再次输入密码：</strong>{{form.confirm(size = 16, placeholder = "repeat your password")|safe}}</p><br/>
-    <hr/>
-    <p><strong>请输入邮箱地址：</strong>{{form.email(size = 16, placeholder = "email address")|safe}}</p><br/>
-    <hr/>
-    {{ form.submit }}
+    <p><strong>请输入用户名：</strong><br/>{{form.username(size = 16, placeholder = "用户名")|safe}}</p><br/>
+    <p><strong>请输入密码：</strong><br/>{{form.password(size = 16, placeholder = "密码")|safe}}</p><br/>
+    <p><strong>请再次输入密码：</strong><br/>{{form.confirm(size = 16, placeholder = "请再次输入密码")|safe}}</p><br/>
+    <p><strong>请输入邮箱地址：</strong><br/>{{form.email(size = 16, placeholder = "邮箱地址")|safe}}</p><br/>
+    {{ wtf.form_field(form.submit, value = "注册")|safe }}
   </form>
 {% endblock %}

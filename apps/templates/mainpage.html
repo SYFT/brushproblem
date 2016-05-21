@@ -6,9 +6,9 @@
       {%- block head %}
         <title>
           {% if title %}
-            {{title}}
+            {{title|safe}}
           {% else %}
-            MyApplication
+            刷题网
           {% endif %}
         </title>
 

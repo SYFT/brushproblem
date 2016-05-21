@@ -112,3 +112,8 @@ table#my-show-table {
 th, td {
   text-align: center;
 }
+
+div#my-index-jumbotron p {
+  font-size: 15px;
+  margin: 0 0 0 0px;
+}

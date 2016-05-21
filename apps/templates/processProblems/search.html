@@ -30,7 +30,7 @@
                 <a href = "{{url_for('processProblems.show', did = doc.id)}}">{{doc.title|safe}}</a>
               </td>
               <td>
-                <p>{{doc.author.username|safe}}（{% if not doc.author.isAdmin %}非{% endif %}管理员）</p>
+                <p><a href = "{{url_for('frontend.otherUserDetails', uid = doc.author.id)}}">{{doc.author.username|safe}}（{% if not doc.author.isAdmin %}非{% endif %}管理员）</a></p>
               </td>
               <td>
                 <p>{{doc.countUsed|safe}}</p>

@@ -17,14 +17,14 @@
                 <a href = "{{url_for('processProblems.show', did = x.id)}}">{{x.title|safe}}</a>
               </td>
               <td>
-                <p>{{x.author.username|safe}}（{% if not x.author.isAdmin %}非{% endif %}管理员）</p>
+                <p><a href = "{{url_for('frontend.otherUserDetails', uid = x.author.id)}}">{{x.author.username|safe}}（{% if not x.author.isAdmin %}非{% endif %}管理员）</a></p>
               </td>
               <td>
                 <p>{{x.countUsed|safe}}</p>
               </td>
             </tr>
           {% endfor %}
-        </table>
+        </table><br/>
         <p>共{{ result|length|safe }}个结果。</p><br/>
         <p>找不到？按<a href = "{{url_for('processProblems.search')}}">这里</a>返回调整查找参数。</p><br/>
     {% else %}
