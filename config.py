@@ -19,7 +19,7 @@ SQLALCHEMY_MIGRATE_REPO = os.path.join(baseDir, 'db_repository')
 
 WHOOSH_BASE = os.path.join(baseDir, 'whoosh_index')
 
-TIMEDELTA_CHOICE = [(0, u'今天'), 
+TIMEDELTA_CHOICE = [(0, u'一天内'), 
 			(1, u'一星期内'),
 			(2, u'一月内（30天）'), 
 			(3, u'无限制')]

@@ -16,10 +16,28 @@
   <div class = "container">
     <div class = "row">
       <div class = "col-lg-6 pull-left">
-        <h2>最近题目及上传者：</h2><br/>
-        {% for doc in listOfRecentDocument %}
-          <p><a href = "{{url_for('processProblems.show', did = doc.id)}}">{{doc.title|safe}}</a> —— {{doc.author.username|safe}}</p><br/>
-        {% endfor %}
+        <h2>最新题目：</h2><br/>
+        <table id = "my-show-table">
+          <tr>
+            <th width = "50%"><h4>试卷名</h4></th>
+            <th width = "30%"><h4>上传者</h4></th>
+            <th width = "20%"><h4>使用次数</h4></th>
+          </tr>
+          
+          {% for doc in listOfRecentDocument %}
+            <tr>
+              <td>
+                <a href = "{{url_for('processProblems.show', did = doc.id)}}">{{doc.title|safe}}</a>
+              </td>
+              <td>
+                <p>{{doc.author.username|safe}}（{% if not doc.author.isAdmin %}非{% endif %}管理员）</p>
+              </td>
+              <td>
+                <p>{{doc.countUsed|safe}}</p>
+              </td>
+            </tr>
+          {% endfor %}
+        </table>
       </div>
       <div class = "col-lg-6 pull-right" align = "middle">
         <h1>搜索</h1><br/>

@@ -75,15 +75,16 @@ def showResult(category, name, timeDelta, showAll = 0) :
 	print timeDelta
 	print startTime
 	if showAll == 0 :
-		results = models.Document.query.\
-					filter(models.Document.timeStamp >= startTime)\
-					.whoosh_search(name, limit = 50).all()
+		result = models.Document.query.\
+					filter(models.Document.timeStamp >= startTime).\
+					filter(models.Document.subjectId == category).\
+					whoosh_search(name, limit = 50).all()
 	else :
-		results = models.Document.query.all()
-		
-	result = []
-	for x in results :
-		result.append((x.id, x.title, x.author.username))
+		result = models.Document.query.\
+					filter(models.Document.timeStamp >= startTime).\
+					filter(models.Document.subjectId == category).all()
+	result = list(result)
+	
 	return render_template('processProblems/showresult.html', result = result)
 
 @processProblems.route('/show/<did>', methods = ['GET', 'POST'])
@@ -149,6 +150,7 @@ def show(did) :
 	
 	if request.method == 'POST' :
 		print 'POST'
+		doc.countUsed += 1
 		recordUserId = documentId
 		recordUserAnswer = ''
 		for pro in allProblem.pro :

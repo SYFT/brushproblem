@@ -48,6 +48,7 @@ class Document(db.Model) :
 	keywordsForTitle = db.Column(db.Unicode(512), index = True)
 	timeStamp = db.Column(db.DateTime, index = True)
 	problems = db.relationship('Problem', backref = 'source', lazy = 'dynamic')
+	countUsed = db.Column(db.Integer)
 	
 	def __init__(self, title, author, subjectId, timeStamp = datetime.datetime.utcnow()) :
 		self.title = unicode(title)
@@ -58,7 +59,8 @@ class Document(db.Model) :
 		result = list(result)
 		l = ' '.join(result)
 		self.keywordsForTitle = unicode(l)
-		print 'okay'
+		self.countUsed = 0
+		# print 'okay'
 	
 	def __repr__(self) :
 		return self.title

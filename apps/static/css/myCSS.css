@@ -104,3 +104,11 @@ div#my-footer {
   clear:both;
   width: 100%;
 }
+
+table#my-show-table {
+  
+}
+
+th, td {
+  text-align: center;
+}
