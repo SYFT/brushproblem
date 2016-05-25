@@ -17,8 +17,8 @@
   <form action = "" method = "post" name = "login">
     {{form.hidden_tag()}}
     <p><strong>请输入用户名：</strong><br/>{{form.username(size = 16, placeholder = "用户名")|safe}}</p><br/>
-    <p><strong>请输入密码：</strong><br/>{{form.password(size = 16, placeholder = "密码")|safe}}</p><br/>
-    <p><strong>请再次输入密码：</strong><br/>{{form.confirm(size = 16, placeholder = "请再次输入密码")|safe}}</p><br/>
+    <p><strong>请输入密码：</strong><br/>{{form.password(id = "my-input-password", size = 16, placeholder = "密码")|safe}}</p><br/>
+    <p><strong>请再次输入密码：</strong><br/>{{form.confirm(id = "my-input-confirm-password", size = 16, placeholder = "请再次输入密码")|safe}}</p><br/>
     <p><strong>请输入邮箱地址：</strong><br/>{{form.email(size = 16, placeholder = "邮箱地址")|safe}}</p><br/>
     {{ wtf.form_field(form.submit, value = "注册")|safe }}
   </form>

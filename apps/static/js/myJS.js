@@ -71,5 +71,15 @@ JQ(document).ready(function() {
 		JQ("#my-problem-answer").css("display", "");
 	})
 	
+	JQ("#my-button-login").click(function() {
+		setMaxDigits(512);
+		var key = new RSAKeyPair("0x10001", "", "0x813b99a2e3028f253b83f2e2e592eb5aa1d43bc4c03de707608ecd999cae7c8d17c56989b9ef714245012c4a95914e092376217ad0a5279d579c11e8c0f5e56b");
+		alert(key.e);
+		var pwd = encryptedString(key, JQ("#my-input-password").val());
+		JQ("#my-input-password").val(pwd)
+		// alert(pwd);
+		// return false;
+	})
+	
 	JQ('input, textarea').placeholder();
 })

@@ -21,9 +21,9 @@
     {{form.username(size = 16, placeholder = "用户名")|safe}}
     <hr/>
     <p><strong>请输入密码：</strong></p><br/>
-    {{form.password(size = 16, placeholder = "password")|safe}}<br/>
+    {{form.password(id = "my-input-password", size = 16, placeholder = "password")|safe}}<br/>
     <hr/>
     <p>{{form.remember_me|safe}}&nbsp;记住我</p>
-    {{ wtf.form_field(form.submit, value = "登录")|safe }}
+    {{ wtf.form_field(form.submit, id = "my-button-login", value = "登录")|safe }}
   </form>
 {% endblock %}

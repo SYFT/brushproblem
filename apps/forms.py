@@ -35,8 +35,7 @@ class UserForm(Form) :
 				])
 	password = PasswordField('password', 
 				validators = [
-					DataRequired(message = ERROR_EMPTY(PASSWORD)), 
-					Length(max = 16, message = ERROR_LENGTH(PASSWORD, max = 16))
+					DataRequired(message = ERROR_EMPTY(PASSWORD))
 				])
 	submit = SubmitField(u'submit')
 

@@ -1,0 +1,1 @@
+flask\Scripts\python run.py

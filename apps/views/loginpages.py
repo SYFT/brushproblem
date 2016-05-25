@@ -14,6 +14,7 @@ loginpages = Blueprint('loginpages', __name__,
 def tryLogin(form) :
 	username = form.username.data
 	password = form.password.data
+	print 'password: %s~~~~' % (password)
 	remember_me = form.remember_me.data
 	u = models.User.query.filter_by(username = username)
 	u = list(u)
