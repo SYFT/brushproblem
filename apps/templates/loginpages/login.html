@@ -15,7 +15,7 @@
 {% block content %}
   <h1>登入</h1><br/>
   <p>还没有帐号？<a href = "{{url_for('registerpages.register')}}">注册</a>一个。</p>
-  <form class = "form form-horizontal" action = "" method = "post" name = "login">
+  <form id = "my-form-login" class = "form form-horizontal" action = "" method = "post" name = "login">
     {{ form.hidden_tag() }}
     <p><strong>请输入用户名：</strong></p><br/>
     {{form.username(size = 16, placeholder = "用户名")|safe}}
@@ -24,6 +24,6 @@
     {{form.password(id = "my-input-password", size = 16, placeholder = "password")|safe}}<br/>
     <hr/>
     <p>{{form.remember_me|safe}}&nbsp;记住我</p>
-    {{ wtf.form_field(form.submit, id = "my-button-login", value = "登录")|safe }}
+    <button class = "btn btn-default" id = "my-button-login", value = "登录">登录</button>
   </form>
 {% endblock %}

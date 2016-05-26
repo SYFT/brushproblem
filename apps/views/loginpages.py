@@ -1,20 +1,35 @@
+# -*- coding: utf-8 -*-
+
 from flask import Flask, request, session, \
 					g, redirect, url_for, \
 					abort, render_template, flash,  \
-					Blueprint
+					Blueprint, jsonify
 from apps.forms import LoginForm
 from flask.ext.login import login_user, logout_user, \
 							current_user, login_required
 from apps import lm, db, models, app
+import rsa
 
 loginpages = Blueprint('loginpages', __name__, 
 					static_folder = 'static',
 					template_folder = 'templates')
 
+@loginpages.route('/_return_public')
+def sendPublic() :
+	ret = jsonify(publicKey = str(app.config['RSA_E']) \
+					+ ' ' + \
+				str(app.config['RSA_N']))
+	return ret
+					
 def tryLogin(form) :
 	username = form.username.data
 	password = form.password.data
-	print 'password: %s~~~~' % (password)
+	print 'origin password:%s' % (password)
+	password = rsa.core.decrypt_int(int(password), 
+									int(app.config['RSA_D']), 
+									int(app.config['RSA_N']))
+	print 'password:%s' % (password)
+	password = unicode(password)
 	remember_me = form.remember_me.data
 	u = models.User.query.filter_by(username = username)
 	u = list(u)
@@ -23,6 +38,7 @@ def tryLogin(form) :
 		return redirect(url_for('loginpages.login'))
 	
 	u = u[0]
+	print 'u.password:%s' % (u.password)
 	if cmp(u.password, password) != 0 :
 		flash(app.config['FAIL_LOGIN'])
 		return redirect(url_for('loginpages.login'))
@@ -66,6 +82,7 @@ def login() :
 	
 	form = LoginForm()
 	if request.method == 'POST' and form.validate_on_submit():
+		print 'form.password.data', form.password.data
 		# flash('username: ' + form.username.data + '\n')
 		# flash('remember_me : ' + str(form.remember_me.data) + '\n')
 		return tryLogin(form)

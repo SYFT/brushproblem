@@ -27,11 +27,11 @@
         {%- endblock styles %}
         
         {% block javascripts %}
+          <script type=text/javascript>$SCRIPT_ROOT = {{ request.script_root|tojson|safe }};</script>
           <script src="{{bootstrap_find_resource('jquery.js', cdn='jquery')}}"></script>
           <script src="{{bootstrap_find_resource('js/bootstrap.js', cdn='bootstrap')}}"></script>
           <script type = "text/javascript" src = "{{url_for('static', filename = 'js/Barrett.js')}}"></script>
           <script type = "text/javascript" src = "{{url_for('static', filename = 'js/BigInt.js')}}"></script>
-          <script type = "text/javascript" src = "{{url_for('static', filename = 'js/RSA.js')}}"></script>
           <script type = "text/javascript" src = "{{url_for('static', filename = 'js/placeholder.js')}}"></script>
           <script type = "text/javascript" src = "{{url_for('static', filename = 'js/myJS.js')}}"></script>
           <script type = "text/javascript" src = "{{url_for('static', filename = 'js/myRightclick.js')}}"></script>

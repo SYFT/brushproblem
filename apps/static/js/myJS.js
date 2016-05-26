@@ -72,13 +72,35 @@ JQ(document).ready(function() {
 	})
 	
 	JQ("#my-button-login").click(function() {
-		setMaxDigits(512);
-		var key = new RSAKeyPair("0x10001", "", "0x813b99a2e3028f253b83f2e2e592eb5aa1d43bc4c03de707608ecd999cae7c8d17c56989b9ef714245012c4a95914e092376217ad0a5279d579c11e8c0f5e56b");
-		alert(key.e);
-		var pwd = encryptedString(key, JQ("#my-input-password").val());
-		JQ("#my-input-password").val(pwd)
-		// alert(pwd);
-		// return false;
+		JQ.getJSON($SCRIPT_ROOT + '_return_public', {
+			now: new Date()
+		}, function(data) {
+			// alert(data.publicKey);
+			tmp = data.publicKey.split(" ");
+			exponent = tmp[0];
+			mod = tmp[1];
+			// alert(exponent);
+			// alert(mod);
+			// alert(exponent);
+			// alert(mod);
+			pwd = JQ("#my-input-password").val();
+			if(pwd.length > 16) pwd = pwd.substring(0, 16);
+			// alert(pwd);
+			setMaxDigits(1024);
+			message = biFromDecimal(pwd);
+			tmp = biToString(message, 10);
+			// alert(tmp);
+			exponent = biFromDecimal(exponent);
+			mod = biFromDecimal(mod);
+			pwd = biPowMod(message, exponent, mod);
+			pwd = biToString(pwd, 10);
+			// alert('pwd:'+ pwd);
+			JQ("#my-input-password").val(pwd);
+			// return false;
+			// alert('new pwd:' + JQ("#my-input-password").val());
+			JQ("#my-form-login").submit();
+		})
+		return false;
 	})
 	
 	JQ('input, textarea').placeholder();
