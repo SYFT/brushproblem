@@ -4,6 +4,7 @@ from flask.ext.wtf import Form
 from wtforms import StringField, PasswordField, BooleanField, \
 					SubmitField, FileField, TextAreaField, SelectField
 from wtforms.validators import *
+from wtforms.validators import ValidationError
 import datetime
 
 # error message
@@ -24,8 +25,18 @@ USERNAME = u'用户'
 PASSWORD = u'密码'
 NEWPASSWORD = u'新密码'
 EMAIL = u'邮箱'
-ERROR_NOT_MATCH = u'两次输入的数据不一样。'
+ERROR_NOT_MATCH = u'两次输入的密码数据不一样。'
 ERROR_NOT_EMAIL = u'在下判断这不是邮箱地址。'
+ERROR_NOT_NUMBER = u'密码必须为数字。'
+
+def isNumber(form, field) :
+	if len(field.data) > 0 :
+		try :
+			for x in field.data :
+				_x = int(x)
+			x = int(field.data)
+		except Exception as e :
+			raise ValidationError(ERROR_NOT_NUMBER)
 
 class UserForm(Form) :
 	username = StringField('username', 
@@ -35,7 +46,9 @@ class UserForm(Form) :
 				])
 	password = PasswordField('password', 
 				validators = [
-					DataRequired(message = ERROR_EMPTY(PASSWORD))
+					DataRequired(message = ERROR_EMPTY(PASSWORD)),
+					Length(max = 256, message = ERROR_LENGTH(PASSWORD, max = 16)),
+					isNumber
 				])
 	submit = SubmitField(u'submit')
 
@@ -48,7 +61,8 @@ class RegisterForm(UserForm) :
 				validators = [
 					DataRequired(message = ERROR_EMPTY(PASSWORD)), 
 					EqualTo('confirm', message = ERROR_NOT_MATCH), 
-					Length(max = 16, message = ERROR_LENGTH(PASSWORD, max = 16))
+					Length(max = 6, message = ERROR_LENGTH(PASSWORD, max = 6)),
+					isNumber
 				])
 	confirm  = PasswordField('repeatPassword')
 	email = StringField('emailaddress', 
@@ -62,7 +76,8 @@ class EditForm(UserForm) :
 	newPassword = PasswordField('password', 
 				validators = [
 					EqualTo('confirm', message = ERROR_NOT_MATCH), 
-					Length(max = 16, message = ERROR_LENGTH(NEWPASSWORD, max = 16))
+					Length(max = 16, message = ERROR_LENGTH(NEWPASSWORD, max = 16)),
+					isNumber
 				])
 	confirm  = PasswordField('repeatPassword')
 	email = StringField('emailaddress', 

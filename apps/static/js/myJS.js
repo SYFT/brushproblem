@@ -84,7 +84,7 @@ JQ(document).ready(function() {
 			// alert(exponent);
 			// alert(mod);
 			pwd = JQ("#my-input-password").val();
-			if(pwd.length > 16) pwd = pwd.substring(0, 16);
+			if(pwd.length > 6) pwd = pwd.substring(0, 6);
 			// alert(pwd);
 			setMaxDigits(1024);
 			message = biFromDecimal(pwd);
