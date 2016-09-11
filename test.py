@@ -1,6 +1,7 @@
 ﻿# -*- coding: utf-8 -*-
 # Testing
 # Testing
+# Testing
 
 CSRF_ENABLED = True
 SECRET_KEY = '123456'
